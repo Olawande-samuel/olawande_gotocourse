@@ -2,7 +2,6 @@ import clsx from "./styles.module.css";
 
 const Toggle = ({isActive}) => {
     function clickHandler(e){
-        console.log(document.getElementById("toggle"))
     }
     return (
         <div className={clsx.toggle} onClick={clickHandler}>

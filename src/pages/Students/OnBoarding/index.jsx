@@ -20,7 +20,6 @@ const OnBoarding = () => {
     const [page, setPage] = useState(0);
     const {getItem,removeItem, updateItem} = useLocalStorage();
 
-    
     let userdata = getItem(VERIFICATION_KEY)
 
     const navigate = useNavigate()
@@ -39,14 +38,10 @@ const OnBoarding = () => {
         employmentStatus: "",
         status: "CONFIRMED"
     })
-    useEffect(() => {
-        console.log("OnBoarding page is mounted");
-        return () => console.log("Removing OnBoarding page");
-    }, [])
+   
     function pageHandler(_){ setPage(old => old += 1);}
     function isValid(data){
         for(let d in data){
-            console.log(d);
             if(data[d].trim() === "") return false;
             else continue;
         }
@@ -76,11 +71,9 @@ const OnBoarding = () => {
             if(!valid) throw new AdvancedError("All fields are required for us to get to know you more", 1);
             const data = createBoarding(formstate);
             const res = await addStudentKYC(data, userdata?.token);
-            console.log(res);
             const {success, message, statusCode} = res;
             if(!success) throw new AdvancedError(message, statusCode)
             else {
-               console.log({res})
                 // SET USERDATA HERE
                 removeItem(VERIFICATION_KEY)
                 
@@ -113,7 +106,6 @@ const OnBoarding = () => {
 
     function changeHandler(e){
         const {name, value} = e.target;
-        console.log({name, value, formstate})
         setFormstate(old => {
             return {
                 ...old,
@@ -202,7 +194,6 @@ function Questions({submitHandler, formstate, changeHandler, setFormstate}){
                 [name]: el
             }
         })
-        console.log({formstate, e, el});
     }
     const [value, setValue] = useState()
     const [phoneError, setPhoneError] = useState(false)
@@ -212,7 +203,6 @@ function Questions({submitHandler, formstate, changeHandler, setFormstate}){
     function handleCountryChange(e){
         const value = e.target.value
         let country = value.split("/")[0]
-        console.log(country)
         setFormstate({...formstate, country:country})
         setCountryCode(e.target.value.split("/")[1])
     }
@@ -229,7 +219,6 @@ function Questions({submitHandler, formstate, changeHandler, setFormstate}){
     
     useEffect(()=>{
         if(value){
-            console.log(isValidPhoneNumber(value) === true);
             if(isValidPhoneNumber(value) === true){
                 setFormstate({...formstate, phoneNumber: value})
                 setPhoneError(false)
@@ -239,7 +228,7 @@ function Questions({submitHandler, formstate, changeHandler, setFormstate}){
         }
     },[value])
 
-    console.log({value})
+    
 
     return (
         <div className={clsx.question}>

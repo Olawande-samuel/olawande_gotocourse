@@ -265,7 +265,6 @@ export const AdminWebinar = () => {
     const [formState, setFormState] = useState(initialState)
     const location = useLocation()
     const id = location.state && location.state.id
-    // console.log({id});
 
     const { getItem } = useLocalStorage();
     let userdata = getItem(KEY);
@@ -283,7 +282,6 @@ export const AdminWebinar = () => {
                 setEdit(false)
                 setFormState(initialState)
                 navigate('/admin/webinar')
-                // console.log({ data });
             } catch (error) {
                 console.error(error)
                 toast.error(error.message, {
@@ -307,7 +305,6 @@ export const AdminWebinar = () => {
                 const { success, message, statusCode } = response
                 if (!success || statusCode !== 1) throw new AdvancedError(message, statusCode)
                 const { data } = response
-                // console.log({ data });
                 setFormState(initialState)
                 navigate('/admin/webinar')
             } catch (error) {
@@ -345,7 +342,6 @@ export const AdminWebinar = () => {
         const { name, value } = e.target;
         const list = { ...formState }
         list.presenters[index][name] = value;
-        // console.log(list);
         setFormState(list)
     }
 
@@ -388,12 +384,9 @@ export const AdminWebinar = () => {
                     if (!success) throw new AdvancedError(message, statusCode);
                     else if (statusCode === 1) {
                         const { data } = res;
-                        // console.log({data});
                         let found = data.find((d) => d._id === id);
                         if (found) {
                             setEdit(true)
-                            // console.log({found});
-                            // setFormState(found)
                             setFormState({ ...formState, ...found });
                         }
                     } else {
@@ -410,7 +403,6 @@ export const AdminWebinar = () => {
         return () => console.log("Removing");
     }, [id])
 
-    console.log({ formState });
     return (
         <Admin>
                     <UploadWidget fileUrl={fileUrl} setFileUrl={setFileUrl} />
@@ -668,7 +660,6 @@ export const AdminWebinarDashboard = () => {
     const webinarData = useQuery(["fetch webinar"], () => getWebinar(userdata?.token), {
         onSuccess: (res) => {
             if (res.data.length > 0) {
-                // console.log("data", res.data);
                 setWebinars(res.data)
 
             }
@@ -695,7 +686,6 @@ export const AdminWebinarDashboard = () => {
             const { data } = response
             queryClient.invalidateQueries(["fetch webinar"])
 
-            // console.log({ data });
         } catch (error) {
             console.error(error)
         } finally {

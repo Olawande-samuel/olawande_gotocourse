@@ -8,7 +8,7 @@ import {useQuery} from "@tanstack/react-query"
 import Loader from "../../../components/Loader";
 import { Sidebar, Navbar } from "../components";
 import clsx from "./styles.module.css";
-import { colors } from "../../../constants";
+import { colors, KEY } from "../../../constants";
 import { useAuth } from "../../../contexts/Auth";
 import { GuardedRoute } from "../../../hoc";
 import Input from "../../../components/Input";
@@ -25,7 +25,6 @@ import { DashboardTop, Community } from "../Students";
 import { FaChalkboardTeacher } from "react-icons/fa";
 
 
-const KEY = "gotocourse-userdata";
 
 
 export {default as Courses} from "./Courses"
@@ -58,15 +57,13 @@ export function CourseInfo() {
   }
   // get Course info
   useEffect(() => {
-    let mounted = true;
-    if (mounted) {
-      if (ref.current) return;
+    if (ref.current) return;
+    if (userdata?.token) {
       (async () => {
         try {
           setGeneralState({...generalState, loading: true});
           const res = await fetchCourse(id, userdata?.token);
           const { success, message, statusCode } = res;
-
           if (!success || statusCode !== 1)
             throw new AdvancedError(message, statusCode);
           const { data } = res;
@@ -94,12 +91,10 @@ export function CourseInfo() {
           setGeneralState({...generalState, loading: false});
         }
       })();
-
-      ref.current = true;
     }
 
-    return () => (mounted = false);
-  }, [id]);
+    return () => ref.current = true;
+  }, [id, userdata?.token]);
 
  
   return (
@@ -909,7 +904,6 @@ export const Teachers = ({ children, isMobile, userdata, notification, header, l
       (async() => {
         try{
           const res = await fetchNotifications(userData?.token);
-          console.log({res})
           if(res){
             const {message, success, statusCode} = res;
             if(!success) throw new AdvancedError(message, statusCode);
@@ -953,13 +947,13 @@ export const Teachers = ({ children, isMobile, userdata, notification, header, l
 
 // fetch messages
 const getMessage = useQuery(["fetch admin messages", userData?.token], ()=>getUnreadMessages(userData?.token), {
+  enabled: !!userData?.token,
   onError: (err)=> {
     toast.error(err.message)
   },
   onSuccess: (res)=>{
     
     if(res.data?.statusCode === 2 ){
-      localStorage.clear()
       return
     }
     if(res.data?.statusCode !== 1){

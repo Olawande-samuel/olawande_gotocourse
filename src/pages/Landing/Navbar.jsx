@@ -1,18 +1,8 @@
 import styled from "styled-components";
-import { Badge } from "@mui/material";
-import { AiOutlineCloseCircle, AiOutlineMenu } from "react-icons/ai";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import {AiOutlineMenu } from "react-icons/ai";
+import { Link } from "react-router-dom";
 // import LogoutButton from "./LogoutButton"
 import { Logosm } from "../../images/components/svgs";
-import { motion } from "framer-motion";
-import { useAuth } from "../../contexts/Auth";
-import { useLocalStorage } from "../../hooks";
-import { KEY } from "../../constants";
-import { FaRegUser } from "react-icons/fa";
-import Button from "@mui/material/Button";
-import Menu from "@mui/material/Menu";
-import MenuItem from "@mui/material/MenuItem";
-import { useState } from "react";
 
 const Container = styled.div`
 	width: 100%;
@@ -22,7 +12,7 @@ const Container = styled.div`
 	right: 0;
 	background: #fff;
 	z-index: 1000;
-`;
+`
 
 const NavContainer = styled.div`
 	color: #0c1825;
@@ -52,13 +42,13 @@ const NavContainer = styled.div`
 		}
 
 		.navbarlogo {
-			flex: 0.6;
+			flex: 0.4;
 			// border: 2px solid yellow;
 		}
 
 		ul {
 			// border: 2px solid green;
-			flex: 0.4;
+			flex: 0.6;
 			list-style-type: none;
 			display: none;
 			align-items: center;
@@ -138,8 +128,7 @@ const NavContainer = styled.div`
 			}
 		}
 	}
-`;
-
+`
 const Navbar = ({ toggleSidebar }) => {
 	return (
 		<Container>
@@ -165,13 +154,16 @@ const Navbar = ({ toggleSidebar }) => {
 					<ul>
 						<div className="firstitems">
 							{/* <a href="" className="d-inline-flex"> */}
-							<Link to="/create-with-gotocourse">
+							<a href="https://create.gotocourse.com/create-with-gotocourse" target="_blank" rel="noreferrer">
 								<button>Create with Gotocourse</button>
-							</Link>
+							</a>
 							{/* </a> */}
 							<Link to="/learn-on-gotocourse" className="d-inline-flex">
 								<button>Learn on Gotocourse</button>
 							</Link>
+							<Link to="/gotocourse-teacher">
+							<button>Teach on Gotocourse </button>
+						</Link>
 						</div>
 					</ul>
 					<div className="hamburger align-items-center">
@@ -192,4 +184,4 @@ const Navbar = ({ toggleSidebar }) => {
 	);
 };
 
-export default Navbar;
+export default Navbar

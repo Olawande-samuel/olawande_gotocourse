@@ -17,14 +17,19 @@ import { useLocalStorage } from "../hooks";
 import { ScrollToTop } from "../pages/Courses";
 import LogoutButton from "./LogoutButton";
 import { AiOutlineCloseCircle } from "react-icons/ai";
+import { useQuery } from "@tanstack/react-query";
+import { KEY } from "../constants";
+import logo from '../images/landing/LearnG2C.png'
+import Teacerlogo from '../images/landing/Teacerlogo.png'
 
-const KEY = "gotocourse-userdata";
 
 const Navbar = ({ background }) => {
 	const { setGeneralState } = useAuth();
 	const [show, setShow] = useState(false);
 	const [drop, setDrop] = useState(false);
 	const { getItem } = useLocalStorage();
+	const [banner, setBanner] = useState({})
+
 
 	const value = getItem(KEY);
 	const location = useLocation();
@@ -52,6 +57,19 @@ const Navbar = ({ background }) => {
 		});
 	}, []);
 
+	const { adminFunctions: { fetchBanner } } = useAuth();
+
+
+	useQuery(["fetch banner"], () => fetchBanner(), {
+		onSuccess: ({ data }) => {
+			let newData = data.filter(d => d.metaKey === "HEADER_PROMOTION");
+			setBanner(JSON.parse(newData[0]?.metaValue))
+
+		}
+	})
+
+
+
 	const celebRoute = location.pathname.split("/")[1] === "lounge";
 	const confirmEmail =
 		location.pathname.split("/")[1] === "email" ||
@@ -59,7 +77,8 @@ const Navbar = ({ background }) => {
 	const categoryRoute = background === "category";
 	const landing = location.pathname.split("/")[1] !== "lounge";
 	const mainpage = location.pathname.split("/")[1] === "learn-on-gotocourse";
-	function showDrop() {}
+	const teacher = location.pathname.split("/")[1] === "qualifications" || location.pathname.split("/")[1] === "gotocourse-teacher";
+	function showDrop() { }
 
 	const [showBanner, setShowBanner] = useState(true);
 	const mybanner = localStorage.getItem("gotocourse-banner");
@@ -67,18 +86,17 @@ const Navbar = ({ background }) => {
 		<nav
 			ref={heightRef}
 			section="top"
-			className={`nav navbar navbar-expand-lg flex-column ${
-				landing || mainpage ? "navbar-light" : "navbar-dark"
-			}`}
+			className={`nav navbar navbar-expand-lg flex-column ${landing || mainpage ? "navbar-light" : "navbar-dark"
+				}`}
 			style={{
 				// background: celebRoute ? "#191046" : confirmEmail ? "#E5E5E5" : landing ? "var(--blue-ish)" :  mainpage ? "#fff": "var(--theme-blue)",
 				background: celebRoute
 					? "#191046"
 					: confirmEmail
-					? "#E5E5E5"
-					: landing
-					? "var(--blue-ish)"
-					: "var(--theme-blue)",
+						? "#E5E5E5"
+						: landing
+							? "var(--blue-ish)"
+							: "var(--theme-blue)",
 				color:
 					confirmEmail || landing || categoryRoute
 						? "var(--theme-blue)"
@@ -89,11 +107,14 @@ const Navbar = ({ background }) => {
 			{mainpage && showBanner && (
 				<div className="d-flex align-items-center justify-content-center p-2 w-100 bg-white">
 					<a
-						href="#upcoming"
+						// href="#upcoming"
+						href={banner.link ? `${banner.link}` : "https://gotocourse.events/Free-Tech-course-training"}
 						className="mb-0 fw-bold me-4"
 						style={{ fontFamily: "Raleway" }}
+						target="_blank"
+						rel="noopener noreferrer"
 					>
-						NEW CLASSES STARTED JANUARY 5, ENROLL NOW
+						{banner.text ? banner.text : "Free class Alert!! - Classes starts March 15, 2023 and Registraion closes May 10. Click to Apply Now!!!"}
 					</a>
 					<i>
 						<AiOutlineCloseCircle
@@ -106,16 +127,49 @@ const Navbar = ({ background }) => {
 					</i>
 				</div>
 			)}
-			<div className="container navbar-container align-items-center">
+			<div
+				className="container navbar-container align-items-center">
 				<Link
 					to="/"
 					onClick={() => window.scrollTo(0, 0)}
 					className="logo navbar-brand "
+					style={{
+						flex: ".25"
+					}}
 				>
 					{confirmEmail || landing || categoryRoute || mainpage ? (
-						<Logosm color="var(--theme-blue)" />
+						// <Logosm color="var(--theme-blue)" />
+
+						teacher ?
+							<img src={Teacerlogo} alt=""
+								width={140}
+								style={{ maxWidth: "100%" }}
+							/>
+
+							:
+
+							<img src={logo} alt=""
+								width={140}
+								style={{ maxWidth: "100%" }}
+							/>
+
+
 					) : (
-						<Logosm />
+						// <Logosm />
+						teacher ?
+
+							<img src={Teacerlogo} alt=""
+								width={140}
+								style={{ maxWidth: "100%" }}
+							/>
+
+							:
+
+							<img src={logo} alt=""
+								width={140}
+								style={{ maxWidth: "100%" }}
+							/>
+
 					)}
 					{/* <small className="d-block" style={{fontSize:"14px", color: landing || mainpage ? "var(--theme-blue)" : "#fff"}}>Learn without limits</small> */}
 				</Link>
@@ -123,26 +177,32 @@ const Navbar = ({ background }) => {
 					<span className="navbar-toggler-icon"></span>
 				</button>
 				<div
-					className={`collapse navbar-collapse  justify-content-end  align-items-center mt-3 mt-lg-0 ${
-						show ? "show" : ""
-					}`}
+					className={`collapse navbar-collapse  justify-content-end  align-items-center mt-3 mt-lg-0 ${show ? "show" : ""
+						}`}
 					id="navbarNav"
 				>
 					<ul className="navbar-nav me-5">
-						<li className="nav-item holder">
-							<Link
-								to="/"
-								className="link nav-link courses me-4"
-								style={{
-									color:
-										landing || mainpage
-											? "var(--theme-blue)"
-											: "rgba(255, 255, 255)",
-								}}
-							>
-								Home
-							</Link>
-						</li>
+
+
+						{
+							!teacher &&
+							<li className="nav-item holder">
+								<Link
+									to="/africa"
+									className="link nav-link courses me-4"
+									style={{
+										color:
+											landing || mainpage
+												? "var(--theme-blue)"
+												: "rgba(255, 255, 255)",
+									}}
+								>
+									Go2Course Africa
+								</Link>
+							</li>
+						}
+
+
 
 						{(location.pathname.split("/")[1] === "" || celebRoute) && (
 							<>
@@ -161,15 +221,7 @@ const Navbar = ({ background }) => {
 									</Link>
 									{drop ? <NavList dropRef={dropRef} /> : null}
 								</li>
-								{/* <li className="nav-item holder">
-                  <Link className="link nav-link courses me-4" to="/lounge"
-                  style={{
-                    color: landing || mainpage ? "var(--theme-blue)": "rgba(255, 255, 255)"
-                  }}
-                  >
-                    Mentor
-                  </Link>
-                </li> */}
+
 							</>
 						)}
 
@@ -206,14 +258,7 @@ const Navbar = ({ background }) => {
 							""
 						) : (
 							<>
-								{/* <li className="nav-item d-flex align-items-center nav_link">
-                  <Link to="/become-a-teacher" className="link"
-                   style={{
-                    color:confirmEmail || landing || categoryRoute || mainpage ? "#0C2191" : "rgba(255, 255, 255)"
-                  }}>
-                    Become a Teacher
-                  </Link>
-                </li> */}
+
 								<li className="nav-item d-flex align-items-center nav_link d-lg-none">
 									<Link
 										to="/login"
@@ -225,17 +270,33 @@ const Navbar = ({ background }) => {
 										Sign In
 									</Link>
 								</li>
-								<li className="nav-item d-flex align-items-center nav_link d-lg-none">
-									<Link
-										to="/signup"
-										className="link"
-										style={{
-											color: landing || mainpage ? "var(--theme-blue)" : "#fff",
-										}}
-									>
-										Register as a Student
-									</Link>
-								</li>
+								{
+									teacher ?
+										<li className="nav-item d-flex align-items-center nav_link d-lg-none">
+											<Link
+												to="/qualifications"
+												className="link"
+												style={{
+													color: landing || mainpage ? "var(--theme-blue)" : "#fff",
+												}}
+											>
+												Register as a Teacher
+											</Link>
+										</li>
+										:
+										<li className="nav-item d-flex align-items-center nav_link d-lg-none">
+											<Link
+												to="/signup"
+												className="link"
+												style={{
+													color: landing || mainpage ? "var(--theme-blue)" : "#fff",
+												}}
+											>
+												Register as a Student
+											</Link>
+										</li>
+								}
+
 							</>
 						)}
 					</ul>
@@ -264,13 +325,12 @@ const Navbar = ({ background }) => {
 								</motion.span>
 							</li>
 							<Link
-								to={`${
-									value.userType === "admin"
-										? "/admin"
-										: value.userType === "student"
+								to={`${value.userType === "admin"
+									? "/admin"
+									: value.userType === "student"
 										? "/student"
 										: "/teacher"
-								}`}
+									}`}
 							>
 								<motion.div
 									whileHover={{
@@ -316,19 +376,37 @@ const Navbar = ({ background }) => {
 								</motion.button>
 							</Link>
 
-							<Link to="/signup">
-								<motion.button
-									type="button"
-									className=" btn-plain d-none d-lg-block newRegister"
-									whileHover={{
-										textShadow: "0px 0px 8px rgb(255, 255, 255)",
-										boxShadow: "0px 0px 8px rgb(0, 0, 0)",
-									}}
-									transition={{ duration: 0.1 }}
-								>
-									<span>Register as a Student</span>
-								</motion.button>
-							</Link>
+							{
+								teacher ?
+									<Link to="/qualifications">
+										<motion.button
+											type="button"
+											className=" btn-plain d-none d-lg-block newRegister"
+											whileHover={{
+												textShadow: "0px 0px 8px rgb(255, 255, 255)",
+												boxShadow: "0px 0px 8px rgb(0, 0, 0)",
+											}}
+											transition={{ duration: 0.1 }}
+										>
+											<span>Register as a Teacher</span>
+										</motion.button>
+									</Link>
+									:
+
+									<Link to="/signup">
+										<motion.button
+											type="button"
+											className=" btn-plain d-none d-lg-block newRegister"
+											whileHover={{
+												textShadow: "0px 0px 8px rgb(255, 255, 255)",
+												boxShadow: "0px 0px 8px rgb(0, 0, 0)",
+											}}
+											transition={{ duration: 0.1 }}
+										>
+											<span>Register as a Student</span>
+										</motion.button>
+									</Link>
+							}
 						</>
 					)}
 				</div>

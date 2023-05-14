@@ -12,10 +12,7 @@ const GuardedRoute = ({ children }) => {
     const route = location.pathname.split("/")[1];
     useEffect(() => {}, []);
 
-    // for create
     let isCreator = value?.userType === "schools";
-
-
     if(isCreator){
         let schoolRoute = location.pathname 
 
@@ -69,10 +66,11 @@ const GuardedRoute = ({ children }) => {
 
         }else {
 
-            if(route === 'admin'){
-                return <Navigate to="/admin/login" />
-            }
-            else return <Navigate to="/login" />;
+            // if(route === 'admin'){
+            //     return <Navigate to="/admin/login" />
+            // }
+            // else 
+            return <Navigate to="/login" />;
         }
     }
 };

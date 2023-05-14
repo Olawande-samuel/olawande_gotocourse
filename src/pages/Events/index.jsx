@@ -9,14 +9,16 @@ import { Link, useNavigate, useParams } from 'react-router-dom'
 import { MdMyLocation } from 'react-icons/md'
 import { useLocalStorage } from '../../hooks'
 import { useAuth } from '../../contexts/Auth'
-import { KEY } from '../../constants'
+import { BLOGURL, KEY } from '../../constants'
 import { useQuery } from '@tanstack/react-query'
+import { ShareModal } from './articles'
 
 const Events = () => {
 
     const { getItem } = useLocalStorage();
     const [blogs, setBlogs] = useState([])
     const [webinars, setWebinars] = useState([])
+    const [open, setOpen] = useState(false)
 
     let navigate = useNavigate()
     let userdata = getItem(KEY);
@@ -25,7 +27,7 @@ const Events = () => {
     const blogData = useQuery(["fetch blogs"], () => getBlogs(), {
         onSuccess: (res) => {
             if (res.data.length > 0) {
-                console.log("data", res.data);
+                // console.log("data", res.data);
                 setBlogs(res.data)
 
             }
@@ -47,11 +49,12 @@ const Events = () => {
 
     const ReadMore = () => {
         let div = document.querySelector('.articles__container')
-        console.log({div});
         div.classList.toggle('toggleheight')
-       
+
 
     }
+
+   
 
     return (
         <Layout>
@@ -68,30 +71,31 @@ const Events = () => {
                     <div className="articles__container" >
                         {
                             blogs.length > 0 && blogs.map((blog, id) => (
-                                // <Link to={`articles/${blog.title.split(" ").join("-").replace('?', '').replace("/", "%2F")}/${blog._id}`} className={style.articleitem} key={id}>
-                                <Link to={`articles/${encodeURIComponent(blog.title)?.split(" ").join("-").replace('?', '').replace("/", "%2F")}/${blog._id}`} className={style.articleitem} key={id}>
-                                    <div className={style.articleimg}>
+                                <div className={style.articleitem}>
+                                    {/* <Link to={`articles/${encodeURIComponent(blog.title)?.split(" ").join("-").replace('?', '').replace("/", "%2F")}/${blog._id}`} className={style.articleitem} key={id}> */}
+                                    <a href={`https://blog.gotocourse.com/events&articles/articles/${encodeURIComponent(blog.title)?.split(" ").join("-").replace('?', '').replace("/", "%2F")}/${blog._id}`} key={id} target="_blank" className={style.articleimg}>
+
                                         <img src={`${process.env.REACT_APP_IMAGEURL}${blog.blogImg}`} alt="" />
 
-                                    </div>
-
+                                    </a>
                                     <div className={style.articleInfo}>
                                         <div className={style.articleTop}>
                                             <span style={{ fontSize: "12px", color: "#4100FA" }}>{new Date(blog.createdAt).toLocaleDateString().split("/").join('.')}</span>
-                                            <FaShareSquare style={{ fontSize: "1.3rem", color: "#0C2191" }} />
+                                            <i><FaShareSquare style={{ color: "#0C2191", fontSize: "1rem", cursor: "pointer" }} onClick={() => setOpen(true)} /></i>
 
                                         </div>
-                                        <h4>
-                                            {blog.title}
-                                        </h4>
+                                        <a href={`https://blog.gotocourse.com/events&articles/articles/${encodeURIComponent(blog.title)?.split(" ").join("-").replace('?', '')}/${blog?._id}`}>
+                                            <h5>{blog.title}</h5>
+                                        </a>
                                         <p className="restrict" dangerouslySetInnerHTML={{ __html: blog.content }}></p>
 
 
                                     </div>
 
 
+                                    <ShareModal x={blog} open={open} setOpen={setOpen} url={BLOGURL} />
+                                </div>
 
-                                </Link>
 
                             ))
                         }
@@ -132,24 +136,43 @@ const Events = () => {
                         <h3>Upcoming events</h3>
 
                         <div className={style.upcoming_events}>
-                            {webinars.length > 0 && webinars.map((event, index) => (
+                            {webinars?.length > 0 && webinars?.filter(webinar => (new Date(webinar?.date)?.toLocaleDateString() >= new Date()?.toLocaleDateString()))?.length > 0 ? webinars?.filter(webinar => (new Date(webinar?.date)?.toLocaleDateString() >= new Date()?.toLocaleDateString()))?.map((event, index) => (
+                                <Upcoming key={index} id={index} event={event} />
+                            ))
+                            :
+                            <>
+                            <p>No Upcoming Events</p>
+                            </>
+                        
+                        
+                        }
+                        </div>
+                    </div>
+                </div>
+
+                <div className={style.upcoming}>
+                    <div className="container">
+                        <h3>Past events</h3>
+
+                        <div className={style.upcoming_events}>
+                        {webinars?.length > 0 && webinars?.filter(webinar => (new Date(webinar?.date)?.toLocaleDateString() < new Date()?.toLocaleDateString()))?.length > 0 && webinars?.filter(webinar => (new Date(webinar?.date)?.toLocaleDateString() < new Date()?.toLocaleDateString()))?.map((event, index) => (
                                 <Upcoming key={index} id={index} event={event} />
                             ))}
                         </div>
                     </div>
                 </div>
-                <div className={style.ondemand}>
+                {/* <div className={style.ondemand}>
                     <div className="container">
-                        <h3>On-demand events</h3>
+                        <h3>Recorded events</h3>
                         <div className={style.ondemand_events}>
-                            {webinars.length > 0 && webinars.map((event, index) => (
+                            {webinars?.length > 0 && webinars.map((event, index) => (
                                 <Ondemand key={index} id={index} event={event} />
                             ))}
 
 
                         </div>
                     </div>
-                </div>
+                </div> */}
             </div>
         </Layout>
     )
@@ -157,7 +180,6 @@ const Events = () => {
 
 
 function Upcoming({ id, event }) {
-    console.log({ event });
     return (
         <div className={style.upcoming_event}>
             <div className={style.upcoming_event_left}>
@@ -243,7 +265,6 @@ export function Event() {
     const webinarData = useQuery(["fetch webinar", id], () => getAWebinar(id), {
         onSuccess: (res) => {
             if (res.data) {
-                console.log("data", res.data);
                 setWebinar(res.data)
 
             }

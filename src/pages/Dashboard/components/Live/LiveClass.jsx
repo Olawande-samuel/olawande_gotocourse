@@ -135,7 +135,6 @@ const LiveClass = () => {
   const navigate = useNavigate()
   
   function handleActionClick(name){
-    console.log(name)
     if(name === "Menu"){
       setOpen(!open)
     } else if(name === "Leave Meeting"){
@@ -207,7 +206,6 @@ export function Navbar({user, isPresenting}){
 
   } 
 
-  console.log("navbar", isPresenting)
   return (
     <nav className={style.live_nav}>
       <div className="container">

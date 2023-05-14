@@ -1156,7 +1156,7 @@ function SuperWrapper() {
 					if (
 						findMyClasss.bootcampId &&
 						(findMyClasss.status === "paid" ||
-							findMyClasss.paymentStatus === "complete")
+							findMyClasss.paymentStatus === "completed")
 					) {
 						setIsPermitted(true);
 						return;

@@ -1,14 +1,11 @@
-import "../classConsole/Content.css";
-import { Link } from "react-router-dom";
-import { useLocalStorage } from "../../../../hooks";
-import { getDate, KEY, tConvert } from "../../../../constants";
-import { useAuth } from "../../../../contexts/Auth";
 import { useQuery } from "@tanstack/react-query";
-import { Fragment, useMemo, useState } from "react";
-import Accordion from 'react-bootstrap/Accordion';
-import { Answer, QuesHeader, QuestionOptions, QuizAction, QuizButton } from "../../Students/Classroom";
+import { useMemo, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import Loader from "../../../../components/Loader";
-import ReactQuill from "react-quill";
+import { getDate, KEY } from "../../../../constants";
+import { useAuth } from "../../../../contexts/Auth";
+import { useLocalStorage } from "../../../../hooks";
+import "../classConsole/Content.css";
 
 
 export default function ConsoleAssessments() {
@@ -18,7 +15,7 @@ export default function ConsoleAssessments() {
   const { generalState: { isMobile }, studentFunctions: { fetchBootcamps } } = useAuth();
 
   const { data, isLoading, isError, } = useQuery(["fetch my classes"], () => fetchBootcamps(userdata?.token))
-  // console.log({ data });
+
 
 
   return (
@@ -29,6 +26,8 @@ export default function ConsoleAssessments() {
 
           <main className="assess">
             <div className="assesstop">
+              <p className="assessinfo">Available Quiz</p>
+
               {
                 data?.data?.filter(item => item.status === "paid").map((x, id) => (
                   <AssessmentItem key={x.bootcampId} x={x} />
@@ -37,9 +36,9 @@ export default function ConsoleAssessments() {
 
             <div className="assessbottom">
               <p className="assessinfo">Submitted assessments</p>
-                {data?.data?.filter(item => item.status === "paid").map((x, id) => (
-                  <AnswerAssessmentItem key={x.bootcampId} x={x} answer={true} />
-                ))}
+              {data?.data?.filter(item => item.status === "paid").map((x, id) => (
+                <AnswerAssessmentItem key={x.bootcampId} x={x} answer={true} />
+              ))}
             </div>
 
 
@@ -65,7 +64,7 @@ const AssessmentItem = ({ x }) => {
 
 
 
-  const { isLoading } = useQuery(["fetch domains", x?.bootcampId], () => fetchStudentDomains(userdata.token, x?.bootcampId), {
+  const { isLoading } = useQuery(["fetch student domains", x?.bootcampId], () => fetchStudentDomains(userdata.token, x?.bootcampId), {
     onSuccess: (res) => {
       setModules(res.data)
     }
@@ -85,15 +84,20 @@ const AssessmentItem = ({ x }) => {
 
   }, [modules])
 
-  console.log({ reduceModules });
-  console.log({ reduceContent });
+  const reduceItem = useMemo(() => {
+    return reduceModules?.filter((item => item.type === "QUIZ")).reduce((total, current) => [
+      ...total, ...current.items
+    ], []);
+
+  }, [modules])
 
   return (
     <>
-     
+
+      {/* {isLoading && <Loader/>} */}
 
       <div className="quizaccordion">
-        {reduceContent?.length > 0 && <Accord reduceContent={reduceContent} />}
+        {reduceContent?.length > 0 && <Accord reduceContent={reduceContent} reduceItem={reduceItem} />}
 
       </div>
 
@@ -105,18 +109,32 @@ const AssessmentItem = ({ x }) => {
 
 
 
-const Accord = ({ reduceContent }) => {
+const Accord = ({ reduceContent, reduceItem }) => {
 
   return (
-    reduceContent?.length > 0 && reduceContent?.map((item, i) => (
+    reduceContent?.length > 0 && reduceContent?.map((item, i) => {
+      let contentId = item?.contentId;
+
+      // let quizDetail = reduceContent?.find(item => item?.contentId === contentId);
+      let contentDetail = reduceItem?.find(item => item?.contentId === contentId);
+
+      return (
         <>
           <div className="assessbox">
             <div className="assessleft">
               <p className="assesstitle">{item.type}</p>
               <p className="assessbold">{item.title}</p>
               <div className="d-flex align-center gap-2">
-                {/* <p className="assesstitle">{getDate(item.startDate)}</p> */}
-             {/* <p className="assesstitle">{item.startTime && tConvert(item.startTime)}</p> */}
+                {contentDetail &&
+                  <>
+                    <p className="assesstitle">{getDate(contentDetail?.endDate)}</p>
+                    <p className="assesstitle">{new Date(contentDetail?.endDate).toLocaleTimeString('en-US', {
+                      hour: '2-digit',
+                      minute: '2-digit'
+                    })}
+                    </p>
+                  </>
+                }
               </div>
             </div>
 
@@ -128,10 +146,11 @@ const Accord = ({ reduceContent }) => {
             </div>
           </div>
 
-          <br/>
-          <br/>
+          <br />
+          <br />
         </>
-    )))
+      )
+    }))
 }
 
 
@@ -155,9 +174,10 @@ const AnswerAssessmentItem = ({ x }) => {
     }
   })
 
-  const { isLoading } = useQuery(["fetch domains", x?.bootcampId], () => fetchStudentDomains(userdata.token, x?.bootcampId), {
+
+  const { isLoading } = useQuery(["fetch student domains", x?.bootcampId], () => fetchStudentDomains(userdata.token, x?.bootcampId), {
     onSuccess: (res) => {
-      // console.log(res.data)
+
       setModules(res.data)
     }
   })
@@ -196,18 +216,21 @@ const AnswerAssessmentItem = ({ x }) => {
 
 
 const AnswerAccord = ({ assessment, reduceContent, reduceModules }) => {
+  const navigate = useNavigate()
 
   return (
     assessment.length > 0 && assessment?.map((x, i) => {
       let contentId = x?.contentId;
       let quizId = x?.quizId;
 
-      let quizDetail = reduceContent?.find(item => item?.contentId === contentId);
       let contentDetail = reduceModules?.find(item => item?.contentId === contentId);
+      let quizDetail = reduceContent?.find(item => item?.contentId === contentId);
       // let DomainDetail = modules?.find(item => item?.contentId === contentDetail?.domain);
 
-      console.log({ x });
+      const score = () => {
+        return assessment?.find(assess => assess.contentId === x?.contentId)?.questions?.reduce((total, current) => total + current?.grade, 0)
 
+      }
 
       return (quizDetail &&
         <div key={i} className="assessmentaccord">
@@ -216,16 +239,42 @@ const AnswerAccord = ({ assessment, reduceContent, reduceModules }) => {
               <p className="assessbold" >{quizDetail?.title}</p>
               <p className="assesstitle" data-id={contentDetail?.domian}>{contentDetail?.title}</p>
               <div className="d-flex align-center gap-2">
-                <p className="assesstitle">{quizDetail?.createdAt && getDate(quizDetail?.createdAt)}</p>
                 <p className="assesstitle">{quizDetail?.startDate && getDate(quizDetail?.startDate)}</p>
+                <p className="assesstitle">{quizDetail && new Date(quizDetail?.endDate).toLocaleTimeString('en-US', {
+                  hour: '2-digit',
+                  minute: '2-digit'
+                })}
+                </p>
               </div>
             </div>
 
             <div className="assessright">
-              <p className="assesstitle">Total score: {x?.totalScore}</p>
+              <div>
+                <p className="assesstitle">Total score: {x?.totalScore}/{score()}</p>
+                <p className="assesstitle">Attempts: {quizDetail?.attempts}</p>
+                <p className="assesstitle">Max-Attempts: {quizDetail?.maxAttempts}</p>
+
+              </div>
               <button className="assessbold" data-id={quizId} disabled
               // onClick={() => setShow(!show)}
-              >Graded: {x?.graded ? "true" : "false"}</button>
+              >Graded: {x?.graded ? "true" : "false"}
+              </button>
+
+              <button className="assessbold" data-id={quizId}
+                // disabled={!x?.graded}
+                onClick={() => navigate(`/student/console/answers?classId=${quizDetail?.classId}&contentId=${quizDetail?.contentId}`)}
+              >Show Answer
+              </button>
+
+              {(quizDetail?.attempts < quizDetail?.maxAttempts) &&
+                <button className="assessbold" data-id={quizId} 
+                onClick={() => navigate(`/student/class-console/class/${quizDetail?.classId}?contentId=${quizDetail?.contentId}`)}
+                >Try Again
+                </button>
+
+              }
+
+            
             </div>
           </div>
 

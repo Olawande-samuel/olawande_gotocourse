@@ -465,8 +465,7 @@ export const Blog = () => {
         setOpen((_) => true);
     }
 
-    // console.log({ id });
-    // console.log({ edit });
+  
 
     useEffect(() => {
         if (id) {

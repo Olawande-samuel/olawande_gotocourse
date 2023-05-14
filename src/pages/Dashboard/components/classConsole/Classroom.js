@@ -14,8 +14,7 @@ import { useAuth } from "../../../../contexts/Auth";
 
 const PopModal = ({ show, handleClose, data }) => {
 
-    console.log({data})
-    const navigate = useNavigate()
+    
     return (
         <>
             <Modal show={show} onHide={handleClose} className="classroom__modal">
@@ -108,11 +107,10 @@ export default function Classroom() {
         setShow(!show)
     }
 
-    console.log({classId})
+
     // const fetchStudents = useQuery(["studentsFetch", userdata.token], ()=>fetchApplications(userdata.token), {
     const fetchStudents = useQuery(["studentsFetch", userdata.token], ()=> fetchBootcampApplications(userdata.token, classId), {
         onSuccess: (res)=> {
-            console.log({res})
             if(res.statusCode === 1){
                 setStudentList(res.data)
             }

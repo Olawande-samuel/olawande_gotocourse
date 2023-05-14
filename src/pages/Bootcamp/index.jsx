@@ -17,7 +17,7 @@ import { motion } from "framer-motion"
 import Layout from "../../components/Layout";
 import clsx from "./styles.module.css";
 import { useLocalStorage } from "../../hooks";
-import { getDate, gotoclass, tConvert } from "../../constants";
+import { getDate, getFullDate, gotoclass, tConvert } from "../../constants";
 import { useNavigate, useParams } from "react-router-dom";
 import BootcampImage from "../../images/bootcamp.webp";
 import Teacher from "../../images/bootcamps/teacher.png";
@@ -465,7 +465,6 @@ export function NewBootcampDetailsComponent() {
 
   const bootcamps = useQuery(["bootcamps", id], () => fetchBootcamps(), {
     onSuccess: res => {
-      // console.log({res})
       if (res.data) {
         setBootcampTrainingInfo(res.data.find(item => item.bootcampId === id))
 
@@ -492,6 +491,10 @@ export function NewBootcampDetailsComponent() {
     // navigate("/coming-soon")
 
     if (userdata?.token) {
+      // if (userdata?.trainee) {
+      //   navigate("pay")
+      //   return;
+      // }
       navigate("payment")
     } else {
       navigate("/login")
@@ -571,12 +574,7 @@ export function NewBootcampDetailsComponent() {
     }
   }
 
-  const handleClick = (event) => {
-    // console.log(event.currentTarget);
-  };
 
-  // console.log({ bootcampTrainingInfo });
-  // console.log("all", bootcamps.data?.data);
 
   useEffect(() => {
     getWishList()
@@ -596,7 +594,6 @@ export function NewBootcampDetailsComponent() {
           bootcampTrainingInfo?.subCategory === "PATH_FINDERS" ? "Pathfinders Courses" : "Executive Courses"
 
 
-  console.log({ bootcampTrainingInfo })
   return (
     <Layout>
       <div className={clsx.bootcampTraining}>
@@ -627,21 +624,21 @@ export function NewBootcampDetailsComponent() {
 
               <div className={clsx.classDescriptionRight}>
                 {
-                  bootcampTrainingInfo?.time?.length > 0 
+                  bootcampTrainingInfo?.time?.length > 0
                   &&
                   <div className="mb-3">
                     <h4>Schedule</h4>
 
-                      {
-                        bootcampTrainingInfo?.time?.map(item=>(
-                          <div>
-                            <span className="me-3">{item.day}:</span>
-                            <span className="">{tConvert(item.startTime)} CST</span>
-                            <span> - </span>
-                            <span>{tConvert(item.endTime)} CST</span>
-                          </div>
-                        ))
-                      }
+                    {
+                      bootcampTrainingInfo?.time?.map(item => (
+                        <div>
+                          <span className="me-3">{item.day}:</span>
+                          <span className="">{tConvert(item.startTime)} CST</span>
+                          <span> - </span>
+                          <span>{tConvert(item.endTime)} CST</span>
+                        </div>
+                      ))
+                    }
 
                   </div>
                 }
@@ -669,27 +666,31 @@ export function NewBootcampDetailsComponent() {
           </div>
         </section>
 
-        <section className={clsx.requirement}>
-          {
-            bootcampTrainingInfo.subCategory !== "EXECUTIVE_COURSES" &&
+        {bootcampTrainingInfo.category !== "TRAIN2 WORKABROAD" &&
 
-            <div className="container">
-              <h4>Syllabus</h4>
-              <div>
-                <ul>
-                  {bootcampTrainingInfo?.syllabus?.map((item) => (
-                    <li>
-                      <p className={clsx.niche}>{item.title}</p>
-                      <p className={clsx.niche}>{item.description}</p>
-                    </li>
-                  ))}
-                </ul>
+          <section className={clsx.requirement}>
+            {
+              bootcampTrainingInfo.subCategory !== "EXECUTIVE_COURSES" &&
+
+              <div className="container">
+                <h4>Syllabus</h4>
+                <div>
+                  <ul>
+                    {bootcampTrainingInfo?.syllabus?.map((item) => (
+                      <li>
+                        <p className={clsx.niche}>{item.title}</p>
+                        <p className={clsx.niche}>{item.description}</p>
+                      </li>
+                    ))}
+                  </ul>
+
+                </div>
 
               </div>
+            }
+          </section>
 
-            </div>
-          }
-        </section>
+        }
         {/* <section className={clsx.process}>
           <div className="container">
             <header>
@@ -721,50 +722,57 @@ export function NewBootcampDetailsComponent() {
           </div>
         </section> */}
 
-        <section >
-          <div className="container">
-            <h4>Other {courseType}</h4>
+        {bootcampTrainingInfo.category !== "TRAIN2 WORKABROAD" &&
+          <section >
+            <div className="container">
+              <h4>Other {courseType}</h4>
 
-            <Grid>
-              {similar && similar.length > 0 && similar?.slice(0, 4).map((item, i) => (
-                ((bootcampTrainingInfo.subCategory === "HEAD_START") || (bootcampTrainingInfo.subCategory === "IN_DEMAND")) ?
-                  <>
-                    <Head {...item} all={item} key={item.bootcampId} />
-                  </>
-                  :
-                  <>
-                    <PathCourseCard {...item} all={item} key={item.bootcampId} />
-                  </>
+              <Grid>
+                {similar && similar.length > 0 && similar?.slice(0, 4).map((item, i) => (
+                  ((bootcampTrainingInfo.subCategory === "HEAD_START") || (bootcampTrainingInfo.subCategory === "IN_DEMAND")) ?
+                    <>
+                      <Head {...item} all={item} key={item.bootcampId} />
+                    </>
+                    :
+                    <>
+                      <PathCourseCard {...item} all={item} key={item.bootcampId} />
+                    </>
 
-              ))}
-            </Grid>
+                ))}
+              </Grid>
 
-            <div className={clsx.viewmore}>
-              <Link to={`/category/${bootcampTrainingInfo.subCategory}`}>View More <BsArrowRight /></Link>
+              <div className={clsx.viewmore}>
+                <Link to={`/category/${bootcampTrainingInfo.subCategory}`}>View More <BsArrowRight /></Link>
+              </div>
+
             </div>
 
-          </div>
 
+          </section>
 
-        </section>
-        <section className={clsx.upcoming_classes}>
-          <div className="container">
-            <header>
-              <h3 className={clsx.section_title}>Similar upcoming classes</h3>
-              {/* <hr /> */}
-            </header>
-            <div className={clsx.upcoming_card}>
-              {
-                upcoming && upcoming.length > 0 && upcoming.splice(0, 4).map((item, i) => (
-                  <Upcome {...item} all={item} />
-                ))
-              }
-              <div className={clsx.viewmore}>
-                <Link to={`/category/upcoming?id=${bootcampTrainingInfo.subCategory}`}>View More <BsArrowRight /></Link>
+        }
+
+        {bootcampTrainingInfo.category !== "TRAIN2 WORKABROAD" &&
+
+          <section className={clsx.upcoming_classes}>
+            <div className="container">
+              <header>
+                <h3 className={clsx.section_title}>Similar upcoming classes</h3>
+                {/* <hr /> */}
+              </header>
+              <div className={clsx.upcoming_card}>
+                {
+                  upcoming && upcoming.length > 0 && upcoming.splice(0, 4).map((item, i) => (
+                    <Upcome {...item} all={item} />
+                  ))
+                }
+                <div className={clsx.viewmore}>
+                  <Link to={`/category/upcoming?id=${bootcampTrainingInfo.subCategory}`}>View More <BsArrowRight /></Link>
+                </div>
               </div>
             </div>
-          </div>
-        </section>
+          </section>
+        }
         {/* <section className={clsx.payment_options}>
           <Payment />
         </section> */}
@@ -780,8 +788,6 @@ export function NewBootcampDetailsComponent() {
 
 
 export function DetailsHero({ navHeight, title, description, addToWishList, subCategory, handleBootstrapEnrollment, loading, img, endDate, startDate, wishlistState, removeCourse, userdata, all }) {
-
-  console.log({ all })
 
   const [open, setOpen] = useState(false)
 
@@ -805,7 +811,7 @@ export function DetailsHero({ navHeight, title, description, addToWishList, subC
           <h4>{title}</h4>
           {/* <p className="restricted_line" dangerouslySetInnerHTML={{ __html: description }}></p> */}
           {/* <p>{description ? description : "Data science refers to the process of extracting clean information to formulate actionable insights"}</p> */}
-          <p style={{ marginTop: "2rem", fontSize: "1.5rem" }}>Starting Date: <span>{loading ? "" : new Date(startDate).toDateString()}</span></p>
+          <p style={{ marginTop: "2rem", fontSize: "1.5rem" }}>Starting Date: <span>{loading ? "" : getFullDate(startDate)}</span></p>
 
           <div className={clsx.hero_buttons}>
             <motion.button
@@ -886,8 +892,7 @@ export function Upcome({ _id, title, duration, category, subCategory, bootcampId
   const userdata = getItem("gotocourse-userdata");
   const navigate = useNavigate();
 
-  // console.log({all});
-  // console.log({category});
+ 
 
   async function handleBootstrapEnrollment(e) {
     e.preventDefault();
@@ -944,7 +949,6 @@ const modalStyle = {
 };
 
 export function ShareModal({ x, open, setOpen, url }) {
-  console.log({ x })
   const inputRef = useRef()
   function copyText() {
 
@@ -968,7 +972,7 @@ export function ShareModal({ x, open, setOpen, url }) {
       return `https://gotocourse.com/categories/${x?.category?.trim().split(" ").join("-").toLowerCase()}/courses/${encodeURIComponent(x?.title)?.trim().split(" ").join("-").toLowerCase()}/${x?.bootcampId?.trim()}`
     }
   }
- 
+
   return (
     <Modal
       open={open}

@@ -5,6 +5,8 @@ import { useQuery } from "@tanstack/react-query";
 import { motion } from "framer-motion"
 import { Logo, Logosm } from "../images/components/svgs"
 import { HashLink } from "react-router-hash-link"
+import logo from '../images/landing/LearnG2C.png'
+import Teacerlogo from '../images/landing/Teacerlogo.png'
 
 const hover = {
   hover: {
@@ -57,6 +59,11 @@ const rightLink = [
     path: "/about-us"
   },
   {
+    id: 7,
+    title: "Apply to teach",
+    path: "/become-a-teacher"
+  },
+  {
     id: 5,
     title: "Careers",
     path: "/career"
@@ -71,28 +78,33 @@ const rightLink = [
     title: "Contact us",
     path: "/contact-us"
   },
+  // {
+  //   id: 7,
+  //   title: "Admin",
+  //   path: "/admin/login"
+  // },
+  // {
+  //   id: 7,
+  //   title: "Teachers",
+  //   path: "/become-a-teacher"
+  // },
+  //   {
+  //     id: 8,
+  //     title: "Teachers",
+  //     path: "/qualifications"
+  // },
   {
-    id: 7,
-    title: "Admin",
-    path: "/admin/login"
-  },
-  {
-    id: 7,
-    title: "Teachers",
-    path: "/become-a-teacher"
-  },
-  {
-    id: 7,
+    id: 9,
     title: "Affiliates",
     path: "/affiliates"
   },
   {
-    id: 8,
-    title: "Mentors Lounge",
-    path: "/lounge"
+    id: 10,
+    title: "Blog",
+    path: "/events&articles"
   },
   {
-    id: 8,
+    id: 11,
     title: "Enterprise",
     path: "/enterprise"
   },
@@ -101,9 +113,9 @@ const Footer = () => {
   const location = useLocation();
   const celebRoute = location.pathname.split("/")[1] === "lounge"
   // const landing = location.pathname.split("/")[1] === "" || location.pathname.split("/")[1] === "become-a-teacher" || location.pathname.split("/")[1] === "classes";
-  const landing = location.pathname.split("/")[1] === "" 
-  const students =location.pathname.split("/")[1] === "" || location.pathname.split("/")[1] === "students";
-  const teacher =location.pathname.split("/")[1] === "" || location.pathname.split("/")[1] === "become-a-teacher" 
+  const landing = location.pathname.split("/")[1] === ""
+  const students = location.pathname.split("/")[1] === "" || location.pathname.split("/")[1] === "students";
+  const teacher = location.pathname.split("/")[1] === "" || location.pathname.split("/")[1] === "become-a-teacher" || location.pathname.split("/")[1] === "qualifications" || location.pathname.split("/")[1] === "gotocourse-teacher"
 
   const scrollWithOffset = (el) => {
     const yCoord = el.getBoundingClientRect().top + window.pageYOffset;
@@ -129,7 +141,7 @@ const Footer = () => {
               <p className="text-center mb-5">Ready to become a mentor on Gotocourse?</p>
               <div className="join_button_wrapper justify-content-center align-items-center d-flex mb-3">
                 <Link to="/teacher/signup" onClick={() => window.scrollTo(0, 0)}>
-                  <button type="button" className="btn btn-outline-primary px-lg-4 py-lg-3" style={{borderColor:"#0C2191", color:"#0C2191"}}>
+                  <button type="button" className="btn btn-outline-primary px-lg-4 py-lg-3" style={{ borderColor: "#0C2191", color: "#0C2191" }}>
                     Enroll as a mentor
                   </button>
                 </Link>
@@ -146,7 +158,7 @@ const Footer = () => {
               </p> */}
 
               <div className="join_button_wrapper justify-content-center align-items-center d-flex mb-3">
-               {students && <Link to="/students" onClick={() => window.scrollTo(0, 0)}>
+                {students && <Link to="/students" onClick={() => window.scrollTo(0, 0)}>
                   <motion.button type="button"
                     className="btn btn-light px-lg-4 py-lg-3"
                     // style={{ color: celebRoute ? "#fff" : "var(--theme-blue)", background: "#fff", borderColor: celebRoute ? "#fff" : "var(--theme-blue)" }}
@@ -161,10 +173,10 @@ const Footer = () => {
                     Join as a student
                   </motion.button>
                 </Link>
-              } 
-             {landing && <small>OR</small> }
+                }
+                {landing && <small>OR</small>}
 
-                {teacher && <Link to="/become-a-teacher">
+                {/* { <a href="https://gotocourse.com" >
                   <motion.button type="button"
                     className="btn btn-light px-lg-4 py-lg-3"
                     // style={{ color: celebRoute ? "#fff" : "var(--theme-blue)", background: "#fff", borderColor: celebRoute ? "#fff" : "var(--theme-blue)" }}
@@ -176,10 +188,50 @@ const Footer = () => {
                     transition={{ duration: 0.1 }}
 
                   >
-                    Apply to teach
+                    Chat us on WhatsApp
                   </motion.button>
-                </Link>
+                </a>
+                } */}
+
+                {
+                  teacher && <p style={{fontWeight: "700", fontSize:"20px"}}>
+                    Gotocourse is selected by leading organizations to develop in-demand career skills.
+                  </p>
                 }
+                 {  !teacher && <a href="https://gotocourse.com" >
+                  <motion.button type="button"
+                    className="btn btn-light px-lg-4 py-lg-3"
+                    // style={{ color: celebRoute ? "#fff" : "var(--theme-blue)", background: "#fff", borderColor: celebRoute ? "#fff" : "var(--theme-blue)" }}
+                    style={{ color: "var(--theme-blue)", background: "#fff", borderColor: "var(--theme-blue)" }}
+                    whileHover={{
+                      boxShadow: "0px 0px 8px rgb(0, 0, 0)",
+                      textShadow: "0px 0px 8px rgb(255,255,255)",
+                    }}
+                    transition={{ duration: 0.1 }}
+
+                  >
+                    Chat us on WhatsApp
+                  </motion.button>
+                </a>
+                }
+              </div>
+              <div className="d-flex justify-content-center align-items-center">
+                {  teacher && <a href="https://gotocourse.com" >
+                    <motion.button type="button"
+                      className="btn btn-light px-lg-4 py-lg-3"
+                      // style={{ color: celebRoute ? "#fff" : "var(--theme-blue)", background: "#fff", borderColor: celebRoute ? "#fff" : "var(--theme-blue)" }}
+                      style={{ color: "var(--theme-blue)", background: "#fff", borderColor: "var(--theme-blue)" }}
+                      whileHover={{
+                        boxShadow: "0px 0px 8px rgb(0, 0, 0)",
+                        textShadow: "0px 0px 8px rgb(255,255,255)",
+                      }}
+                      transition={{ duration: 0.1 }}
+
+                    >
+                      Chat us on WhatsApp
+                    </motion.button>
+                  </a>
+                  }
               </div>
             </div>
         }
@@ -189,49 +241,71 @@ const Footer = () => {
               <Link to="/" onClick={() => window.scrollTo(0, 0)}>
                 <i className="d-none d-lg-block">
                   {/* <Logo color={!celebRoute ? "var(--theme-blue)" : "#fff"} /> */}
-                  <Logo color={"var(--theme-blue)" } />
+                  {/* <Logo color={"var(--theme-blue)" } /> */}
+                  {teacher ?
+                    <img src={Teacerlogo} alt=""
+                      width={250}
+                      style={{ maxWidth: "100%" }}
+                    />
+
+                    :
+
+                    <img src={logo} alt="" width={250} />
+                  }
+
                 </i>
 
                 <i className="d-lg-none">
                   {/* <Logosm color={!celebRoute ? "var(--theme-blue)" : "#fff"} /> */}
-                  <Logosm color={"var(--theme-blue)"} />
+                  {/* <Logosm color={"var(--theme-blue)"} /> */}
+                  {teacher ?
+                    <img src={Teacerlogo} alt=""
+                      width={250}
+                      style={{ maxWidth: "100%" }}
+                    />
+
+                    :
+
+                    <img src={logo} alt="" width={250} />
+                  }
+
                 </i>
                 {/* <small className="text-center d-block" style={{ fontSize: '16px', color: !celebRoute ? "var(--theme-blue)" : "#fff" }}>Learn without limits.</small> */}
-                <small className="text-center d-block" style={{ fontSize: '16px', color:  "var(--theme-blue)"}}>Learn without limits.</small>
+                <small className="text-center d-block" style={{ fontSize: '16px', color: "var(--theme-blue)" }}>Learn without limits.</small>
               </Link>
             </div>
 
-            <div className="second">
-                <ul>
-                  <li>Categories</li>
-                  {categories.data?.data?.map((link, index) => (
-                    <Link key={index} to={`/categories/${link.name.split(" ").join("-").toLowerCase()}`} onClick={()=>{
-                      localStorage.setItem('gotocourse-category', JSON.stringify(link))
-                    }}>
-                      <motion.li
-                        style={{ 
-                          // color: !celebRoute ? "var(--theme-blue)" : "#FFF",
-                          color:"var(--theme-blue)",
-                          lineHeight: "26px",
-                          fontSize: "10px",
-                        }}
-                        whileHover={{
-                          scale: 1.1,
-                          originX: 0,
-                          color: "#F75C4E"
-                        }}
-                        transition={{
-                          stiffness: 300
-                        }}
-                        
-                      >
-                        {link.name}
-                      </motion.li>
-                    </Link>
-                  ))}
+            {/* <div className="second">
+              <ul>
+                <li>Categories</li>
+                {categories.data?.data?.map((link, index) => (
+                  <Link key={index} to={`/categories/${link.name.split(" ").join("-").toLowerCase()}`} onClick={() => {
+                    localStorage.setItem('gotocourse-category', JSON.stringify(link))
+                  }}>
+                    <motion.li
+                      style={{
+                        // color: !celebRoute ? "var(--theme-blue)" : "#FFF",
+                        color: "var(--theme-blue)",
+                        lineHeight: "26px",
+                        fontSize: "10px",
+                      }}
+                      whileHover={{
+                        scale: 1.1,
+                        originX: 0,
+                        color: "#F75C4E"
+                      }}
+                      transition={{
+                        stiffness: 300
+                      }}
+
+                    >
+                      {link.name}
+                    </motion.li>
+                  </Link>
+                ))}
 
               </ul>
-            </div>
+            </div> */}
           </div>
 
           <div className="footer_right">
@@ -258,7 +332,7 @@ const Footer = () => {
                           stiffness: 300
                         }}
                         // style={{ color: !celebRoute ? "var(--theme-blue)" : "#FFF", fontSize:"10px", lineHeight:"26px" }}
-                        style={{ color:"var(--theme-blue)" , fontSize:"10px", lineHeight:"26px" }}
+                        style={{ color: "var(--theme-blue)", fontSize: "10px", lineHeight: "26px" }}
                       >
                         {link.title.toUpperCase()}
                       </motion.li>
@@ -282,7 +356,7 @@ const Footer = () => {
                         transition={{
                           stiffness: 300
                         }}
-                        style={{ color:  "var(--theme-blue)", fontSize:"10px", lineHeight:"26px" }}
+                        style={{ color: "var(--theme-blue)", fontSize: "10px", lineHeight: "26px" }}
                       >
                         {link.title.toUpperCase()}
                       </motion.li>

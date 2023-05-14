@@ -64,7 +64,7 @@ const UploadForm = ({isOpen, setIsOpen, setPreviewImage }) => {
                 pauseOnHover: true
             })
             if(err.statusCode === 2){
-                localStorage.clear()
+                throw new AdvancedError('session expired. Log in to continue');
                 // navigate("/")
             }
         }

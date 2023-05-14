@@ -42,7 +42,6 @@ export function Dashboard(){
     try{
       const res = await fetchAffiliateStats(userdata?.token);
       const {message, statusCode} = res.data;
-      console.log(res.data);
       if(statusCode === 1) {
         const {data} = res.data;
         setStats(_ => data);
@@ -62,7 +61,6 @@ export function Dashboard(){
         if(statusCode !== 1) throw new AdvancedError(message, statusCode);
         toast.success(message)
         const {data} = response.data;
-        console.log(data);
         setStats(_ => data);
         setLink(old => `${old}${data?.affiliateId}`)
         getItem(AFFILIATE_KEY, data);
@@ -72,7 +70,6 @@ export function Dashboard(){
     }
   }
   useEffect(() => {
-    console.log("Affiliate Dashboard mounted");
     if(flag.current) return;
     (async () => {
       try{

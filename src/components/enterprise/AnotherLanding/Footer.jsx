@@ -74,28 +74,28 @@ const rightLink = [
     title: "Contact us",
     path: "/contact-us"
   },
+  // {
+  //   id: 7,
+  //   title: "Admin",
+  //   path: "/admin/login"
+  // },
   {
-    id: 7,
-    title: "Admin",
-    path: "/admin/login"
-  },
-  {
-    id: 7,
+    id: 8,
     title: "Teachers",
     path: "/become-a-teacher"
   },
   {
-    id: 7,
+    id: 9,
     title: "Affiliates",
     path: "/affiliates"
   },
+  // {
+  //   id: 10,
+  //   title: "Mentors Lounge",
+  //   path: "/lounge"
+  // },
   {
-    id: 8,
-    title: "Mentors Lounge",
-    path: "/lounge"
-  },
-  {
-    id: 8,
+    id: 11,
     title: "Enterprise",
     path: "/enterprise"
   },
@@ -141,7 +141,7 @@ display: "flex", alignItems: "center"
                   <Logosm color={"var(--theme-blue)"} />
                 </i>
                 {/* <small className="text-center d-block" style={{ fontSize: '16px', color: !celebRoute ? "var(--theme-blue)" : "#fff" }}>Learn without limits.</small> */}
-                <small className="text-center d-block" style={{ fontSize: '16px', color: "var(--theme-blue)", padding: "1rem 0" }}>All right reserved | c 2022 Gotocourse Inc </small>
+                <small className="text-center d-block" style={{ fontSize: '16px', color: "var(--theme-blue)", padding: "1rem 0" }}>All rights reserved | c 2022 Gotocourse Inc </small>
               </Link>
 
               <div style={{ display: "flex", alignItems: "center", justifyContent:"center", gap: "2rem" , padding: "2rem 0"}}>

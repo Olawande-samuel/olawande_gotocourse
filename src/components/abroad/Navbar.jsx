@@ -2,31 +2,33 @@ import styled from "styled-components";
 import { AiOutlineCloseCircle, AiOutlineMenu } from "react-icons/ai";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 // import LogoutButton from "./LogoutButton"
-import { Logosm } from "../../images/components/svgs";
+import { Logosm, TrainLogo, TrainLogoSm } from "../../images/components/svgs";
 import { motion } from "framer-motion";
 import { useAuth } from "../../contexts/Auth";
 import { useLocalStorage } from "../../hooks";
 import { KEY } from "../../constants";
 import { FaRegUser } from "react-icons/fa";
 import { useState } from "react";
+// import logo from '../../images/abroad/logo.png'
+import africalogo from '../../images/abroad/africalogo.png'
+import SideBar from "./Sidebar";
 
 const Container = styled.div`
 	width: 100%;
-	position: sticky;
+	position: fixed;
 	left: 0;
 	top: 0;
 	right: 0;
-	/* background: #fff; */
-	background: transparent; 
+	background: #EFF2FF;
 	z-index: 1000;
+	/* border: 2px solid red; */
 `;
 
 const NavContainer = styled.div`
 	color: #0c1825;
 	width: 100%;
-	// border: 2px solid red;
-	height: 4rem;
-    background: transparent; 
+	height: 5rem;
+	background: #EFF2FF;
 	z-index: 1000;
 
 	.navcontainer {
@@ -39,7 +41,11 @@ const NavContainer = styled.div`
 		height: 100%;
 		width: 100%;
 		gap: 2rem;
-		// border: 2px solid red;
+	 	/* border: 2px solid red; */
+
+		button{
+			margin-top: unset;
+		}
 
 		.hamburger {
 			display: block;
@@ -47,8 +53,11 @@ const NavContainer = styled.div`
 		}
 
 		.navbarlogo {
-			/* flex: 0.6; */
+						/* flex: 0.6; */
 			/* border: 2px solid yellow; */
+			img{
+				width:150px;
+			}
 		}
 
 		ul {
@@ -86,23 +95,25 @@ const NavContainer = styled.div`
 				/* border: 2px solid purple; */
 
 				.first__btn {
-					color: var(--theme-blue);
+					color:#fff;
 					border: 1px solid #bbbbbb;
 					border-radius: 7px;
 					padding: 0.5rem 1rem;
 					font-weight: 700;
 					font-size: 16px;
 					line-height: 27px;
+					background: var(--theme-blue);
 
 					a {
-						color: var(--theme-blue);
+						color: #FFf;
 					}
 				}
 
 				.second__btn {
-					background: var(--theme-blue);
-					border: 2px solid white;
-					color: #fff;
+					color: var(--theme-blue);
+					border: 2px solid #fff;
+					border: none;
+					background: #fff;
 					padding: 0.5rem 1rem;
 					font-weight: 700;
 					font-size: 14px;
@@ -110,7 +121,7 @@ const NavContainer = styled.div`
 					border-radius: 12px;
 
 					a {
-						color: #fff;
+						color: var(--theme-blue);
 					}
 				}
 			}
@@ -119,6 +130,11 @@ const NavContainer = styled.div`
 
 	@media (min-width: 900px) {
 		.navcontainer {
+			.navbarlogo{
+				/* flex: 0.3; */
+
+			}
+
 			ul {
 				display: flex;
 			}
@@ -130,11 +146,14 @@ const NavContainer = styled.div`
 	}
 `;
 
-const Navbar = ({ toggleSidebar }) => {
+const Navbar = () => {
 	const { setGeneralState } = useAuth();
 	const { getItem } = useLocalStorage();
 	const [anchorEl, setAnchorEl] = useState(null);
 	const open = Boolean(anchorEl);
+
+	const [showBar, setShowBar] = useState(false)
+	const toggleSidebar = () => setShowBar(!showBar)
 
 	const handleClick = (event) => {
 		setAnchorEl(event.currentTarget);
@@ -185,19 +204,22 @@ const Navbar = ({ toggleSidebar }) => {
 				<div className="navcontainer container">
 					<div className="navbarlogo">
 						<Link to={`/`}>
-							<Logosm color="var(--theme-blue)" />
+						{/* <Logosm color="var(--theme-blue)" /> */}
+						{/* <img src={logo} alt="" width={150} /> */}
+						{/* <TrainLogo color="var(--theme-blue)"/> */}
+						<img src={africalogo} alt="" />
 						</Link>
 					</div>
 
 					<ul>
 						<div className="firstitems">
 							<li>
-								<Link to={`/train`}>Train to Work Abroad</Link>
+								<Link to={`/africa/train-to-work`}>Train to Work Abroad</Link>
 							</li>
-							<li>
+							 {/* <li>
 								<Link to={`/women`}>Women for Tech</Link>
-							</li>
-							
+							</li> */}
+							 
 							{/* <div className="dropdown">
 							<button className="dropbtn">Create on Gotocourse</button>
 							<div className="dropdown-content">
@@ -209,7 +231,7 @@ const Navbar = ({ toggleSidebar }) => {
 						</li> */}
 						</div>
 
-						{/* <div className="seconditems">
+						<div className="seconditems">
 							{value?.token ? (
 								<>
 									<li className="me-3 nav_link">
@@ -225,7 +247,7 @@ const Navbar = ({ toggleSidebar }) => {
 											onClick={() => {
 												localStorage.clear();
 
-												navigate("/school/login");
+												navigate("/login");
 											}}
 										>
 											Logout
@@ -261,18 +283,18 @@ const Navbar = ({ toggleSidebar }) => {
 								<>
 									<li>
 										<button className="first__btn">
-											<Link to={`/school/login`}>Sign in</Link>{" "}
+											<Link to={`/login`}>Sign in</Link>{" "}
 										</button>
 									</li>
 
 									<li>
 										<button className="second__btn">
-											<Link to={`/school/signup`}>Register for free</Link>
+											<Link to={`/signup?trainee`}>Register for free</Link>
 										</button>
 									</li>
 								</>
 							)}
-						</div> */}
+						</div>
 					</ul>
 
 					<div className="hamburger align-items-center">
@@ -289,6 +311,7 @@ const Navbar = ({ toggleSidebar }) => {
 					</div>
 				</div>
 			</NavContainer>
+			<SideBar showSidebar={showBar} toggleSidebar={toggleSidebar}/>
 		</Container>
 	);
 };

@@ -14,7 +14,7 @@ import { Product, Stu1, Stu2, Stu3 } from "../../../images/components/svgs"
 import Loader from "../../../components/Loader"
 import { Sidebar, Searchbar, Navbar } from "../components";
 import clsx from "./styles.module.css";
-import { colors, getDate, gotoclass, gotoclassPayment, getFullDate, calculateWeeksBetween } from "../../../constants";
+import { colors, getDate, gotoclass, gotoclassPayment, getFullDate, calculateWeeksBetween, IMAGEURL } from "../../../constants";
 import avatar from "../../../images/teacher.png"
 import { GuardedRoute } from "../../../hoc";
 import Input from "../../../components/Input";
@@ -39,6 +39,7 @@ import PayModal from "../../../components/PayModal";
 import { LiveClassInfo } from "../components/classConsole/Liveclass";
 import { Link } from "react-router-dom";
 import { BiMoney } from "react-icons/bi";
+import UploadWidget from "../components/classConsole/components/UploadWidget";
 
 
 
@@ -46,61 +47,119 @@ const KEY = 'gotocourse-userdata';
 
 
 export function Profile() {
-    const { generalState: { isMobile, notification, loading }, setGeneralState, studentFunctions: { fetchProfile } } = useAuth();
-
+    const { generalState: { isMobile, notification, loading }, generalState, setGeneralState, studentFunctions: { fetchProfile }, kycFunctions: { getAStudentKYC, addStudentVerificationId } } = useAuth();
+    const [fileUrl, setFileUrl] = useState("")
+    // const [uploadlink, setUploadlink] = useState("")
     const ref = useRef(false)
     const { updateItem, getItem } = useLocalStorage();
     let userdata = getItem(KEY);
     const navigate = useNavigate();
-    useEffect(() => {
-        setTimeout(() => {
-            setGeneralState(old => {
-                return {
-                    ...old,
-                    notification: null
-                }
-            })
-        }, 5000)
-    }, [])
+    const [user, setUser] = useState({})
+	const queryClient = useQueryClient()
+
+    // useEffect(() => {
+    //     setTimeout(() => {
+    //         setGeneralState(old => {
+    //             return {
+    //                 ...old,
+    //                 notification: null
+    //             }
+    //         })
+    //     }, 5000)
+    // }, [])
 
 
-    useEffect(() => {
-        if (ref.current) return
-        if (userdata) {
-            const token = userdata.token;
-            (async () => {
-                try {
-                    const res = await fetchProfile(token);
-                    const { success, message, statusCode } = res;
-                    if (!success) throw new AdvancedError(message, statusCode);
-                    else {
-                        const { data } = res;
-                        const newValue = {
-                            ...userdata,
-                            ...data
-                        }
-                        userdata = updateItem(KEY, newValue);
-                    }
-                } catch (err) {
-                    toast.error(err.message, {
-                        position: "top-right",
-                        autoClose: 4000,
-                        hideProgressBar: true,
-                        closeOnClick: true,
-                        pauseOnHover: true,
-                        draggable: true,
-                        progress: undefined,
-                    });
+    // useEffect(() => {
+    //     if (ref.current) return
+    //     if (userdata.token) {
+    //         const token = userdata.token;
+    //         (async () => {
+    //             try {
+    //                 const res = await fetchProfile(token);
+    //                 const { success, message, statusCode } = res;
+    //                 if (!success) throw new AdvancedError(message, statusCode);
+    //                 else {
+    //                     const { data } = res;
+    //                     const newValue = {
+    //                         ...userdata,
+    //                         ...data
+    //                     }
+    //                     userdata = updateItem(KEY, newValue);
+    //                 }
+    //             } catch (err) {
+    //                 toast.error(err.message, {
+    //                     position: "top-right",
+    //                     autoClose: 4000,
+    //                     hideProgressBar: true,
+    //                     closeOnClick: true,
+    //                     pauseOnHover: true,
+    //                     draggable: true,
+    //                     progress: undefined,
+    //                 });
+    //             }
+    //         })()
+    //     }
+
+    //     ref.current = true
+    // }, [userdata?.token])
+
+    // function editProfileHandler(e) {
+    //     navigate("/student/profile/edit");
+    // user-onboarding
+    // }
+
+
+    useQuery(["fetch a student kyc", userdata?.token], () => getAStudentKYC(userdata?.token),
+        {
+            enabled: userdata?.token !== null,
+            onSuccess: (res) => {
+                if (res?.success) {
+                    setUser(res.data);
+                    return;
                 }
-            })()
+            },
+            onError: (err) => console.error(err),
         }
+    );
 
-        ref.current = true
-    }, [userdata?.token])
+    const handleSubmit = async (e) => {
+        e.preventDefault()
+        try {
 
-    function editProfileHandler(e) {
-        navigate("/student/profile/edit");
+            setGeneralState({ ...generalState, loading: true })
+            const response = await addStudentVerificationId(userdata?.token, fileUrl)
+            const { success, message, statusCode } = response
+            if (!success || statusCode !== 1) throw new AdvancedError(message, statusCode)
+            const { data } = response
+            setGeneralState({ ...generalState, loading: false })
+            queryClient.refetchQueries(["fetch a student kyc"])
+
+            toast.success(message, {
+                position: "top-right",
+                autoClose: 4000,
+                hideProgressBar: true,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+            });
+
+        } catch (error) {
+            toast.error(error.message, {
+                position: "top-right",
+                autoClose: 4000,
+                hideProgressBar: true,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+            });
+        } finally {
+            setGeneralState({ ...generalState, loading: false })
+
+        }
     }
+
     return (
         <Students isMobile={isMobile} userdata={userdata} notification={notification} header="Profile">
             <div className={clsx.students_profile}>
@@ -108,21 +167,81 @@ export function Profile() {
                     <div className={clsx.students_profile_top_img}>
                         <img src={userdata?.profileImg ? userdata.profileImg : avatar} style={{ borderRadius: 10 }} width="100%" alt="Avatar" />
                     </div>
-                    <button className={clsx.students_profile_top_button} onClick={editProfileHandler}>
+                    {/* <button className={clsx.students_profile_top_button} onClick={editProfileHandler}>
                         <MdEdit />  &nbsp;   <span className="d-none d-md-block">Edit</span>
-                    </button>
+                    </button> */}
                 </div>
                 <div className={clsx.students_profile_main}>
-                    {/* <span className="text-muted">Name:</span> */}
+                    <span className="text-muted">Name:</span>
                     <h1 className={clsx.students__header} style={{ marginTop: 20 }}>{userdata?.firstName} {userdata?.lastName}</h1>
                     <span className="text-muted">Experience:</span>
-                    <p>{userdata?.bio ? userdata?.bio : "I'm a purposeful person"} </p>
+                    <p>{userdata?.bio ? userdata?.bio : user?.question?.experience ? user?.question?.experience : "I'm a purposeful person"} </p>
                     <span className="text-muted">Bio:</span>
                     <p>{userdata?.goals ? userdata?.goals : "I'm here to achieve great things in tech"}</p>
+                    <span className="text-muted">Phone Number</span>
+                    <p>{user?.question?.phoneNumber}</p>
+
+                    <span className="text-muted">Degree</span>
+                    <p>{user?.question?.degree}</p>
+                    <span className="text-muted">Employment</span>
+                    <p>{user?.question?.employment}</p>
+                    <span className="text-muted">Country</span>
+                    <p>{user?.question?.country}</p>
+                    <span className="text-muted">Region</span>
+                    <p>{user?.question?.region}</p>
+
+
+                    {
+                        (user?.verificationId !== "default.png") && (
+                            <>
+
+                                <div className={clsx.title}>
+                                    <p className={clsx.question}>Verification Id Card</p>
+                                    <div style={{
+                                        width: "350px",
+                                        height: "200px"
+
+                                    }}>
+                                        <img src={`${IMAGEURL}${user?.verificationId}`} alt="" style={{
+                                            maxWidth: "100%",
+                                            maxHeight: "100%"
+                                        }} />
+                                    </div>
+                                </div>
+
+                                <div>
+                                    Id Card Approval: {user?.IDVerified ? "true" : "false"}
+
+                                </div>
+                            </>
+                        )
+                    }
+
 
                 </div>
+                {
+                    (user?.verificationId === "default.png") && (
+                        <>
+                            <div>
+                                <label htmlFor="">Upload a valid Id Card</label> <br />
+                                <UploadWidget fileUrl={fileUrl} setFileUrl={setFileUrl} />
+                            </div>
+
+                            <div>
+                                {/* <form > */}
+                                {/* <input className="w-100 form-control"  type="text" value={uploadlink} onChange={(e) => setUploadlink(e.target.value)} /> */}
+                                <button disabled={!fileUrl} onClick={handleSubmit} className="button" style={{ padding: ".5rem 2rem" }}>Save Uploaded Id</button>
+                                {/* </form> */}
+                            </div>
+                        </>
+
+                    )
+                }
+
+
             </div>
-        </Students>
+
+        </Students >
     )
 }
 
@@ -380,47 +499,49 @@ export function MyClasses() {
 
     useEffect(() => {
         if (flag.current) return;
-        (async () => {
-            try {
-                const res = await fetchBootcamps(userdata?.token);
-                const { message, success, statusCode } = res;
-                if (!success) throw new AdvancedError(message, statusCode);
-                else if (statusCode === 1) {
-                    const { data } = res;
-                    if (data.length > 0) {
-                        setCourseList(data);
+        if (userdata?.token) {
+            (async () => {
+                try {
+                    const res = await fetchBootcamps(userdata?.token);
+                    const { message, success, statusCode } = res;
+                    if (!success) throw new AdvancedError(message, statusCode);
+                    else if (statusCode === 1) {
+                        const { data } = res;
+                        if (data.length > 0) {
+                            setCourseList(data);
+                        } else {
+
+                            toast.error("No bootcamp found", {
+                                position: "top-right",
+                                autoClose: 4000,
+                                hideProgressBar: true,
+                                closeOnClick: true,
+                                pauseOnHover: true,
+                                draggable: true,
+                                progress: undefined,
+                            });
+                        }
+
                     } else {
-
-                        toast.error("No bootcamp found", {
-                            position: "top-right",
-                            autoClose: 4000,
-                            hideProgressBar: true,
-                            closeOnClick: true,
-                            pauseOnHover: true,
-                            draggable: true,
-                            progress: undefined,
-                        });
+                        throw new AdvancedError(message, statusCode);
                     }
-
-                } else {
-                    throw new AdvancedError(message, statusCode);
+                } catch (err) {
+                    toast.error(err.message, {
+                        position: "top-right",
+                        autoClose: 4000,
+                        hideProgressBar: true,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                    });
+                } finally {
+                    setLoading(_ => false);
                 }
-            } catch (err) {
-                toast.error(err.message, {
-                    position: "top-right",
-                    autoClose: 4000,
-                    hideProgressBar: true,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                });
-            } finally {
-                setLoading(_ => false);
-            }
-        })()
+            })()
+        }
         flag.current = true;
-    }, [])
+    }, [userdata?.token])
 
     function gotoCreateCourseHandler(e) {
         navigate("create");
@@ -430,17 +551,15 @@ export function MyClasses() {
     }
 
     function handleNavigate(category, name, id) {
-        console.log("clicking");
         // localStorage.setItem("gotocourse-courseId", id)
         let courseCategory = category?.split(" ").join("-")
         let courseName = name?.split(" ").join("-")
         navigate(`/categories/${courseCategory}/courses/${courseName}/${id}/payment`)
     }
 
-    console.log({ courseList });
 
     return (
-        <Students header={"My Classes"}>
+        <Students header={"My Courses"}>
             {loading && <Loader />}
             <div className={clsx["students_profile"]}>
                 <div className={clsx.admin__student}>
@@ -449,30 +568,6 @@ export function MyClasses() {
                     </div> */}
                     <div className={clsx.admin__student_main}>
                         {courseList?.length > 0 ? (
-                            // <table className={clsx.admin__student_table}>
-                            //     <thead>
-                            //         {tableHeaders.map((el, i) => (
-                            //             <th key={i}>{el}</th>
-                            //         ))}
-                            //     </thead>
-                            //     <tbody>
-                            //         {courseList?.map(
-                            //             // {_id, title, duration, startTime, endTime, startDate,endDate, description, type, isActive, instructorId, bootcampImg, all}
-                            //             ({ bootcampName, tutorName, startTime, endTime, endDate, startDate, bootcampId, bootcampImg, _id }, i) => (
-                            //                 <tr style={{ padding: "1rem" }}>
-                            //                     <td>{i + 1}</td>
-                            //                     <td>{bootcampName}</td>
-                            //                     <td>{tutorName}</td>
-                            //                     <td>{getDate(startDate)}</td>
-                            //                     <td>{startTime}</td>
-                            //                 </tr>
-                            //             )
-                            //         )}
-                            //         <p>
-                            //         </p>
-                            //     </tbody>
-                            // </table>
-
                             <div className={` ${clsx.dashboard_courses}`}>
                                 <div className={clsx["dashboard_courses--left"]}>
                                     {/* <h6 style={{ marginBottom: ".5rem" }}>Available Courses</h6>
@@ -533,7 +628,7 @@ export function MyClasses() {
                                                 <div className={clsx["courseitem"]}>
                                                     <div className={clsx.classes_button}>
                                                         {
-                                                            (item.paymentStatus === "complete" || item.paymentStatus === "paid") ?
+                                                            (item.paymentStatus === "completed" || item.paymentStatus === "paid") ?
 
                                                                 <button className="d-flex align-items-center" style={{ background: "var(--theme-blue)", color: "#fff" }}
                                                                     onClick={(e) => navigate(`/student/class-console/class/${item.bootcampId}`)}
@@ -594,57 +689,59 @@ export function Bootcamps() {
 
     useEffect(() => {
         if (flag.current) return;
-        (async () => {
-            try {
-                const res = await fetchBootcamps(userdata?.token);
-                const { message, success, statusCode } = res;
-                if (!success) throw new AdvancedError(message, statusCode);
-                else if (statusCode === 1) {
-                    const { data } = res;
-                    if (data.length > 0) {
+        if (userdata?.token) {
+            (async () => {
+                try {
+                    const res = await fetchBootcamps(userdata?.token);
+                    const { message, success, statusCode } = res;
+                    if (!success) throw new AdvancedError(message, statusCode);
+                    else if (statusCode === 1) {
+                        const { data } = res;
+                        if (data.length > 0) {
 
-                        setCourseList(data);
-                        toast.success(message, {
-                            position: "top-right",
-                            autoClose: 4000,
-                            hideProgressBar: true,
-                            closeOnClick: true,
-                            pauseOnHover: true,
-                            draggable: true,
-                            progress: undefined,
-                        });
+                            setCourseList(data);
+                            toast.success(message, {
+                                position: "top-right",
+                                autoClose: 4000,
+                                hideProgressBar: true,
+                                closeOnClick: true,
+                                pauseOnHover: true,
+                                draggable: true,
+                                progress: undefined,
+                            });
+                        } else {
+
+                            toast.error("No bootcamp found", {
+                                position: "top-right",
+                                autoClose: 4000,
+                                hideProgressBar: true,
+                                closeOnClick: true,
+                                pauseOnHover: true,
+                                draggable: true,
+                                progress: undefined,
+                            });
+                        }
+
                     } else {
-
-                        toast.error("No bootcamp found", {
-                            position: "top-right",
-                            autoClose: 4000,
-                            hideProgressBar: true,
-                            closeOnClick: true,
-                            pauseOnHover: true,
-                            draggable: true,
-                            progress: undefined,
-                        });
+                        throw new AdvancedError(message, statusCode);
                     }
-
-                } else {
-                    throw new AdvancedError(message, statusCode);
+                } catch (err) {
+                    toast.error(err.message, {
+                        position: "top-right",
+                        autoClose: 4000,
+                        hideProgressBar: true,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                    });
+                } finally {
+                    setLoading(_ => false);
                 }
-            } catch (err) {
-                toast.error(err.message, {
-                    position: "top-right",
-                    autoClose: 4000,
-                    hideProgressBar: true,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                });
-            } finally {
-                setLoading(_ => false);
-            }
-        })()
+            })()
+        }
         flag.current = true;
-    }, [])
+    }, [userdata?.token])
 
     function gotoCreateCourseHandler(e) {
         navigate("create");
@@ -711,7 +808,6 @@ export function Classes() {
     const bootcamps = useQuery(["bootcamps"], () => fetchBootcamps());
     const [search, setSearch] = useState("");
 
-    // console.log(bootcamps?.data?.data);
     return (
         <Students isMobile={isMobile} userdata={userdata} header="Courses">
             {/* <div className={clsx.students_profile}>
@@ -753,20 +849,18 @@ export function Wishlist() {
         onSuccess: (res) => {
             if (res?.data?.length > 0) {
                 setWishlists(res?.data);
-            }else {
+            } else {
                 setWishlists([])
             }
         }
     });
 
 
- 
 
-    console.log({ wishlists });
+
 
     const value = useMemo(() => {
         return wishlists?.reduce((total, current) => {
-            console.log({ current });
             return total + current.price
         }, 0)
     }, [wishlists])
@@ -774,9 +868,8 @@ export function Wishlist() {
     // const Available=  bootcamps?.data?.data?.length > 0 && bootcamps?.data?.data?.some(r=> wishlists?.map(wishlist => wishlist.courseId).indexOf(r.bootcampId) >= 0)
     // const Available = bootcamps?.data?.data?.length > 0 && bootcamps?.data?.data?.filter(boot => boot.bootcampId === (wishlists?.map(wishlist => wishlist.courseId)))
 
-    // console.log({Available});
 
-  
+
 
 
     return (
@@ -798,14 +891,17 @@ export function Wishlist() {
 
 
                 <div className={clsx.classes}>
-                    <div className={clsx.wishlistprice}>
-                        <small>Total:</small>
-                        <p>{`$${value}`}</p>
-                        {/* <p>$11,000</p> */}
-                        <Link to={`/student/wishlist-checkout`}><button disabled={wishlists?.length <= 0 ? true : false}>Checkout</button></Link>
+                    {(!userdata?.trainee) &&
+                        <div className={clsx.wishlistprice}>
+                            <small>Total:</small>
+                            <p>{`$${value}`}</p>
+                            {/* <p>$11,000</p> */}
+                            <Link to={`/student/wishlist-checkout`}><button disabled={wishlists?.length <= 0 ? true : false}>Checkout</button></Link>
 
 
-                    </div>
+                        </div>
+
+                    }
                     <p style={{ padding: "1rem 0" }}>My Cart</p>
 
                     <div className={clsx.students_wishlist}>
@@ -1119,7 +1215,6 @@ function DeleteModal({ id, open, handleClose }) {
             if (!success) throw new AdvancedError(message, statusCode);
             else {
                 const { data } = res;
-                console.log("reloading");
                 queryClient.invalidateQueries(["carts", "bootcamps"])
                 handleClose()
                 // toast.success(message, {
@@ -1189,7 +1284,6 @@ export function WishlistCheckOut() {
     const checkout = async () => {
         //get all ids
         let ids = wishlists.map(wishlist => wishlist.courseId);
-        console.log({ ids });
         //   payCarts
         try {
             setGeneralState({ ...generalState, loading: true })
@@ -1198,7 +1292,6 @@ export function WishlistCheckOut() {
             if (!success) throw new AdvancedError(message, statusCode);
             else if (statusCode === 1) {
                 const { data } = res;
-                console.log({ data });
                 setPayintent(data.clientSecret)
                 setShowStripeModal(true)
                 toast.success(message, {
@@ -1325,12 +1418,12 @@ export function WishlistCheckOut() {
 
                 <div>
                     {showStripeModal && <PayModal
-                        token={payIntent} 
-                        openPaymentModal={showStripeModal} 
-                        handleClose={handleClose} 
+                        token={payIntent}
+                        openPaymentModal={showStripeModal}
+                        handleClose={handleClose}
                         cart={true}
-                        />
-                        }
+                    />
+                    }
 
                 </div>
 
@@ -1387,17 +1480,30 @@ export function Courses() {
     const ref = useRef(false)
     useEffect(() => {
         if (ref.current) return
-        (async () => {
-            try {
-                setGeneralState({ ...generalState, loading: true })
-                const res = await fetchCourses(userdata?.token);
-                const { success, message, statusCode } = res;
-                setGeneralState({ ...generalState, loading: false })
-                if (!success || statusCode !== 1) throw new AdvancedError(message, statusCode);
-                else {
-                    const { data } = res;
-                    setCourses(_ => data);
-                    toast.success(message, {
+        if (userdata?.token) {
+            (async () => {
+                try {
+                    setGeneralState({ ...generalState, loading: true })
+                    const res = await fetchCourses(userdata?.token);
+                    const { success, message, statusCode } = res;
+                    setGeneralState({ ...generalState, loading: false })
+                    if (!success || statusCode !== 1) throw new AdvancedError(message, statusCode);
+                    else {
+                        const { data } = res;
+                        setCourses(_ => data);
+                        toast.success(message, {
+                            position: "top-right",
+                            autoClose: 4000,
+                            hideProgressBar: true,
+                            closeOnClick: true,
+                            pauseOnHover: true,
+                            draggable: true,
+                            progress: undefined,
+                        });
+                    }
+                } catch (err) {
+                    setGeneralState({ ...generalState, loading: false })
+                    toast.error(err.message, {
                         position: "top-right",
                         autoClose: 4000,
                         hideProgressBar: true,
@@ -1407,22 +1513,11 @@ export function Courses() {
                         progress: undefined,
                     });
                 }
-            } catch (err) {
-                setGeneralState({ ...generalState, loading: false })
-                toast.error(err.message, {
-                    position: "top-right",
-                    autoClose: 4000,
-                    hideProgressBar: true,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                });
-            }
-        })()
+            })()
+        }
 
         ref.current = true
-    }, [])
+    }, [userdata?.token])
 
 
     const [rating, setRating] = useState(0) // initial rating value
@@ -1496,7 +1591,7 @@ export function History() {
     const ref = useRef(false)
     useEffect(() => {
         if (ref.current) return
-        if (userdata) {
+        if (userdata?.token) {
             (async () => {
                 setGeneralState({ ...generalState, loading: true })
                 try {
@@ -1532,7 +1627,7 @@ export function History() {
         }
 
         ref.current = true
-    }, [])
+    }, [userdata?.token])
 
 
     const tableHeaders = ["No", "Courses", "Status", "Date", "Course Price", "Amount Paid"]
@@ -1585,7 +1680,6 @@ export function Fees() {
 
     useQuery(["fetch my enrolledclasses"], () => fetchBootcampFees(userdata?.token), {
         onSuccess: (res) => {
-            console.log({ res });
             if (res?.data?.length > 0) {
                 setCourse((res?.data));
             }
@@ -1610,33 +1704,9 @@ export function Fees() {
 
     }
 
-    // async function fetchPayments(token) {
-    //     setGeneralState({ ...generalState, loading: true })
-    //     try {
-    //         const res = await Promise.all([fetchStudentFees(token), fetchBootcampFees(token)])
-    //         console.log({ res })
-    //         if (res.length > 0) {
-    //             const myPayment = res[0].data.concat(res[1].data)
-
-    //             console.log(myPayment)
-    //             setCourse(myPayment)
-    //         }
-    //         setGeneralState({ ...generalState, loading: false })
-    //     } catch (err) {
-    //         toast.error(err.message);
-    //     }
-    // }
-
-
-    // useEffect(() => {
-    //     if (userdata.token) {
-    //         fetchPayments(userdata.token)
-    //     }
-    // }, [userdata.token])
-
     useEffect(() => {
         if (ref.current) return
-        if (userdata) {
+        if (userdata?.token) {
             (async () => {
                 setGeneralState({ ...generalState, loading: true })
                 try {
@@ -1646,7 +1716,6 @@ export function Fees() {
                     if (!success || statusCode !== 1) throw new AdvancedError(message, statusCode);
                     else {
                         const { data } = res;
-                        console.log({ data });
                         setFees(_ => data);
                     }
                 } catch (err) {
@@ -1663,7 +1732,7 @@ export function Fees() {
             })()
         }
         ref.current = true
-    }, [])
+    }, [userdata?.token])
 
 
     const tableContents = fees.length > 0 ? fees : []
@@ -1693,7 +1762,6 @@ export function Fees() {
 
     const handlePay = async (paymentId, type) => {
         setGeneralState({ ...generalState, loading: true })
-        console.log({ type })
         try {
             const res = await payStudentFees(userdata.token, paymentId);
             // const res = type === "course" ? await payStudentFees(userdata.token, paymentId) : await addBootcamp({bootcampId: paymentId}, userdata.token);
@@ -1715,7 +1783,6 @@ export function Fees() {
 
     }
 
-    // console.log({ course });
     return (
         <Students isMobile={isMobile} userdata={userdata} header="Payments">
             <div className={clsx.students_profile}>
@@ -1886,34 +1953,37 @@ export function Notification() {
 
     useEffect(() => {
         if (flag.current) return;
-        (async () => {
-            try {
-                setLoader(true)
-                const res = await fetchNotifications(userdata?.token);
-                const { message, success, statusCode } = res;
-                if (!success) throw new AdvancedError(message, statusCode);
-                const { data } = res
-                if (data.length > 0) {
-                    setNotifications(data)
-                    const unread = data.filter((notification) => notification.isRead !== true)
-                    setGeneralState({ ...generalState, notifications: unread.length })
+        if (userdata?.token) {
+
+            (async () => {
+                try {
+                    setLoader(true)
+                    const res = await fetchNotifications(userdata?.token);
+                    const { message, success, statusCode } = res;
+                    if (!success) throw new AdvancedError(message, statusCode);
+                    const { data } = res
+                    if (data.length > 0) {
+                        setNotifications(data)
+                        const unread = data.filter((notification) => notification.isRead !== true)
+                        setGeneralState({ ...generalState, notifications: unread.length })
+                    }
+                } catch (err) {
+                    toast.error(err.message, {
+                        position: "top-right",
+                        autoClose: 4000,
+                        hideProgressBar: true,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                    });
+                } finally {
+                    setLoader(_ => false);
                 }
-            } catch (err) {
-                toast.error(err.message, {
-                    position: "top-right",
-                    autoClose: 4000,
-                    hideProgressBar: true,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                });
-            } finally {
-                setLoader(_ => false);
-            }
-        })()
+            })()
+        }
         flag.current = true;
-    }, [reload])
+    }, [reload, userdata?.token])
 
     async function markAsRead(e) {
         e.preventDefault();
@@ -2029,8 +2099,7 @@ export const Dashboard = ({ mixpanel }) => {
     const { data: myenrolledcourses, isSuccess: mycoursesuccess } = useQuery(["fetch my enrolledclasses"], () => fetchMyClasses(userdata?.token))
     // const { data: allCourses } = useQuery(["fetch all bootcamps"], () => fetchBootcamps())
     const { data, isSuccess } = useQuery(["bootcamps"], () => fetchBootcamps());
-    // console.log({data})
-    // console.log("wish",wishlistData );
+
     const topContent = [
         {
             id: 1,
@@ -2072,14 +2141,12 @@ export const Dashboard = ({ mixpanel }) => {
 
 
 
-    function filterDates(date){
+    function filterDates(date) {
         let isFound
-        console.log({date})
-        if(date){
-          isFound = (new Intl.DateTimeFormat('en-US').format(new Date(date))?.includes(dateFilter))
-          console.log({isFound})
-          return isFound
-        }else {
+        if (date) {
+            isFound = (new Intl.DateTimeFormat('en-US').format(new Date(date))?.includes(dateFilter))
+            return isFound
+        } else {
             return false
         }
     }
@@ -2097,10 +2164,13 @@ export const Dashboard = ({ mixpanel }) => {
                     <AiOutlineSearch style={{ fontSize: "1.5rem", color: "#292D32" }} />
                 </div>
 
-                <div className={clsx.students_profile_main}>
-                    {/* <UpcomingCourses data={all ? all : []} /> */}
-                    <UpcomingCourses data={data?.data ? data?.data : []} search={search} />
-                </div>
+                {
+                    userdata?.trainee &&
+                    <div className={clsx.students_profile_main}>
+                        {/* <UpcomingCourses data={all ? all : []} /> */}
+                        <UpcomingCourses data={data?.data ? data?.data : []} search={search} />
+                    </div>
+                }
 
 
 
@@ -2198,15 +2268,21 @@ function UpcomingCourses({ data, search }) {
     const { getItem } = useLocalStorage()
     let userdata = getItem(KEY);
 
-    const first = data?.length > 0 ? data?.filter(item => item.startDate === "2023-01-19T00:00:00.000Z" && item.isActive) : [];
-    const second = data?.length > 0 ? data?.filter(item => item.startDate === "2023-01-05T00:00:00.000Z" && item.isActive) : [];
-    const third = data?.length > 0 ? data?.filter(item => item.startDate !== "2023-01-05T00:00:00.000Z" && item.startDate !== "2023-01-19T00:00:00.000Z" && item.isActive).sort((a, b) => new Date(a.startDate) - new Date(b.startDate)) : [];
-    const all = [...first, ...second, ...third];
-    // console.log({ second });
+    // const first = data?.length > 0 ? data?.filter(item => item.startDate === "2023-01-19T00:00:00.000Z" && item.isActive) : [];
+    // const second = data?.length > 0 ? data?.filter(item => item.startDate === "2023-01-05T00:00:00.000Z" && item.isActive) : [];
+    // const third = data?.length > 0 ? data?.filter(item => item.startDate !== "2023-01-05T00:00:00.000Z" && item.startDate !== "2023-01-19T00:00:00.000Z" && item.isActive).sort((a, b) => new Date(a.startDate) - new Date(b.startDate)) : [];
+    // const all = [...first, ...second, ...third];
+    const all = data?.length > 0 ? data?.filter(item => item.category === "TRAIN2 WORKABROAD") : [];
+
 
     function handleCourseSelect(e, item) {
         e.preventDefault()
         if (userdata?.token) {
+            // if (userdata?.trainee) {
+            //     localStorage.setItem("gotocourse-bootcampdata", JSON.stringify(item))
+            //     gotoclassPayment(item.title, item.category, item.bootcampId, navigate, userdata?.trainee)
+            //     return;
+            // }
             localStorage.setItem("gotocourse-bootcampdata", JSON.stringify(item))
             gotoclassPayment(item.title, item.category, item.bootcampId, navigate)
         } else {
@@ -2217,7 +2293,7 @@ function UpcomingCourses({ data, search }) {
     return (
         <div className={` ${clsx.dashboard_courses}`}>
             <div className={clsx["dashboard_courses--left"]}>
-                <h6 style={{ marginBottom: ".5rem" }}>Upcoming Courses</h6>
+                <h6 style={{ marginBottom: ".5rem" }}>Train to Work Abroad Courses</h6>
                 <small className="mb-4 d-block">Select and enroll for a course to get started</small>
 
                 <div className={clsx["courseheader"]}>
@@ -2227,25 +2303,7 @@ function UpcomingCourses({ data, search }) {
                     <div className={clsx["courseitem"]}>Subcategory</div>
                     <div className={clsx["courseitem"]}>Start Date</div>
                     <div className={clsx["courseitem"]}>Durations</div>
-                    <div className={clsx["courseitem"]}>
-                        {/* <FormControl fullWidth size="small">
-                            <InputLabel id="demo-simple-select-label">Fee</InputLabel>
-                            <Select
-                                labelId="demo-simple-select-label"
-                                id="demo-simple-select"
-                                // value={age}
-                                label="fee"
-                            // onChange={handleChange}
-                            >
-                                <MenuItem value={30}>POUNDS</MenuItem>
-                                <MenuItem value={10}>USD</MenuItem>
-                                <MenuItem value={20}>EURO</MenuItem>
-                                <MenuItem value={20}>NAIRA</MenuItem>
-                            </Select>
-                        </FormControl> */}
-
-                        Fees
-                    </div>
+                    <div className={clsx["courseitem"]}>Fees</div>
                     <div className={clsx["courseitem"]} />
                 </div>
 
@@ -2295,7 +2353,7 @@ function UpcomingCourses({ data, search }) {
                             </div>
 
                             <div className={clsx["courseitem"]}>
-                                ${(item?.packages?.length === 0 && item.price) ? item.price : (item?.packages?.length > 0) && item.packages[0].price}
+                                &#8358;{(item?.packages?.length === 0 && item.price) ? item.price : (item?.packages?.length > 0) && item.packages[0].price}
 
                             </div>
 
@@ -2345,6 +2403,11 @@ function AllAvailableCourses({ data, search }) {
     function handleCourseSelect(e, item) {
         e.preventDefault()
         if (userdata?.token) {
+            // if (userdata?.trainee) {
+            //     localStorage.setItem("gotocourse-bootcampdata", JSON.stringify(item))
+            //     gotoclassPayment(item.title, item.category, item.bootcampId, navigate, userdata?.trainee)
+            //     return;
+            // }
             localStorage.setItem("gotocourse-bootcampdata", JSON.stringify(item))
             gotoclassPayment(item.title, item.category, item.bootcampId, navigate)
         } else {
@@ -2352,18 +2415,16 @@ function AllAvailableCourses({ data, search }) {
         }
 
     }
-    // console.log({ data });
+    const first = data?.length > 0 ? data?.filter(item => item.startDate?.includes("2023-03") && item.isActive && item.category !== "TRAIN2 WORKABROAD").sort((a, b) => new Date(a.startDate) - new Date(b.startDate)) : [];
+    // const third = data?.length > 0 ? data?.filter(item => !item.startDate?.includes("2023-03") && item.isActive).sort((a, b) => new Date(a.startDate) - new Date(b.startDate)) : [];
 
-    const first = data?.length > 0 ? data?.filter(item => item.startDate === "2023-01-19T00:00:00.000Z" && item.isActive) : [];
-    const second = data?.length > 0 ? data?.filter(item => item.startDate === "2023-01-05T00:00:00.000Z" && item.isActive) : [];
-    const third = data?.length > 0 ? data?.filter(item => item.startDate !== "2023-01-05T00:00:00.000Z" && item.startDate !== "2023-01-19T00:00:00.000Z" && item.isActive).sort((a, b) => new Date(a.startDate) - new Date(b.startDate)) : [];
-    const all = [...first, ...second, ...third];
+    const all = [...first];
 
     return (
 
         <div className={` ${clsx.dashboard_courses}`}>
             <div className={clsx["dashboard_courses--left"]}>
-                <h6 style={{ marginBottom: ".5rem" }}>Available Courses</h6>
+                <h6 style={{ marginBottom: ".5rem" }}>Upcoming Courses</h6>
                 <small className="mb-4 d-block">Select and enroll for a course to get started</small>
 
 
@@ -2490,24 +2551,42 @@ function AvailableCourses({ data, search }) {
     function handleCourseSelect(e, item) {
         e.preventDefault()
         if (userdata?.token) {
+            // if (userdata?.trainee) {
+            //     localStorage.setItem("gotocourse-bootcampdata", JSON.stringify(item))
+            //     gotoclassPayment(item.title, item.category, item.bootcampId, navigate, userdata?.trainee)
+            //     return;
+            // }
             localStorage.setItem("gotocourse-bootcampdata", JSON.stringify(item))
-            gotoclassPayment(item.title, item.category, item.bootcampId, navigate)
+            gotoclassPayment(item.title, item.category, item.bootcampId, navigate, true)
         } else {
             navigate("/login")
         }
 
     }
-    // console.log({ data });
 
-    const first = data?.length > 0 ? data?.filter(item => item.startDate === "2023-01-19T00:00:00.000Z" && item.isActive) : [];
-    const second = data?.length > 0 ? data?.filter(item => item.startDate === "2023-01-05T00:00:00.000Z" && item.isActive) : [];
-    const third = data?.length > 0 ? data?.filter(item => item.startDate !== "2023-01-05T00:00:00.000Z" && item.startDate !== "2023-01-19T00:00:00.000Z" && item.isActive).sort((a, b) => new Date(a.startDate) - new Date(b.startDate)) : [];
-    const all = [...first, ...second, ...third];
+    let ids = [
+        "63f74cdc78429071a01a00bf",
+        "63717978f0eaad8dcf392eeb"
+       ]
+       
+       const first = data?.length > 0 ? data?.filter(item => item.bootcampId === "636de01bbc7cb9bcc9c9b119" && item.isActive) : [];
+       const second = data?.length > 0 ? data?.filter(item => item.bootcampId === "63f68ab678429071a0195c6d" && item.isActive) : [];
+       const third = data?.length > 0 ? data?.filter(item => item.bootcampId === "63717aa2f0eaad8dcf3930a7" && item.isActive) : [];
+       const fourth = data?.length > 0 ? data?.filter(item => item.bootcampId === "6430661e1485c80cb3261471" && item.isActive) : [];
+
+       const fifth = data?.length > 0 ? data?.filter(item => !ids.includes(item.bootcampId) && item.startDate?.includes("2023-03") && item.isActive  &&  item.category !== "TRAIN2 WORKABROAD").sort((a, b) => new Date(a.startDate) - new Date(b.startDate)) : [];
+
+       // const second = res.data?.length > 0 ? res.data?.filter(item => item.startDate === "2023-01-05T00:00:00.000Z" && item.isActive) : [];
+       // const third = res.data?.length > 0 ? res.data?.filter(item => item.startDate !== "2023-01-05T00:00:00.000Z" && item.startDate !== "2023-01-19T00:00:00.000Z" && item.isActive).sort((a, b) => new Date(a.startDate) - new Date(b.startDate)) : [];
+       const all = [...first, ...second, ...third, ...fourth, ...fifth];
+
+
+    
 
     return (
         <div className={` ${clsx.dashboard_courses}`}>
             <div className={clsx["dashboard_courses--left"]}>
-                <h6 style={{ marginBottom: ".5rem" }}>Available Courses</h6>
+                <h6 style={{ marginBottom: ".5rem" }}>Upcoming Classes</h6>
                 <small className="mb-4 d-block">Select and enroll for a course to get started</small>
 
                 <div className={clsx["courseheader"]}>
@@ -2713,7 +2792,7 @@ export const Students = ({ children, isMobile, notification, userdata, header, l
                 });
             }
         })()
-    }, [])
+    }, [userdata?.token])
 
     const getCarts = useQuery(["carts"], () => fetchWishlist(userData?.token), {
         enabled: userData?.token !== null,
@@ -2788,7 +2867,7 @@ export const Students = ({ children, isMobile, notification, userdata, header, l
         },
         onSuccess: (res) => {
             if (res.data?.statusCode === 2) {
-                localStorage.clear()
+                return
             }
             if (res.data?.statusCode !== 1) {
                 toast.error(res.data?.message, {
@@ -2894,12 +2973,10 @@ export function GotoDashboard() {
                         user_type: route
                     })
 
-                    console.log(response)
                 } catch (err) {
                     console.error(err)
                     toast.error("An error occured")
                 } finally {
-                    console.log("done!!!")
                     setLoading(false)
                 }
             }

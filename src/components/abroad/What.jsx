@@ -17,6 +17,12 @@ background: #EFF2FF;
             line-height: 48px;
             color: #101213;
         }
+
+        p{
+            font-weight: 400;
+            color: #101213;
+            font-size: 16px;
+        }
     }
 }
     
@@ -27,11 +33,11 @@ const What = () => {
         <Container>
             <div className="container">
                 <div className="content">
-                    <h4>What you will learn</h4>
+                    <h4>Learn World Class Skills on Gotocourse</h4>
                     <p>
-                        TRINT mentors are experienced practitioners who work at the world's most innovative <br />
-                        companies. They're experts in their field, making sure you're mastering the most up-to- <br />
-                        date and practical skills companies around the world need.
+                    The Train to Work Abroad is tailored in the direction of equipping individuals to work abroad 
+                    and live the lives of their dreams. With our comprehensive training facilitated by world-class  
+                     Tech experts and professionals, you can rest assured that this program is for you.
                     </p>
 
                 </div>

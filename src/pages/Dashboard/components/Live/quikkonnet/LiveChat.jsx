@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { AiOutlineMenu, AiOutlinePaperClip } from "react-icons/ai";
-import { BiArrowBack, BiSearch, BiUserCircle } from "react-icons/bi";
-import { BsArrowLeftCircle, BsMic } from "react-icons/bs";
+import { BiArrowBack, BiGroup, BiSearch, BiUserCircle } from "react-icons/bi";
+import { BsThreeDotsVertical, BsArrowLeftCircle, BsMic } from "react-icons/bs";
+import { IconButton, Tab, Tabs, Tooltip, Box, FormControl, FormControlLabel, Menu, MenuItem, Modal, Switch, TextField } from "@mui/material"
 import styled from "styled-components";
 import profile from "../../../../../images/chat.png";
 import rocket from "../../../../../images/Launch rocket.png";
@@ -44,7 +45,6 @@ import {
 	useSearchParams,
 } from "react-router-dom";
 
-import { Box, IconButton, Tab, Tabs, Tooltip } from "@mui/material";
 import PropTypes from "prop-types";
 import { useIntercom } from "react-use-intercom";
 import { Link } from "react-router-dom";
@@ -368,6 +368,7 @@ function AllUsers() {
 		teacherFunctions: { fetchMyStudents },
 		studentFunctions: { getMyTeachers },
 		generalState: { searchValue },
+		commonFunctions: {fetchMyGroups}
 	} = useAuth();
 
 	// const isAdmin = userData.userType !== 'admin';
@@ -377,6 +378,7 @@ function AllUsers() {
 	const [teachers, setTeachers] = useState([]);
 	const [students, setStudents] = useState([]);
 	const [admins, setAdmins] = useState([]);
+	const [groups, setGroups] = useState([]);
 	// const [userInfo, setUserInfo] = useState({});
 	// const [loader, setLoader] = useState(false);
 
@@ -412,7 +414,7 @@ function AllUsers() {
 	// const allStudentAdmin = useQuery(userData?.token && ["get all student admins"], () => fetchAdmin(), {
 	//     enabled: isStudent,
 	//     onSuccess: (res)=>{}
-	// })
+	// })		
 	// const allStudentTeacher = useQuery(["get my teachers", userData?.token], () => fetchBootcamps(userData?.token), {
 	//   enabled: userData?.userType !== "teacher",
 	//   onSuccess: (res)=>{
@@ -459,31 +461,37 @@ function AllUsers() {
 	const allStudentTeacher = useQuery(["get my teachers", userData?.token], () => getMyTeachers(userData?.token, id), {
 	  enabled: userData?.userType === "student",
 	  onSuccess: (res)=>{
-		  console.log(res)
-	    if(res.success){
-	    //   let teachers = new Set()
-	    //   res.data.forEach(student => {
-	    //     if(student.tutorId){
-	    //       teachers.add(student)
-	    //     }
-	    //   })
-	    //   let teacherArray = Array.from(teachers)
-	    //   console.log({teacherArray})
-	    //   setTeachers(teacherArray)
+	    if(res.statusCode === 1){
+	      setTeachers(res.data)
 	    }
 	  },
 	  onError: (err) => console.error(err)
 	})
 
+	const allGroups = useQuery(["get all student admins", userData?.token], () => fetchMyGroups(userData?.token), {
+	    onSuccess: (res)=>{
+			if (res.data?.length > 0) {
+				let data = res.data;
+				// let admin = res.data.filter(admin=> admin.firstName === "Admiralty")
+				setGroups(data);
+			}
+		},
+		onError: (err)=>{
+			console.error(err);
+		}
+
+	})
+
 	return (
 		<>
-			{[...admins, ...students]
+			{[...admins, ...students, ...groups, ...teachers]
 				?.filter(
 					(item) =>
 						item.firstName?.includes(searchValue) ||
 						item.lastName?.includes(searchValue) ||
 						item.name?.includes(searchValue) ||
-						item.tutorName?.includes(searchValue)
+						item.tutorName?.includes(searchValue) ||
+						item.title?.includes(searchValue)
 				)
 				.map((item, i) => (
 					<ContactWindow {...item} all={item} />
@@ -501,6 +509,7 @@ function ContactWindow({
 	all,
 	name,
 	tutorName,
+	title
 }) {
 	const navigate = useNavigate();
 	const { generalState, setGeneralState } = useAuth();
@@ -509,12 +518,14 @@ function ContactWindow({
 		let userid = message?.userId
 			? message?.userId
 			: message?.fromUser
-			? message?.fromUser
-			: message?.teacherId
-			? message?.teacherId
-			: message?.adminId
-			? message?.adminId
-			: message?.studentId;
+				? message?.fromUser
+				: message?.teacherId
+					? message?.teacherId
+					: message.tutorId 
+						? message.tutorId 
+						: message?.adminId
+							? message?.adminId
+							: message?.studentId;
 
 		e.preventDefault();
 		navigate(`?contact=${userid}`);
@@ -532,6 +543,20 @@ function ContactWindow({
 					{profileImg ? (
 						<img src={profileImg} alt="" />
 					) : (
+						title ?
+						<div
+							style={{
+								height: "50px",
+								width: "50px",
+								display: "grid",
+								placeItems: "center",
+								color: "#FFF",
+							}}
+						>
+							<BiGroup size="3rem" />
+						</div>
+
+						:
 						<div
 							style={{
 								height: "50px",
@@ -553,7 +578,10 @@ function ContactWindow({
 					<div className="name">{user.fullName}</div>
 				) : tutorName ? (
 					<div className="name">{tutorName}</div>
-				) : (
+				) : title ? 
+					<div classNmae="name">{title}</div>
+				:
+				(
 					<div className="name">{`${firstName ? firstName : ""} ${
 						lastName ? lastName : ""
 					}`}</div>
@@ -574,6 +602,7 @@ function OpenedChat() {
 		generalState: { chatDetail, showMainChat },
 		generalState,
 		adminFunctions: { getMessages, sendMessage },
+		commonFunctions:{getGroupMessages, sendGroupMessage},
 		setGeneralState,
 	} = useAuth();
 
@@ -599,12 +628,44 @@ function OpenedChat() {
 			},
 		}
 	);
+
+	const GroupMessages = useQuery([`get group messages ${chatDetail?.groupId}`], ()=>getGroupMessages(userData.token, chatDetail?.groupId),{
+		enabled: chatDetail?.groupId !== "" || chatDetail?.groupId !== null,
+		onSuccess: (res) => {
+			if (res.data?.length > 0) {
+				setMessageList(res.data);
+			} else {
+				setMessageList([]);
+			}
+		},
+		onError: (err) => {
+			if (err.statusCode === 2)
+				err.message = "Session expired. Please login again";
+		},
+	})
+
 	const msgMutation = useMutation(
 		(data) => sendMessage(userData?.token, data),
 		{
 			onSuccess: (res) => {
 				if (res.success) {
 					queryClient.invalidateQueries(["get private messages from user"]);
+					setText("");
+				} else {
+					toast.error(res.message);
+				}
+			},
+			onError: (err) => {
+				toast.error(err.message);
+			},
+		}
+	);
+	const groupMsgMutation = useMutation(
+		([token, id, data]) => sendGroupMessage(token, id, data),
+		{
+			onSuccess: (res) => {
+				if (res.success) {
+					queryClient.invalidateQueries([`get group messages ${chatDetail?.groupId}`]);
 					setText("");
 				} else {
 					toast.error(res.message);
@@ -623,18 +684,25 @@ function OpenedChat() {
 	function sendMsg(e) {
 		e.preventDefault();
 		if (text) {
-			msgMutation.mutate({
-				toUser: chatDetail.userId
-					? chatDetail.userId
-					: chatDetail.teacherId
-					? chatDetail.teacherId
-					: chatDetail.fromUser
-					? chatDetail.fromUser
-					: chatDetail.adminId
-					? chatDetail.adminId
-					: chatDetail.studentId,
-				body: text,
-			});
+			if(chatDetail?.groupId){
+				groupMsgMutation.mutate([userData?.token, chatDetail?.groupId,  {body: text} ])
+
+			}else {
+				msgMutation.mutate({
+					toUser: chatDetail.userId
+						? chatDetail.userId
+						: chatDetail.teacherId
+						? chatDetail.teacherId
+						: chatDetail.tutorId 
+						? chatDetail.tutorId 
+						: chatDetail.fromUser
+						? chatDetail.fromUser
+						: chatDetail.adminId
+						? chatDetail.adminId
+						: chatDetail.studentId,
+					body: text,
+				});
+			}
 		} else {
 			toast.error("Enter a valid message", {
 				position: "top-right",
@@ -670,24 +738,31 @@ function OpenedChat() {
 						<p>
 							{chatDetail?.user?.fullName
 								? chatDetail?.user?.fullName.substring(0, 2)
-								: chatDetail?.name?.substring(0, 2)}
+								:chatDetail?.name ?  chatDetail?.name?.substring(0, 2)
+								:
+								chatDetail?.title?.substring(0, 2)
+								
+							}
 						</p>
 					)}
 				</Profile>
 				<PreviewContent>
 					<div className="name text-dark">
-						{chatDetail?.name
+						{
+							chatDetail?.name
 							? chatDetail.name
 							: chatDetail?.user
 							? chatDetail?.fullName
-							: `${chatDetail?.firstName} ${chatDetail?.lastName}`}
+							: chatDetail?.title ? chatDetail.title :`${chatDetail?.firstName} ${chatDetail?.lastName}`
+						}
 					</div>
 				</PreviewContent>
+				{/* <GroupContextMenu /> */}
 			</ChatHeader>
 
 			<OpenedContent>
 				<TextContent>
-					{ourMessages.isLoading ? (
+					{ourMessages.isLoading || GroupMessages?.isLoading ? (
 						<div className="spinner-border text-primary">
 							<div className="visually-hidden">Loading</div>
 						</div>
@@ -771,4 +846,52 @@ function ChatBar({ sender, user, body, profileImg }) {
 		</>
 	);
 }
+
+
+
+
+export function GroupContextMenu({ x, id, handleClick, data=[], openAnchor, anchorEl, setAnchorEl}){
+    
+
+    const handleClose = () => {
+        setAnchorEl(null);
+    }
+
+
+
+    return (
+        <div className="suite__dots">
+            <BsThreeDotsVertical
+                id="basic-button"
+                aria-controls={openAnchor ? 'basic-menu' : undefined}
+                aria-haspopup="true"
+                aria-expanded={openAnchor ? 'true' : undefined}
+                onClick={handleClick}
+            />
+            <Menu
+			id="basic-menu"
+			anchorEl={anchorEl}
+			open={openAnchor}
+			onClose={handleClose}
+			MenuListProps={{
+				'aria-labelledby': 'basic-button',
+			}}
+			>
+                    
+				{
+					data?.map(({title}) =>(
+						<MenuItem key={id}>
+							<span className="ms-3">{title}</span>
+						</MenuItem>
+					))
+					
+				}
+
+            </Menu>
+        </div>
+    )
+}
+
+
+
 export default LiveChat;

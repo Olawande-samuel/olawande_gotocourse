@@ -4,14 +4,15 @@ import { useState } from 'react'
 import styled from 'styled-components'
 import { useAuth } from '../../contexts/Auth'
 import { ClassTypeComponent, UpskillCourseCard } from './landingComponents'
+import { NewGrid } from './UpNext'
 
 const Grid = styled.div`
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(min(200px, 230px), 230px));
-    grid-auto-rows:470px;
+    grid-auto-rows:330px;
     /* overflow: hidden; */
     gap: 1.5rem;
-    justify-content:space-around;
+    justify-content:center;
     padding: .5rem;
     
     @media screen and (min-width: 1400px) {
@@ -51,7 +52,7 @@ const UpskillCourse = () => {
     <ClassTypeComponent {...data}>
         <Grid>
             {
-                shorts?.filter(item=>item.isActive).sort((a, b) => new Date(a.startDate) - new Date(b.startDate)).slice(0, 8).map(item=>(
+                shorts?.filter(item=>item.isActive).sort((a, b) => new Date(a.startDate) - new Date(b.startDate)).slice(0, 4).map(item=>(
                     <UpskillCourseCard {...item} all={item} key={item.bootcampId}/>
                 ))
             }
@@ -189,8 +190,8 @@ export const upskillAltData = [
 const data = {
     header: "",
     header2:"Explore In Upskill courses",
-    subtext:"Develop Tech skills most needed by companies and increase your earnings",
-    subtext1:"Knowledge boost within 1-14 days",
+    subtext2:"Develop Tech skills most needed by companies and increase your earnings",
+    subtext3:"Knowledge boost within 1-14 days",
     content: [
         {
             title:"Products",

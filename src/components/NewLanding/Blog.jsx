@@ -12,10 +12,10 @@ import { ClassTypeComponent } from "./landingComponents";
 
 const Grid = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(200px, 230px), 230px));
-  grid-auto-rows: 380px;
+  grid-template-columns: repeat(auto-fit, minmax(min(289px, 100%), 300px));
+  /* height: 570px; */
   overflow: hidden;
-  gap: 2.5rem;
+  gap: 2rem;
   row-gap: 3rem;
   justify-content: space-around;
   padding: .7rem .5rem;
@@ -45,14 +45,15 @@ flex-shrink:0;
 
 
 a{
-    height: 35%;
+    height: 65%;
     // border: 2px solid red;
 
     img{
         width: 100%;
         max-height: 100%;
-        // object-fit:cover;
-        // object-position: top;
+        height: 100%;
+        object-fit:cover;
+        object-position: top;
     }
 }
 
@@ -60,7 +61,7 @@ a{
 
 .bottom{
     // padding: 0.5rem 0;
-    height: 60%;
+    height: 35%;
     display: flex;
     flex-direction:column;
     // border: 2px solid green;
@@ -138,13 +139,17 @@ export const Blog = () => {
 
     //         }
     //     }
-    // })
-
-    const blogsData = useQuery(["fetch list blogs"], () => getBlogs(), {
+    // }
+    
+    useQuery(["fetch list blogs"], () => getBlogs(), {
         onSuccess: (res) => {
             if (res.data.length > 0) {
-                console.log("data", res.data);
-                setBlogs(res.data)
+                // console.log("data", res.data);
+                const first = res.data?.length > 0 ? res.data?.filter(item => item._id === "641c2cd91480a5bfe94b2302") : [];
+                const second = res.data?.length > 0 ?res.data?.filter(item => item._id !== "641c2cd91480a5bfe94b2302")?.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)) : [];
+                const all = [...first, ...second];
+                setBlogs(all)
+                // 
 
             }
         }
@@ -153,12 +158,15 @@ export const Blog = () => {
     return (
         <ClassTypeComponent {...data}>
             <Grid>
-                {blogs.length > 0 && blogs.sort((a,b) => new Date(b.createdAt) - new Date(a.createdAt)).slice(0, 8).map(blog => (
+                {blogs.length > 0 && blogs?.slice(0, 4)?.map(blog => (
 
                     <Card key={blog._id}>
-                        <Link to={`/events&articles/articles/${encodeURIComponent(blog.title)?.split(" ").join("-").replace('?', '')}/${blog?._id}`}>
+                        {/* <Link to={`/events&articles/articles/${encodeURIComponent(blog.title)?.split(" ").join("-").replace('?', '')}/${blog?._id}`}>
                             <img src={`${process.env.REACT_APP_IMAGEURL}${blog.blogImg}`} alt="" />
-                        </Link>
+                        </Link> */}
+                        <a href={`https://blog.gotocourse.com/events&articles/articles/${encodeURIComponent(blog.title)?.split(" ").join("-").replace('?', '')}/${blog?._id}`} target="_blank">
+                            <img src={`${process.env.REACT_APP_IMAGEURL}${blog.blogImg}`} alt="" />
+                        </a>
                         <div className="bottom">
                             <DateAndAction>
                                 <span>
@@ -169,9 +177,13 @@ export const Blog = () => {
                                 </span>
                             </DateAndAction>
                             <div >
-                                <Link  to={`/events&articles/articles/${encodeURIComponent(blog.title)?.split(" ").join("-").replace('?', '')}/${blog?._id}`}>
+                                {/* <Link  to={`/events&articles/articles/${encodeURIComponent(blog.title)?.split(" ").join("-").replace('?', '')}/${blog?._id}`}>
                                     <h5>{blog.title}</h5>
-                                </Link>
+                                </Link> */}
+
+                                <a href={`https://blog.gotocourse.com/events&articles/articles/${encodeURIComponent(blog.title)?.split(" ").join("-").replace('?', '')}/${blog?._id}`}>
+                                    <h5>{blog.title}</h5>
+                                </a>
                                 <p className="restrict" dangerouslySetInnerHTML={{ __html: blog.content }}></p>
                             </div>
 

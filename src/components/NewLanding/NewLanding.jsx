@@ -6,6 +6,7 @@ import Layout from "../Layout";
 import BootImg from "../../images/bootcamps/allClasses2.webp";
 import HeroImg from "../../images/newlanding.webp";
 import getStarted from "../../images/easysteps.png";
+import boy from "../../images/landing/interactive.png";
 import { useAuth } from "../../contexts/Auth";
 import "./landing.css";
 import { useLocalStorage } from "../../hooks";
@@ -21,6 +22,7 @@ import Inperson from "../../images/in-Person.webp";
 import Mento from "../../images/inPerson.webp";
 import Tech from "../../images/fast.webp";
 import Image from "../Image";
+import NewCompanies from "../NewCompanies";
 import Companies from "../Companies";
 import Faq from "../Faq";
 import Mentors from "./Mentors/Mentors";
@@ -60,7 +62,7 @@ import afford from "../../images/landing/affordable.png";
 import critical from "../../images/landing/platform.png";
 // import interactive from "../../images/landing/interactive.webp";
 import interactive from "../../images/landing/interactive.png";
-
+import womentech from '../../images/abroad/womentech.jpg'
 import GreatOpportunities from "./GreatOpportunities";
 import ShortCourses from "./ShortCourses";
 import ExecutiveClasses from "./ExecutiveClasses";
@@ -77,72 +79,170 @@ import Pathfinder from "./Pathfinder";
 import { useIntercom } from "react-use-intercom";
 import Tutorial from "./Tutorial";
 import Helmet from 'react-helmet'
+import Ready from "./Ready";
+import Overflow from "./Overflow";
+import NewCourse from "./NewCousrse";
+import Testimonials from "../Testimonials";
+import Endless from "./Endless";
+import HowLearn from "./Learn";
+import Review from "./Review";
+import { NewReady } from "./NewOver";
+import { ToastContainer } from "react-toastify";
+import { IconButton } from "@mui/material";
+import { MdClose } from "react-icons/md";
 
 
 const NewLanding = () => {
 
-  const { show, boot } = useIntercom(); 
+  const { show, boot } = useIntercom();
+  const [open, setOpen] = useState(true)
 
-  useEffect(()=>{
+  useEffect(() => {
     boot()
     show()
 
-  },[])
+  }, [])
 
   return (
     <>
       <Helmet>
-        <title>Gotocourse</title>
+        <title>Gotocourse | Learn on gotocourse</title>
         <meta property="og:site_name" content="Gotocourse" />
-        <meta name="description" content="Gotocourse" />
+        <meta name="description" content="Learn on gotocourse. Learn in-demand tech skills from experts" />
       </Helmet>
-    <Layout background="blue">
-      <Hero />
-      <Stats />
-      <WhatweDo />
-      <Companies />
-      {/* <Tutorial/> */}
-      {/* <Mission /> */}
-      <GreatOpportunities />
-      <Up />
-      <Category />
-      <Benefits />
-      <IndemandClasses />
-      <UpskillCourse />
-      <Headstart />
-      <Pathfinder />
-      {/* <ExecutiveClasses /> */}
-      <ShortCourses />
-      <Mentors />
-      <BetterWay />
-      <VideoSection />
-      {/* <TechPro /> */}
-      {/* <VirtualTraining /> */}
-      {/* <LiveWebinars /> */}
-      <Blog />
-      {/* <Success /> */}
-      {/* <Logos /> */}
-      {/* <TeachingBenefits /> */}
-      {/* <TrackPro /> */}
-      {/* <Faq /> */}
-      {/* <AffiliatePro /> */}
-      {/* <Gif /> */}
-      {/* <Experienced /> */}
-      {/* <Benefits /> */}
-      {/* <Seamless /> */}
-      {/* <Bootcamp/> */}
-      {/* <Becoming /> */}
-      {/* <Learn type={"newLanding"} />
-        <Self />
-      <Mentorship /> */}
-      {/* <InPerson /> */}
-      {/* <Testimonials type="newLanding" /> */}
-      {/* <Overview /> */}
-    </Layout>
+      <Layout background="blue">
+        <ToastContainer
+          position="top-right"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover />
+        <Hero />
+        <NewCompanies />
+        <NewReady />
+        {/* <WomenTech open={open} setOpen={setOpen} /> */}
+        {/* <Ready/> */}
+        {/* <Overflow/> */}
+        <GreatOpportunities />
+        <Category />
+        <Up />
+        <NewCourse />
+        <UpskillCourse />
+        <Headstart />
+        <Pathfinder />
+        {/* <ShortCourses /> */}
+        <Endless />
+        <HowLearn />
+        <Review />
+        {/* <Testimonials type="newLanding" /> */}
+        <VideoSection />
+        {/* <Companies /> */}
+        {/* <Stats /> */}
+        {/* <WhatweDo /> */}
+        {/* <Tutorial/> */}
+        {/* <Mission /> */}
+        {/* <Benefits /> */}
+        {/* <IndemandClasses /> */}
+        {/* <ExecutiveClasses /> */}
+        {/* <Mentors /> */}
+        {/* <BetterWay /> */}
+        {/* <TechPro /> */}
+        {/* <VirtualTraining /> */}
+        {/* <LiveWebinars /> */}
+        {/* <Blog /> */}
+        {/* <Success /> */}
+        {/* <Logos /> */}
+        {/* <TeachingBenefits /> */}
+        {/* <TrackPro /> */}
+        {/* <Faq /> */}
+        {/* <AffiliatePro /> */}
+        {/* <Gif /> */}
+        {/* <Experienced /> */}
+        {/* <Benefits /> */}
+        {/* <Seamless /> */}
+        {/* <Bootcamp/> */}
+        {/* <Becoming /> */}
+        {/* <Learn type={"newLanding"} /> */}
+        {/* <Self /> */}
+        {/* <Mentorship />  */}
+        {/* <InPerson /> */}
+        {/* <Overview /> */}
+      </Layout>
     </>
   );
 };
 export default NewLanding;
+
+function WomenTech({ open, setOpen }) {
+  const modalStyle = {
+    position: "absolute",
+    bottom: "20%",
+    left: "50%",
+    transform: "translate(-50%)",
+    width: "auto",
+    bgcolor: "rgba(0, 0, 0, 0.3)",
+    boxShadow: 24,
+    p: 0,
+  };
+
+  const style = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 'min(100% - 2rem, 500px)',
+    // bgcolor: 'background.paper',
+    bgcolor: 'transparent',
+    border: 'none',
+    // boxShadow: 24,
+    // p: 4,
+    margin: "4.5rem 0 0 0",
+
+  };
+
+
+  return (
+    <Modal
+      open={open}
+      onClose={() => setOpen(false)}
+      aria-labelledby="modal-modal-title"
+      aria-describedby="modal-modal-description"
+      style={{
+        display: "flex",
+        justifyContent: "center",
+        border: "none",
+        // backgroundColor: "rgba(0, 0, 0, 0.)"
+      }}
+    >
+      <>
+
+
+
+        <Box sx={style}>
+          <div style={{  textAlign:"right",cursor:"pointer",  width: "100%" , padding:".2rem 0"}} onClick={() => setOpen(false)}>
+            <MdClose style={{ color: " #F75C4E",fontSize:"30px"}} />
+          </div>
+          <div style={{ width: "100%", height: "350px", }}>
+            <img src={womentech} alt="" style={{ maxWidth: "100%", maxHeight: "100%", width: "100%" }} />
+
+          </div>
+          <a href="https://gotocourse.events/women4-tech-scholarship" target={'_blank'}>
+            <button className="py-1 px-2"
+              style={{ width: "100%", border: "none", fontSize: "32px", outline: "none", background: " #F75C4E", color: "#FFF" }}
+            >
+              APPLY HERE NOW!!!
+            </button>
+          </a>
+
+        </Box>
+      </>
+    </Modal>
+  );
+}
 
 function VideoSection() {
   const [open, setOpen] = useState(false);
@@ -163,19 +263,21 @@ function VideoSection() {
 
       </div>
 
+
+
       <div className="video__right">
         <div className="content">
-          <h5>Learn and grow with our community</h5>
+          {/* <h5> Partner with us.</h5> */}
+          <h5> Join our community</h5>
 
-          <p>Community is everything! Meet and
-            collaborate with Gotocourse mentors and
-            career advisors who can help you advance
-            your digital skills and career.
-            It's a great way to expand your skill set.</p>
+          {/* <p>Gotocourse in partnership with providing a fantastic learning and teaching experience partners with teachers like you to help students learn new skills</p> */}
+          <p>Gotocourse has provided just the right community to help you learn, grow and connect with other professionals all around the world.</p>
 
-          <button>
-            Join our community
-          </button>
+          <a target="_blank" rel="noopener noreferrer" href="https://t.me/+x8ZaQqhzAqc2MjJh">
+            <button>
+              Join the community
+            </button>
+          </a>
         </div>
       </div>
       <PopupVideo open={open} setOpen={setOpen} />
@@ -346,21 +448,22 @@ function Hero() {
   const heroData = [
     {
       id: 1,
-      title: "Start and launch",
-      title2: "your IT career now",
-      // subtitle: "All-in-one platform for learning tech skills",
+      title: "Learn the Skill",
+      title2: "To get the Job",
+      subtitle: `The beginner-friendly online learning programme with `,
+      subtitle2: `the highest completion rate and grad employment`,
       social: true,
       acctype: "student",
       list: [
-        "Learn from Industry Experts",
-        "Launch new career within 2 to 6 months",
-        "Connect from anywhere",
+        // "Learn from Industry Experts",
+        // "Launch new career within 2 to 6 months",
+        // "Connect from anywhere",
       ],
       img: tell,
       color: "var(--theme-blue)",
       borderRadius: "7px",
       link: "/signup",
-      link_btn: "Register to get started ",
+      link_btn: "Register for free ",
       // img:HeroImg
     },
     {
@@ -399,7 +502,7 @@ function Hero() {
     },
     {
       id: 4,
-      title: "Your kids can start",
+      title: "Anyone can start ",
       title2: "from here.",
       // subtitle: "Whether you are starting newly or upgrading your skills this is the best place to learn. No need of without putting your life on hold. You can study anywhere, everywhere and at any time, Gotocourse is your ideal destination of growing your tech and business skills.",
       social: true,
@@ -409,7 +512,7 @@ function Hero() {
         "Find your path to I.T by learning from real world experts",
         "Build solid foundation that leads to life-time opportunity",
       ],
-      img: interactive,
+      img: boy,
       color: "#F75C4E",
       link: "/sign-up",
       link_btn: "Register today",
@@ -433,7 +536,7 @@ function Hero() {
       <Swiper
         // install Swiper modules
         modules={[Navigation, Autoplay, Pagination, Scrollbar, A11y]}
-        loop={false}
+        loop={true}
         speed={1500}
         autoplay={{ delay: 5000 }}
         spaceBetween={0}
@@ -480,6 +583,7 @@ function HeroContent({
   title2,
   signInWithFacebook,
   subtitle,
+  subtitle2,
   img,
   list,
   acctype,
@@ -503,6 +607,8 @@ function HeroContent({
           </h1>
           <h6 className="newHero_left-title mb-4 mb-lg-5">
             {list && subtitle}
+            <span className="d-block">{subtitle2}</span>
+
           </h6>
           {list ? (
             <div className=" new_hero_list d-flex justify-content-start">
@@ -571,7 +677,7 @@ export function Stats() {
   const statData = [
     {
       title: "20k+",
-      content: "Trained Students",
+      content: "Registered Students",
     },
     // {
     //   title: "20k+",
@@ -599,13 +705,13 @@ export function Stats() {
     //   content: "In-demand Courses",
     // },
     {
-      title: "500",
+      title: "200+",
       content: "Courses",
     },
-    {
-      title: "20",
-      content: "Countries",
-    },
+    // {
+    //   title: "20",
+    //   content: "Countries",
+    // },
   ];
   return (
     <section className="stats_main">

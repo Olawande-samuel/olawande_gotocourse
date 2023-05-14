@@ -15,10 +15,7 @@ import tick from "../../images/student/check.png";
 
 
 const Career = () => {
-    useEffect(() => {
-        console.log("Career page is mounted");
-        return () => console.log("Removing the Career page");
-    }, [])
+
 
 
     return (

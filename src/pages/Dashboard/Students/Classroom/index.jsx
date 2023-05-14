@@ -25,7 +25,7 @@ import { toast, ToastContainer } from 'react-toastify';
 import UploadWidget from '../../components/classConsole/components/UploadWidget';
 
 
-const Container = styled.div`
+export const Container = styled.div`
 position: relative;
 /* border: 2px solid yellow; */
 height: 100vh;
@@ -34,7 +34,7 @@ height: 100vh;
 `
 
 
-const IconContainer = styled.div`
+export const IconContainer = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -52,7 +52,7 @@ const IconContainer = styled.div`
     box-shadow: 0px 203px 81px rgba(0, 0, 0, 0.01), 0px 114px 68px rgba(0, 0, 0, 0.05), 0px 51px 51px rgba(0, 0, 0, 0.09), 0px 13px 28px rgba(0, 0, 0, 0.1), 0px 0px 0px rgba(0, 0, 0, 0.1);
 `
 
-const ClassroomContainer = styled.div`
+export const ClassroomContainer = styled.div`
     width: 100%;
     /* height: calc(100vh - 75px); */
     height:100%;
@@ -69,7 +69,7 @@ const ClassroomContainer = styled.div`
     }
 `;
 
-const BreadcrumbLink = styled(Link)`
+export const BreadcrumbLink = styled(Link)`
     color: ${props => props.$isCurrentPage ? '#0C2191' : '#666363'};
     font-weight: 400;
     font-size: 0.9rem;
@@ -81,7 +81,7 @@ const BreadcrumbLink = styled(Link)`
 `;
 
 
-const ClassroomMain = styled.div`
+export const ClassroomMain = styled.div`
     width: min(100% - 3rem, 950px);
     margin-inline: auto;
     height: 100%;
@@ -97,7 +97,7 @@ const ClassroomMain = styled.div`
 `;
 
 
-const ClassroomMainTop = styled.div`
+export const ClassroomMainTop = styled.div`
     display: flex;
     flex-direction: column;
     /* align-items: center; */
@@ -129,6 +129,21 @@ const ClassroomMainTop = styled.div`
         }
     }
 
+    .banner{
+        text-align: center;
+        vertical-align: middle;
+        background: var(--theme-blue);
+        color: white;
+        padding: .5rem 0;
+        p{
+            margin-bottom: 0;
+        }
+
+        span{
+            color: var(--theme-orange);
+  
+        }
+    }
     .bread{
         display: flex;
         align-items: center;
@@ -148,7 +163,7 @@ const ClassroomMainTop = styled.div`
 `;
 
 
-const MenuButton = styled(IconButton)`
+export const MenuButton = styled(IconButton)`
 
     & svg {
         color: var(--theme-blue);
@@ -161,7 +176,7 @@ const MenuButton = styled(IconButton)`
 
 
 
-const ClassroomMainBody = styled.div`
+export const ClassroomMainBody = styled.div`
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -177,9 +192,9 @@ const ClassroomMainBody = styled.div`
 
 `;
 
-const BodyContent = styled.div`
+export const BodyContent = styled.div`
     width: 100%;
-    margin-top: 30px;
+    /* margin-top: 30px; */
     display: flex;
     flex-direction: column;
     gap: 4rem;
@@ -193,7 +208,7 @@ const BodyContent = styled.div`
     }
 `
 
-const BodyInfo = styled.div`
+export const BodyInfo = styled.div`
     width: 100%;
     padding: 20px;
     display: flex;
@@ -208,7 +223,7 @@ const BodyInfo = styled.div`
 `;
 
 
-const PaperTop = styled.div`
+export const PaperTop = styled.div`
     width: 100%;
     border: 1px solid rgba(0, 0, 0, 0.12);
     display: flex;
@@ -238,7 +253,7 @@ const PaperTop = styled.div`
 
 
 
-const BodyActions = styled.div`
+export const BodyActions = styled.div`
     width: 100%;
     display: flex;
     align-items: center;
@@ -266,7 +281,7 @@ const BodyActions = styled.div`
 `;
 
 
-const VideoAction = styled.div`
+export const VideoAction = styled.div`
     width: 100%;
     display: flex;
     justify-content: flex-end;
@@ -284,7 +299,7 @@ export const QuizAction = styled.div`
 `;
 
 
-const NextButton = styled(CustomButton)`
+export const NextButton = styled(CustomButton)`
     font-size: 0.8rem !important;
 
     & svg {
@@ -294,13 +309,13 @@ const NextButton = styled(CustomButton)`
 `;
 
 
-const PreviousButton = styled(NextButton)`
+export const PreviousButton = styled(NextButton)`
     & svg {
         margin-right: 10px;
     }
 `
 
-const Quiz = styled.div`
+export const Quiz = styled.div`
     width: 100%;
     display: flex;
     align-items: center;
@@ -319,18 +334,18 @@ const Quiz = styled.div`
 `;
 
 
-const Note = styled.div`
+export const Note = styled.div`
     width: 100%;
     display: flex;
     flex-direction: column;
 `
 
-const QuizImageContainer = styled.div`
+export const QuizImageContainer = styled.div`
     width: 425px;
     height: 425px;
 `;
 
-const QuizImage = styled.img`
+export const QuizImage = styled.img`
     width: 100%;
     height: 100%;
 `;
@@ -344,7 +359,7 @@ export const QuizButton = styled.button`
     border-radius: 5px;
 `;
 
-const MarkButton = styled.button`
+export const MarkButton = styled.button`
 display: ${({ display }) => display ? 'none' : 'block'};
     background-color: #3f50b5 ;
     color: white ;
@@ -358,7 +373,7 @@ display: ${({ display }) => display ? 'none' : 'block'};
 
 
 
-const FileName = styled.div`
+export const FileName = styled.div`
 display: flex;
 align-items: center;
 justify-content: space-between;
@@ -370,7 +385,7 @@ p{
 }
 
 `
-const FileDisplay = styled.div`
+export const FileDisplay = styled.div`
 width: 100%;
 // height: 300px;
 // border: 2px solid red;
@@ -393,7 +408,7 @@ video{
 
 
 `
-const QuizInfo = styled.div`
+export const QuizInfo = styled.div`
 padding: 1rem;
 /* border: 2px solid red; */
 border: 1px solid #004DB6;
@@ -402,7 +417,9 @@ border-radius: 10px;
 background: #EEF5FF;
 box-shadow: 0px 203px 81px rgba(0, 0, 0, 0.01), 0px 114px 68px rgba(0, 0, 0, 0.05), 0px 51px 51px rgba(0, 0, 0, 0.09), 0px 13px 28px rgba(0, 0, 0, 0.1), 0px 0px 0px rgba(0, 0, 0, 0.1);
 
-
+.max{
+    color: var(--theme-orange);
+}
 
 
 `
@@ -474,7 +491,7 @@ export const UploadContainer = styled.div`
 
 `
 
-const NotecContainer = styled.div`
+export const NotecContainer = styled.div`
 // border: 2px solid red;
 padding: .5rem 1rem; 
 p{
@@ -503,7 +520,6 @@ ul{
 
 
 const NoteComponent = (contentItem) => {
-    console.log({ contentItem });
 
     return (
         <NotecContainer>
@@ -524,14 +540,12 @@ const NoteComponent = (contentItem) => {
 
 const FileComponent = (contentItem) => {
     const [open, setOpen] = useState(false)
-    console.log(contentItem.contentItem);
 
     const getExtention = (val) => {
-        // console.log({ val });
 
         if (val?.split('/')[0] === "video") {
             return "video"
-        } else if ((val?.split('/')[1] === "pdf") || (val?.split('/')[1] === "pptx") || (val?.split('/')[1] === "ppt") || (val?.split('/')[1] === "doc") || (val?.split('/')[1] === "docx") || ((val?.split('/')[1] === "csv") || (val?.split('/')[1] === "clsx"))) {
+        } else if ((val?.split('/')[1] === "pdf") || (val?.split('/')[1] === "pptx") || (val?.split('/')[1] === "ppt") || (val?.split('/')[1] === "doc") || (val?.split('/')[1] === "undefined") || (val?.split('/')[1] === "docx") || (val?.split('/')[1] === "xlsx") || ((val?.split('/')[1] === "csv") || (val?.split('/')[1] === "clsx"))) {
             return "pdf"
         }
         else return "image"
@@ -547,7 +561,6 @@ const FileComponent = (contentItem) => {
                 method: 'GET',
                 responseType: 'blob',
             }).then((response) => {
-                console.log({ response })
                 const href = URL.createObjectURL(response.data);
                 const link = document.createElement('a');
                 link.href = href;
@@ -564,7 +577,6 @@ const FileComponent = (contentItem) => {
                 method: 'GET',
                 responseType: 'blob',
             }).then((response) => {
-                console.log({ response })
                 const href = URL.createObjectURL(response.data);
                 const link = document.createElement('a');
                 link.href = href;
@@ -583,7 +595,8 @@ const FileComponent = (contentItem) => {
     return (
         <div>
             <Paper variant='outlined' className="paper">
-                {!(getExtention(contentItem?.contentItem?.type) === "pdf") &&
+                {
+                // !(getExtention(contentItem?.contentItem?.type) === "pdf") &&
                     <PaperTop>
                         <div>
                             <BodyActions>
@@ -614,7 +627,6 @@ const FileComponent = (contentItem) => {
 
                         getExtention(contentItem?.contentItem?.type) === "pdf" ?
                             <div className="pdf">
-
                                 <DocumentViewer
                                     file={contentItem?.contentItem?.fileUri}
                                     name={contentItem?.contentItem?.fileName?.split(".")[0]?.split("_")?.join(" ")}
@@ -634,8 +646,8 @@ const FileComponent = (contentItem) => {
             <ViewModal
                 open={open}
                 setOpen={setOpen}
-                file={contentItem?.contentItem?.fileName}
-                type={contentItem?.contentItem?.type}
+                file={contentItem?.contentItem?.fileUri}
+                type={contentItem?.contentItem?.type} 
                 title={contentItem?.contentItem?.title}
             />
 
@@ -664,7 +676,7 @@ function WelcomeSection({ pageHandler, contentItem }) {
                     hour: '2-digit',
                     minute: '2-digit'
                 })}</span></p>
-                <p>Number of submissions:  <span>{contentItem?.attempts || 0}/{contentItem?.maxAttempts}</span> </p>
+                <p>Number of submissions: {(contentItem?.attempts < contentItem?.maxAttempts) ? <span>{contentItem?.attempts} </span> : <span className='max'>You have reached the maximum number of attempts</span>} </p>
                 <p> Provisional Result (based on Objective): <span>100.00%</span></p>
             </QuizInfo>
 
@@ -678,7 +690,6 @@ function WelcomeSection({ pageHandler, contentItem }) {
 }
 
 const QuizComponent = ({ contentItem, userdata, attemptedStatus, page, setPage }) => {
-    console.log(contentItem);
     const { consoleFunctions: { attemptQuiz } } = useAuth();
     const [note, setNotes] = useState([])
     const [myAnswers, setMyAnswers] = useState([]);
@@ -686,6 +697,7 @@ const QuizComponent = ({ contentItem, userdata, attemptedStatus, page, setPage }
     const [fileUrl, setFileUrl] = useState("");
     const [uploadlink, setUploadLink] = useState("")
     const [uploads, setUploads] = useState([])
+    let queryClient = useQueryClient();
 
 
 
@@ -693,7 +705,7 @@ const QuizComponent = ({ contentItem, userdata, attemptedStatus, page, setPage }
     // function backpageHandler(_) { setPage(old => old -= 1); }
 
 
-    function setNote(text, quizId, questionId, questionIndex, quizIndex) {
+    function setNote(text, questionId, quizIndex) {
         // for editor content
         let allNotes = note
         allNotes[quizIndex] = text
@@ -723,10 +735,8 @@ const QuizComponent = ({ contentItem, userdata, attemptedStatus, page, setPage }
     const handleInputChange = (e, questionId, index) => {
         const { value } = e.target;
         let list = [...myAnswers]
-        // console.log({ questionId })
         let thisOption = list.findIndex(item => item.questionId === questionId)
 
-        // console.log("questionId2Option: " + thisOption)
         if (thisOption === -1) {
             list.push({ questionId: questionId, answers: [value] })
         } else {
@@ -745,14 +755,13 @@ const QuizComponent = ({ contentItem, userdata, attemptedStatus, page, setPage }
             allAnswers = uploads
         } else allAnswers = myAnswers
 
-        console.log({ allAnswers });
         try {
             setLoading(true)
             const res = await attemptQuiz(userdata?.token, contentItem?._id, allAnswers);
-            console.log({ res });
             const { message, success, statusCode } = res;
             if (!success) throw new AdvancedError(message, statusCode);
             else if (statusCode === 1) {
+                queryClient.invalidateQueries(["fetch student domains"])
                 toast.success(message, {
                     position: "top-right",
                     autoClose: 4000,
@@ -780,7 +789,6 @@ const QuizComponent = ({ contentItem, userdata, attemptedStatus, page, setPage }
         }
     }
 
-    // console.log({ myAnswers });
 
 
     const AddLink = (e, questionId, index) => {
@@ -832,7 +840,6 @@ const QuizComponent = ({ contentItem, userdata, attemptedStatus, page, setPage }
         else return;
     }
 
-    console.log({ uploads });
 
     return (
         <>
@@ -840,7 +847,7 @@ const QuizComponent = ({ contentItem, userdata, attemptedStatus, page, setPage }
                 page === 0 ? <WelcomeSection pageHandler={pageHandler} contentItem={contentItem} /> :
 
                     <div>
-                        {contentItem?.questions?.length > 0 && contentItem?.questions.map((ques, index) => (
+                        {contentItem?.questions?.length > 0 && contentItem?.questions?.map((ques, index) => (
                             <Accordion key={index}>
                                 <Accordion.Item eventKey={index} className="accord__body">
                                     <Accordion.Header className="accord__header"> Question {index + 1}</Accordion.Header>
@@ -851,19 +858,18 @@ const QuizComponent = ({ contentItem, userdata, attemptedStatus, page, setPage }
                                         </QuesHeader>
 
                                         <QuestionOptions>
-                                            <h4 dangerouslySetInnerHTML={{ __html: `${ques.title}` }}></h4>
+                                            <h4 dangerouslySetInnerHTML={{ __html: `${ques?.title}` }}></h4>
 
                                             {
-                                                ques?.type === "THEORY" && ques?.options && ques?.options.length > 0 && ques?.options.map((opt, i) => (
-                                                    <>
-                                                        {opt.title}
-                                                        <Answer>
-                                                            <ReactQuill theme="snow" value={note[index]} onChange={(e) => setNote(e, ques?._id, opt?._id, i, index)} />
-                                                        </Answer>
+                                                ques?.type === "THEORY" &&
+                                                <>
+                                                    <Answer>
+                                                        <ReactQuill theme="snow" value={note[index]} onChange={(e) => setNote(e, ques?._id, index)} />
+                                                    </Answer>
 
 
-                                                    </>
-                                                ))
+                                                </>
+
 
 
                                             }
@@ -959,7 +965,9 @@ const QuizComponent = ({ contentItem, userdata, attemptedStatus, page, setPage }
                                         </button>
                                     )
                                     :
-                                    <QuizButton onClick={() => AnswerQuiz("mutiple")} disabled={(+contentItem?.attempts) >= (+contentItem?.maxAttempts)}>
+                                    <QuizButton onClick={() => AnswerQuiz("mutiple")}
+                                        disabled={(contentItem?.attempts >= contentItem?.maxAttempts) ? true : false}
+                                    >
                                         Submit
                                     </QuizButton>
                             }
@@ -983,6 +991,7 @@ const Classroom = () => {
     const [bootcampName, setBootcampName] = useState({})
     const [searchParams, setSearchParams] = useSearchParams();
     const [locked, setLocked] = useState(false);
+
 
     const [loading, setLoading] = useState(false);
 
@@ -1015,18 +1024,37 @@ const Classroom = () => {
         }
     })
 
-    const { isLoading } = useQuery(["fetch domains", id], () => fetchStudentDomains(userdata.token, id), {
+    const { isLoading } = useQuery(["fetch student domains", id], () => fetchStudentDomains(userdata.token, id), {
         onSuccess: (res) => {
-            // console.log(res.data)
             setModules(res.data)
         }
     })
+
+    let dueDate = bootcampName[0]?.nextPayment;
+    // notify due date
+    let paymentDaysLeft = useMemo(() => {
+        let today = new Date();
+        let time = new Date(dueDate) - today
+        let oneDay = 86400000;
+        let daysLeft = 0
+        if (time >= oneDay) {
+            if(Math.floor(time / oneDay) <= 7){
+                daysLeft = Math.floor(time / oneDay);
+                return daysLeft
+
+            }
+            daysLeft = Math.floor(time / oneDay);
+            return daysLeft
+        }
+        return daysLeft
+
+    }, [bootcampName, dueDate])
 
 
 
 
     const reduceContent = useMemo(() => {
-        return modules?.reduce((total, current) => [
+        return modules?.sort((a, b) => a.order - b.order)?.reduce((total, current) => [
             ...total, ...current.contents
         ], []);
 
@@ -1084,19 +1112,16 @@ const Classroom = () => {
     const MoveButton = (type) => {
         if (reduceContent?.length > 0 && type === "next") {
             const findIndex = reduceContent?.findIndex(content => content.contentId === contentId);
-            console.log({ findIndex });
 
 
 
             let val = ""
             if (findIndex !== (reduceContent?.length - 1)) {
                 val = findIndex + 1;
-                console.log({ val });
                 setSearchParams({
                     contentId: reduceContent[val]?.contentId
                 })
                 if (!reduceContent[val]?.isLocked) {
-                    console.log("item is logged");
                     setLocked(false)
                     setPickedType(reduceContent[val]?.type)
                     setContents(reduceContent[val]?.items)
@@ -1105,7 +1130,6 @@ const Classroom = () => {
 
                 } else {
                     setContents([])
-                    console.log("item is  not locked");
                     setLocked(true)
                     setPickedType(reduceContent[val]?.type)
                     setBodyTitle(reduceContent[val]?.title)
@@ -1120,7 +1144,6 @@ const Classroom = () => {
                 })
 
                 if (!reduceContent[val]?.isLocked) {
-                    console.log("item is locked");
                     setLocked(false)
                     setContents(reduceContent[val]?.items)
                     setBodyTitle(reduceContent[val]?.title)
@@ -1129,7 +1152,6 @@ const Classroom = () => {
 
                 } else {
                     setContents([])
-                    console.log("item is  not locked");
                     setLocked(true)
                     setBodyTitle(reduceContent[val]?.title)
                     setPickedType(reduceContent[val]?.type)
@@ -1148,7 +1170,6 @@ const Classroom = () => {
                     contentId: reduceContent[val]?.contentId
                 })
                 if (!reduceContent[val]?.isLocked) {
-                    console.log("item is locked");
 
                     setLocked(false)
                     setPickedType(reduceContent[val]?.type)
@@ -1157,7 +1178,6 @@ const Classroom = () => {
                     return;
 
                 } else {
-                    console.log("item is  not locked");
                     setContents([])
                     setLocked(true)
                     setPickedType(reduceContent[val]?.type)
@@ -1250,15 +1270,13 @@ const Classroom = () => {
 
 
     const handleCompleted = async (contentId, fileId, type) => {
-        console.log({ contentId });
         setLoading(true)
         try {
 
             const { data, statusCode } = await markAsCompleted(userdata?.token, contentId, fileId, type)
             if (statusCode === 1) {
                 setLoading(false)
-                queryClient.invalidateQueries(["fetch domains"])
-                console.log({ data });
+                queryClient.invalidateQueries(["fetch student domains"])
 
             }
         } catch (error) {
@@ -1272,7 +1290,6 @@ const Classroom = () => {
 
 
     const handleFileCompleted = async (contentId, contentsId, type) => {
-        // console.log("token", userdata?.token);
         setLoading(true)
 
         let ids = [];
@@ -1284,8 +1301,7 @@ const Classroom = () => {
             const { data, statusCode } = await markFileAsCompleted(userdata?.token, contentId, ids, type)
             if (statusCode === 1) {
                 setLoading(false)
-                queryClient.invalidateQueries(["fetch domains"])
-                console.log({ data });
+                queryClient.invalidateQueries(["fetch student domains"])
 
             }
 
@@ -1294,7 +1310,6 @@ const Classroom = () => {
             console.log({ error });
         }
 
-        // console.log({ ids });
 
 
 
@@ -1302,31 +1317,20 @@ const Classroom = () => {
 
 
 
-
-
-    // console.log({ contentId });
-
-
-    console.log({ modules });
-    console.log({ reduceContent });
-    console.log({ reduceItem });
-    console.log({ contents });
-    console.log({ totalItem });
-
     return (
         <Container>
             {isLoading && <Loader />}
             <ToastContainer
-				position="top-right"
-				autoClose={5000}
-				hideProgressBar={false}
-				newestOnTop={false}
-				closeOnClick
-				rtl={false}
-				pauseOnFocusLoss
-				draggable
-				pauseOnHover
-			/>
+                position="top-right"
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+            />
 
             <ClassroomContainer>
                 <div>
@@ -1335,7 +1339,9 @@ const Classroom = () => {
                         open={showMobile}
                         onClick={e => setShowMobile(_ => false)}
                     >
-                        <Sidebar isMobile={true} modules={modules}
+                        <Sidebar
+                            isMobile={true}
+                            modules={modules}
                             setContents={setContents}
                             setPickedType={setPickedType}
                             reduceContent={reduceContent}
@@ -1349,7 +1355,8 @@ const Classroom = () => {
                     </Backdrop>
 
                     <Sidebar
-                        isMobile={false} modules={modules}
+                        isMobile={false}
+                        modules={modules}
                         setContents={setContents}
                         setPickedType={setPickedType}
                         reduceContent={reduceContent}
@@ -1372,7 +1379,15 @@ const Classroom = () => {
                             <h5 style={{ margin: 0 }}><Link to={`/student/console/myclasses`}>Classroom</Link></h5>
 
                         </div>
+                        {
+                            (paymentDaysLeft >= 0 && paymentDaysLeft <= 7) &&
+
+                                <div className="banner">
+                                    <p>You have <span>{paymentDaysLeft}</span> day(s) left to pay for this course</p>
+                                </div>
+                            }
                         <div className='bread'>
+                
                             <Breadcrumbs separator={<MdNavigateNext />} aria-label="breadcrumb">
                                 <BreadcrumbLink to="/student">
                                     Dashboard

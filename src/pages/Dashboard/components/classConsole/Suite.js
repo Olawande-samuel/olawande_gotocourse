@@ -1,40 +1,34 @@
-import '../classConsole/Content.css'
-import { NavLink, Outlet, useNavigate, useParams, useSearchParams } from 'react-router-dom';
-import { useState } from 'react'
-import processed from '../../../../images/processed.png'
+import { IconButton, Menu, MenuItem, Modal, Tooltip } from '@mui/material';
+import Box from '@mui/material/Box';
+import Tab from '@mui/material/Tab';
+import Tabs from '@mui/material/Tabs';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useState } from 'react';
+import { AiOutlineClose, AiOutlineSearch } from 'react-icons/ai';
+import { BiStopCircle, BiTrash, BiVideoRecording } from 'react-icons/bi';
 import {
     BsDownload,
     BsMic,
     BsMicMute,
     BsPauseCircle,
     BsRecordCircle,
-    BsThreeDotsVertical,
-  } from "react-icons/bs";
-  import { AiOutlineClose, AiOutlineSearch } from 'react-icons/ai';
-  import Tabs from '@mui/material/Tabs';
-import Tab from '@mui/material/Tab';
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
-import { Link, useLocation } from "react-router-dom";
-import { IconButton, Menu, MenuItem, Modal, Tooltip } from '@mui/material';
-import { HiOutlineCloudUpload } from 'react-icons/hi';
-import { BiStopCircle, BiTrash, BiVideoRecording } from 'react-icons/bi';
+    BsThreeDotsVertical
+} from "react-icons/bs";
 import { MdPresentToAll } from 'react-icons/md';
-import { UploadFormContent } from './components/upload';
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { AdvancedError } from '../../../../classes';
-import { useLocalStorage } from '../../../../hooks';
-import { CLASSID, getFullDate, getTime, KEY } from '../../../../constants';
+import { CLASSID, getFullDate, KEY } from '../../../../constants';
 import { useAuth } from '../../../../contexts/Auth';
+import { useLocalStorage } from '../../../../hooks';
+import processed from '../../../../images/processed.png';
+import '../classConsole/Content.css';
+import { UploadFormContent } from './components/upload';
 import { ViewModal } from './File';
 
-import { useReactMediaRecorder } from "react-media-recorder";
-import { useRef } from 'react';
-import { useEffect } from 'react';
-import { border } from '@mui/system';
-import { IoCloudUploadOutline } from 'react-icons/io5';
+import { useEffect, useRef } from 'react';
 import { BsPlay } from "react-icons/bs";
+import { IoCloudUploadOutline } from 'react-icons/io5';
+import { useReactMediaRecorder } from "react-media-recorder";
 import { Accord } from '.';
 import UploadWidget from './components/UploadWidget';
 
@@ -70,7 +64,6 @@ export function Processed() {
 
     const files = useQuery(["fetch suite files", userdata?.token], ()=>fetchSuiteFiles(userdata?.token), {
         onSuccess: (res)=> {
-            console.log(res)
             res.data.length > 0 && setData(res.data)
         },
         onError: (err)=> {
@@ -123,7 +116,6 @@ function SuiteBox({x, id}){
 
     const mutation = useMutation(([usertoken, data])=> deleteCreatorItem(usertoken, data), {
         onSuccess: (res)=>{
-            console.log(res)
             queryClient.invalidateQueries("fetch suite files")
         },
         onError: (err)=>console.error(err)
@@ -310,7 +302,6 @@ function CreatorMenu({ id, content }) {
     }
 
     const handleOpen=(e, type)=>{
-        console.log(type)
         setAnchorEl(null);
         if(type === "file"){
             setIsOpen(true)
@@ -410,7 +401,6 @@ const UploadForm = ({isOpen, setIsOpen, setPreviewImage, uploadType }) => {
     //             toast.success(message)
     //         }
     //     }catch(err){
-    //         console.error(err.statusCode)
     //         setLoading(false)
     //         toast.error(err.message)
     //         if(err.statusCode === 2){
@@ -437,9 +427,7 @@ const UploadForm = ({isOpen, setIsOpen, setPreviewImage, uploadType }) => {
     }
 
     function progressHandler(event) {
-        console.log({event})
         var percent = (event.loaded / event.total) * 100;
-        console.log(percent)
         setProgress(Math.round(percent) + "% uploaded... please wait")
         // _("progressBar").value = Math.round(percent);
         // _("status").innerHTML = Math.round(percent) + "% uploaded... please wait";
@@ -457,7 +445,6 @@ const UploadForm = ({isOpen, setIsOpen, setPreviewImage, uploadType }) => {
       
     function errorHandler(event) {
         setLoading(false)
-        console.error(event)
         toast.error(event.message)
         
     }
@@ -467,7 +454,6 @@ const UploadForm = ({isOpen, setIsOpen, setPreviewImage, uploadType }) => {
     }
     const mutation = useMutation(([token, data])=>addFile(token, data), {
         onSuccess: (res)=> {
-            console.log(res)
             setData(null)
             setFile(null)
             setImageUrl(null)
@@ -600,10 +586,8 @@ export const UploadVideoRecording = ({isVideoOpen, setIsVideoOpen, setPreviewIma
 
     const addToFile = useMutation(([token, data])=> addNewFile(token, data), {
         onSuccess: (res)=> {
-            console.log(res)
             if(res.statusCode === 1){
                 createFileContent(res.data.fileId)
-                console.log("setting done")
             }
         },
         onError: err => console.error(err)
@@ -611,7 +595,6 @@ export const UploadVideoRecording = ({isVideoOpen, setIsVideoOpen, setPreviewIma
 
 
     async function uploadFileHandler(e){
-        console.log("calling")
         if(!fileName){
             toast.error('Please provide a file name')
             return
@@ -635,9 +618,7 @@ export const UploadVideoRecording = ({isVideoOpen, setIsVideoOpen, setPreviewIma
     }
 
     function progressHandler(event) {
-        console.log({event})
         var percent = (event.loaded / event.total) * 100;
-        console.log(percent)
         setProgress(Math.round(percent) + "% uploaded... please wait")
         // _("progressBar").value = Math.round(percent);
         // _("status").innerHTML = Math.round(percent) + "% uploaded... please wait";
@@ -645,8 +626,6 @@ export const UploadVideoRecording = ({isVideoOpen, setIsVideoOpen, setPreviewIma
       
     function completeHandler(event) {
         let response = JSON.parse(event.target.response)
-        console.log(response)
-        
         let ext = response?.secure_url.split("/");
         let extension = ext[ext.length -1]
         addToFile.mutate([value.token, {
@@ -733,7 +712,6 @@ export const UploadVideoRecording = ({isVideoOpen, setIsVideoOpen, setPreviewIma
     function handleUnmute(e){
         e.preventDefault()
         setMuted(false)
-        // console.log(unMuteAudio)
         unMuteAudio()
 
     }
@@ -789,7 +767,7 @@ export const UploadVideoRecording = ({isVideoOpen, setIsVideoOpen, setPreviewIma
                             
                             <div className="my-3 d-flex align-items-center justify-content-between">
                                 <div className="my-3" style={{width:"min(100%, 450px)"}}> 
-                                    <input type="text" name="title" id="title " className="form-control"  style={{outline:"1.5px solid var(--theme-blue)"}} placeholder='Enter file name' value={fileName} onChange={(e)=>setFileName(e.target.value)} onBlur={()=>console.log("blurred")} onFocus={()=>console.log("focused")} />
+                                    <input type="text" name="title" id="title " className="form-control"  style={{outline:"1.5px solid var(--theme-blue)"}} placeholder='Enter file name' value={fileName} onChange={(e)=>setFileName(e.target.value)}  />
                                 </div>
                                 <button 
                                     className="button py-2 px-4"
@@ -977,9 +955,7 @@ export const UploadScreenRecording = ({isScreenOpen, setIsScreenOpen, setPreview
     }
 
     function progressHandler(event) {
-        console.log({event})
         var percent = (event.loaded / event.total) * 100;
-        console.log(percent)
         setProgress(Math.round(percent) + "% uploaded... please wait")
     }
       
@@ -1005,8 +981,6 @@ export const UploadScreenRecording = ({isScreenOpen, setIsScreenOpen, setPreview
 
     const mutation = useMutation(([token, data])=>addFile(token, data), {
         onSuccess: (res)=> {
-            console.log(res)
-            
             queryClient.invalidateQueries("fetch suite files")
         },
         onError: (err)=> console.error(err)
@@ -1014,8 +988,6 @@ export const UploadScreenRecording = ({isScreenOpen, setIsScreenOpen, setPreview
 
     const addMainFileMutation = useMutation(([token, data])=>addMainFile(token, data), {
         onSuccess: (res)=> {
-            console.log(res)
-            
             queryClient.invalidateQueries("file content")
         },
         onError: (err)=> console.error(err)
@@ -1078,7 +1050,6 @@ export const UploadScreenRecording = ({isScreenOpen, setIsScreenOpen, setPreview
     function handleUnmute(e){
         e.preventDefault()
         setMuted(false)
-        // console.log(unMuteAudio)
         unMuteAudio()
 
     }
@@ -1127,7 +1098,7 @@ export const UploadScreenRecording = ({isScreenOpen, setIsScreenOpen, setPreview
                         <>
                             <div className="my-3 d-flex align-items-center justify-content-between">
                                 <div className="my-3" style={{width:"min(100%, 450px)"}}> 
-                                    <input type="text" name="title" id="title " className="form-control"  style={{outline:"1.5px solid var(--theme-blue)"}} placeholder='Enter file name' value={fileName} onChange={(e)=>setFileName(e.target.value)} onBlur={()=>console.log("blurred")} onFocus={()=>console.log("focused")} />
+                                    <input type="text" name="title" id="title " className="form-control"  style={{outline:"1.5px solid var(--theme-blue)"}} placeholder='Enter file name' value={fileName} onChange={(e)=>setFileName(e.target.value)} />
                                 </div>
                                 <button 
                                     className="button py-2 px-4"

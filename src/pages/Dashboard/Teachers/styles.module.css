@@ -124,13 +124,16 @@
     color:#fff;
     background-color: rgba(0, 130, 35, 1);
 }
-.teachers_profile {
-    background-color:var(--white);
+.teachers_profile, .admin_profile {
     height: 80vh;
     padding: min(.5rem, 40px);
     border-radius: 10px;
     width: 100%;
     overflow-y: scroll;
+}
+
+.teachers_profile {
+    background-color:var(--white);
 }
 .teachers_profile_top {
     display: flex;
@@ -320,14 +323,14 @@
     color: var(--textBlue)
 }
 
-.form_group select {
+/* .form_group select {
     outline: none;
     padding: 12px;
     border: 1px solid rgba(208, 204, 204, 0.5);
     border-radius: 5px;
     text-indent: 40px;
     background-color: var(--primary);
-}
+} */
 
 .form_group textarea{
     outline: none;
@@ -441,10 +444,10 @@
     width: min(100% - 0.5rem, 480px );
 }
 
-
+/* 
 .requests form label {
     margin-top: 20px;
-}
+} */
 
 .requests_button {
     margin: 15px 0px;
@@ -463,13 +466,174 @@
 
 /* EARNINGS */
 .earnings_card_wrapper{
-    display: flex;
-    flex-wrap:wrap;
+    display: grid;
+    grid-template-columns: 200px min(300px, 400px);
+    /* flex-wrap:wrap; */
     gap: 1.5rem;
+}
+
+@media screen and (max-width: 767px) {
+    .earnings_card_wrapper{
+        grid-template-columns: repeat(auto-fit, minmax(min(250px, 100px), 300px));
+    }   
+}
+/* .earnings_card_wrapper > div:nth-child(1) {
+    grid-area: 1 / 2 / 2 / 4;
+}
+.earnings_card_wrapper > div:nth-child(2) {
+    grid-area: 1 / 2 / 3 / 5;
+} */
+
+.earntop, .earnbtm{
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding: .5rem 0;
+    color: #081131;
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 31px;
+}
+.earntop{
+    padding: 0 1rem;
 
 }
-.earnings_card_wrapper > div {
-    flex: 1 1 30%;
+
+.earntop > div:nth-of-type(1), .earntop> div:nth-of-type(3){
+    flex: .5;
+    /* border: 2px solid red; */
+}
+
+.earntop > div:nth-of-type(2){
+    flex: 4;
+    padding: 0 .5rem;
+    /* border: 2px solid yellow; */
+
+}
+
+.earntop> div:nth-of-type(3){
+    flex: 1;
+    padding: 0 .5rem;
+    /* border: 2px solid red; */
+}
+
+
+.earnbtm > div:nth-of-type(1), .earnbtm> div:nth-of-type(3){
+    flex: .5;
+    /* border: 2px solid red; */
+}
+
+.earnbtm > div:nth-of-type(2){
+    flex: 4.6;
+    padding: 0 .5rem;
+    /* border: 2px solid yellow; */
+
+}
+
+.earnbtm> div:nth-of-type(3){
+    flex: 1;
+    padding: 0 .5rem;
+    /* border: 2px solid red; */
+}
+
+.earnbtm{
+    color: #081131;
+    font-weight: 400;
+    padding:.5rem 0;
+
+}
+
+.earninfo{
+    display: grid;
+    grid-template-columns: 1.5fr 1fr 1fr 1fr 1fr;
+    align-items: center;
+    width: 100%;
+    gap: 1rem;
+    padding: .5rem 0;
+}
+
+
+
+.earnbtn input{
+padding: .5rem  1rem;
+border: 1px solid #DBDBDB;
+border-radius: 10px;
+outline: none;
+}
+
+.earn{
+    display: flex;
+    flex-direction: column;
+}
+
+
+.earntopbar{
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding: .5rem 0;
+    color: #081131;
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 31px;
+}
+
+
+.earntopbar > div:nth-of-type(1){
+    flex: .5;
+    /* border: 2px solid red; */
+}
+
+.earntopbar > div:nth-of-type(2), 
+.earntopbar > div:nth-of-type(3){
+    flex: 2.5;
+    padding: 0 .5rem;
+    flex-wrap: wrap;
+    /* border: 2px solid yellow; */
+
+}
+
+.earntopbar > div:nth-of-type(4), 
+.earntopbar> div:nth-of-type(5)
+
+{
+    flex: 1.5;
+    padding: 0 .5rem;
+    /* border: 2px solid yellow; */
+
+}
+
+
+
+.earntopbar> div:nth-of-type(6),
+.earntopbar> div:nth-of-type(7),
+.earntopbar> div:nth-of-type(8)
+{
+    flex: 2;
+    padding: 0 .5rem;
+    /* border: 2px solid yellow; */
+
+}
+
+.earnbtmbar{
+    color: #081131;
+    font-weight: 400;
+    padding:.7rem 0;
+
+}
+
+
+
+@media screen and (max-width:768px){
+    .earntop, .earntopbar{
+       flex-direction: column;
+    }
+
+    .earninfo{
+        grid-template-columns: 1fr;
+
+    }
+    
 }
 
 
@@ -535,3 +699,4 @@
     background: var(--theme-orange) !important;
     padding: 8px 12px;
 }
+

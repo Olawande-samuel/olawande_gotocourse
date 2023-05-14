@@ -3,6 +3,7 @@ import React, { useState } from 'react'
 import styled from 'styled-components'
 import { useAuth } from '../../contexts/Auth'
 import { ClassTypeComponent, Short, TechPreCard } from './landingComponents'
+import { NewGrid } from './UpNext'
 
 const Grid = styled.div`
     display: grid;
@@ -71,7 +72,7 @@ const ShortCourses = () => {
 const data = {
     header: "Explore short courses",
     header2:"& Tech entreprenuership education ",
-    subtext:"Knowledge boost within 1-14 days",
+    subtext2:"Knowledge boost within 1-14 days",
     content: [],
     bottomTitle:"View  more short courses > ",
     bottomLink:`/category/SHORT_COURSES`

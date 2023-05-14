@@ -67,7 +67,6 @@ const Referral = () => {
             navigate("/affiliate");
             setLoading(_ => false);
         }, 0);
-        console.log("Student Referral page is mounted");
         return () => console.log("Student Referal page is unmounted");
     }, [])
 

@@ -230,6 +230,20 @@
     color: #0C2191;
 }
 
+.earnaccord__body{
+    margin-bottom: .5rem;
+}
+
+.earnaccord__header button {
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 31px;
+    color: #081131;
+    border: none;
+    outline: none;
+
+}
+
 .content__quiz small {
     font-weight: 400;
     font-size: 10px;
@@ -840,7 +854,7 @@
 
 
 .assessleft {
-    flex: .5;
+    flex: .35;
     display: flex;
     flex-direction: column;
     /* border: 2px solid blue; */
@@ -848,7 +862,7 @@
 }
 
 .assessright {
-    flex: .5;
+    flex: .65;
     /* border: 2px solid yellow; */
     display: flex;
     align-items: center;

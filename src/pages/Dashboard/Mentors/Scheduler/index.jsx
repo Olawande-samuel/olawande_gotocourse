@@ -74,7 +74,7 @@ const StyledCalendar = styled(Calendar)`
     }
 
     & .react-calendar__navigation{
-        width; 100%;
+        width: 100%;
         display: flex;
         align-items: center;
         justify-content: space-between;
@@ -155,7 +155,7 @@ const TimeFormContainer = styled.div`
         color: #0C2191;
         font-weight: 500;
         margin-bottom: 8px;
-        letter-spacing; 0.4px;
+        letter-spacing: 0.4px;
     }
 
 `;
@@ -191,12 +191,10 @@ const Scheduler = () => {
         console.log("Mentors Scheduler is mounted");
         return () => console.log("Mentors Scheduler is unmounted");
     }, [])
-    console.log({userdata});
 
 
     function changeHandler(e){
         const {name, value} = e.target;
-        console.log(e.target, value, name);
         setFormstate(old => {
             return {
                 ...old,

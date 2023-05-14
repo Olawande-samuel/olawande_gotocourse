@@ -70,11 +70,6 @@ const cardData = [
 
 const Affiliate = () => {
     
-    useEffect(() => {
-        console.log("Admin affiliate page showing");
-        return () => console.log("Removing Admin affiliate page");
-    }, [])
-
     const [select, setSelect] = useState("30 days")
 
     function changeHandler(e){

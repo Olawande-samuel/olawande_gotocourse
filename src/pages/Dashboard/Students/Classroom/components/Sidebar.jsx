@@ -4,6 +4,7 @@ import { Module } from './';
 import { Link, useNavigate } from 'react-router-dom';
 import { useMemo } from 'react';
 import { Button, IconButton } from "@mui/material";
+import { Logosm } from '../../../../../images/components/svgs';
 
 
 
@@ -41,59 +42,65 @@ const SidebarBody = styled.div`
     color: #fff ;
     
 .side__nav{
-    height: 10%;
-    /* border: 2px solid red; */
-
-    .navbarright{
-        width: 100%;
-        background-color:  var(--theme-blue);
-        display: flex;
-        align-items: center;
-        padding: 10px 20px;
-
-
-        & h5 {
-            font-weight: 300;
-            font-size: 1.15rem;
-            color: #fff;
-
+    height: 15%;
+    /* border: 2px solid purple; */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
             a{
-                color: #fff;   
+                color: #fff; 
+                /* padding: px 20px; */
+  
             }
+        
+}
+
+.newmiddle{
+    height: 85%;
+    overflow-y: auto;
+    /* border: 2px solid green; */
+
+    &::-webkit-scrollbar{
+        // display: none
+        width: 5px;
+        &-thumb{
+            background:  #fff;
+            width: 5px;
+    
+    
         }
-    }
 
 }
 
     .bodytop{
-        height: 20%;
+        /* height: 20%; */
         /* border: 2px solid white; */
 
 
     }
 
     .bodymiddle{
-        height: 60%;
-        overflow-y: auto;
-        padding: 1rem 0;
+        /* height: 60%; */
+        /* overflow-y: auto; */
+        padding-bottom: 1rem;
         /* border: 2px solid yellow; */
 
-        &::-webkit-scrollbar{
-        // display: none
-        /* width: .2rem; */
+        /* &::-webkit-scrollbar{
+         display: none 
+        width: .2rem;
         &-thumb{
             background:  var(--theme-blue);
             width: .3rem;
     
     
-        }
+        } */
     }
 
     }
 
 
     .bodybottom{
-        height: 10%;
+        /* height: 10%; */
         /* border: 2px solid purple; */
         display: flex;
         align-items: center;
@@ -122,7 +129,7 @@ const Progress = styled.progress`
 
 const ProgressContainer = styled.div`
     width: 100%;
-    padding: 20px;
+    padding: 10px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -154,13 +161,11 @@ export const CustomButton = styled(Button)`
 const Sidebar = ({ setShowMobile, modules, setContents, setPickedType, setBodyTitle, reduceContent, setActive, active, isMobile, progress, setLocked
 }) => {
     const navigate = useNavigate()
-    console.log({ progress });
 
     const ProgressResult = useMemo(() => {
         let result = 0;
         if (reduceContent?.length === 0) return result;
         result = (Math.floor((progress.isCompleted / progress.total) * 100))
-        console.log({ result })
         return result
     }, [reduceContent, progress.isCompleted, progress.length])
 
@@ -168,50 +173,50 @@ const Sidebar = ({ setShowMobile, modules, setContents, setPickedType, setBodyTi
         <SidebarContainer $mobile={isMobile}>
             <SidebarBody>
                 <div className='side__nav'>
-                    <div className='navbarright'>
-                        <h5 style={{ margin: 0 }}><Link to={`/student/console/myclasses`}>Classroom</Link></h5>
+                        <Link to="/">
+                            <Logosm />
+                        </Link>
+
+                        <Link to={`/student/console/myclasses`} style={{fontSize: "18px"}}>Classroom</Link>
+
+                </div>
+                <div className='newmiddle'>
+                    <div className="bodytop">
+
+                        {reduceContent?.length > 0 &&
+                            <ProgressContainer>
+                                <p>Progress:  {ProgressResult}%</p>
+                                <Progress value={ProgressResult} max="100" />
+                            </ProgressContainer>
+                        }
 
                     </div>
-                    
-                </div>
 
-                <div className="bodytop">
-                    <CustomButton sx={{
-                        marginInline: 'auto', width: '50%', color: "#fff"
-                    }}>
-                        Refresh topics
-                    </CustomButton>
-                    {reduceContent?.length > 0 &&
-                        <ProgressContainer>
-                            <p>Progress:  {ProgressResult}%</p>
-                            <Progress value={ProgressResult} max="100" />
-                        </ProgressContainer>
-                    }
-
-                </div>
-                <div className='bodymiddle'>
-                    {
-                        modules?.sort((a, b) => a.order - b.order).map((module, id) =>
-                            <Module
-                                title={module.name}
-                                // active={active}
-                                // setActive={setActive}
-                                contentsData={module.contents}
-                                key={id}
-                                setContents={setContents}
-                                setPickedType={setPickedType}
-                                module={id}
-                                reduceContent={reduceContent}
-                                setBodyTitle={setBodyTitle}
-                                setLocked={setLocked}
+                    <div className='bodymiddle'>
+                        {
+                            modules?.sort((a, b) => a.order - b.order).map((module, id) =>
+                                <Module
+                                    title={module.name}
+                                    // active={active}
+                                    // setActive={setActive}
+                                    contentsData={module.contents}
+                                    key={id}
+                                    setContents={setContents}
+                                    setPickedType={setPickedType}
+                                    module={id}
+                                    reduceContent={reduceContent}
+                                    setBodyTitle={setBodyTitle}
+                                    setLocked={setLocked}
 
 
-                            />)
-                    }
+                                />)
+                        }
 
-                </div>
-                <div className="bodybottom">
-                    <button className="back_button" style={{ width: "100%" }} onClick={() => navigate('/student/console/myclasses')}>Back to Console</button>
+                    </div>
+                    <div className="bodybottom">
+                        <button className="back_button" style={{ width: "100%" }} onClick={() => navigate('/student/console/myclasses')}>Back to Console</button>
+
+                    </div>
 
                 </div>
 

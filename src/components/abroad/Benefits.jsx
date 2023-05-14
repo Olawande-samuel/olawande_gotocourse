@@ -4,7 +4,8 @@ import engage from '../../images/abroad/engage.svg'
 import convenience from '../../images/abroad/convenience.svg'
 
 const Container = styled.div`
-  background: #DEEDFF;  
+ background: #EFF2FF;
+  padding: 2rem;
 
   .container{
     .content{

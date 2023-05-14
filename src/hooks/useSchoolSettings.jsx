@@ -46,7 +46,7 @@ const useSchoolSettings = (school_id) => {
         adminFunctions
             .fetchSchoolSettings(userdata?.token, school_id)
             .then((axiosRes) => {
-                console.log(axiosRes);
+                // console.log(axiosRes);
                 if (axiosRes.success) {
                     setSchoolSettings(axiosRes.data);
                     setLoading(false);
@@ -72,7 +72,7 @@ const useSchoolSettings = (school_id) => {
         adminFunctions
             .updateSchoolSettings(userdata?.token, school_id, newSettings)
             .then((axiosRes) => {
-                console.log(axiosRes);
+                // console.log(axiosRes);
                 if (axiosRes.success) {
                     setSchoolSettings(axiosRes.data);
                     setLoading(false);

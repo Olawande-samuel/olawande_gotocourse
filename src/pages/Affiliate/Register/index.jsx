@@ -25,10 +25,7 @@ const Register = () => {
     const {authFunctions: {register}, setGeneralState} = useAuth();
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
-    useEffect(() => {
-        console.log("Registration page showing...");
-        return () => console.log("Registration page is removing...")
-    }, [])
+  
     const [formstate, setFormstate] = useState({
         fullName: "",
         email: "",
@@ -104,7 +101,6 @@ const Register = () => {
                         notification: message,
                       };
                     });
-                    console.log(data); 
                     navigate(`/email`);
                 }
             }

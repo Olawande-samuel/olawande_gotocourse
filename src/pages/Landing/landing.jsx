@@ -40,8 +40,9 @@ const NewHome = ({ mixpanel }) => {
 		<>
 			<Helmet>
 				<title>Gotocourse</title>
+				<meta property="og:url" content="https://gotocourse.com" />
 				<meta property="og:site_name" content="Gotocourse" />
-				<meta name="description" content="Gotocourse" />
+				<meta name="description" content="Gotocourse is a platform for learning in-demand tech and business skills and enables you to create virtual learning school" />
 			</Helmet>
 			<HomeComponent>
 				<Navbar toggleSidebar={toggleSidebar} />
@@ -62,13 +63,14 @@ const NewHome = ({ mixpanel }) => {
 						business skills online
 					</p>
 					<div className="d-flex gap-3 mt-4">
-						{/* <a href="" className="d-inline-flex"> */}
-						<Link to="/create-with-gotocourse">
-							<button>I'm a school administator</button>
-						</Link>
-						{/* </a> */}
+						<a href="https://create.gotocourse.com/create-with-gotocourse" target="_blank" rel="noreferrer">
+							<button>I'm a school creator</button>
+						</a>
 						<Link to="/learn-on-gotocourse">
 							<button>I'm a Learner</button>
+						</Link>
+						<Link to="/gotocourse-teacher">
+							<button>I'm an Independent Teacher </button>
 						</Link>
 					</div>
 				</Center>

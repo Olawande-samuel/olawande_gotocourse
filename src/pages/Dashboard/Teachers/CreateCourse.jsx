@@ -138,7 +138,6 @@ export const Syllabus = ({
     });
     setOpenPreview(true);
   };
-  console.log({formstate})
 
   async function submitHandler(e) {
     e.preventDefault();
@@ -155,7 +154,6 @@ export const Syllabus = ({
           instructors:[...instructorsList, ...currentInstructor],
           categoryName: formstate.category
         }
-        console.log(formdata)
         delete formdata.category
         if ( formdata.name === "" || formdata.categoryName === "" || formdata.description === "" ) throw new AdvancedError("All fields are required", 0);
         
@@ -176,7 +174,6 @@ export const Syllabus = ({
       }
     } else {
     try {
-      console.log({formstate})
       let formdata = {
         ...formstate,
         type:"PACKAGE",
@@ -900,33 +897,35 @@ export const Syllabus = ({
 
     useEffect(() => {
       if(flag.current) return;
-      (async () => {
-        try {
-          const token = userdata?.token;
-          const res = await fetch(token);
-          const { message, success, statusCode } = res;
-          if (!success) throw new AdvancedError(message, statusCode);
-          else {
-            const { data } = res;
-            //do somethings
-            setTeachers(_=>  data);
+      if(userdata?.token){
+        (async () => {
+          try {
+            const token = userdata?.token;
+            const res = await fetch(token);
+            const { message, success, statusCode } = res;
+            if (!success) throw new AdvancedError(message, statusCode);
+            else {
+              const { data } = res;
+              //do somethings
+              setTeachers(_=>  data);
+            }
+          } catch (err) {
+            toast.error(err.message, {
+              position: "top-right",
+              autoClose: 4000,
+              hideProgressBar: true,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+            });
+          }finally {
+            setLoading(_ => false);
           }
-        } catch (err) {
-          toast.error(err.message, {
-            position: "top-right",
-            autoClose: 4000,
-            hideProgressBar: true,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-          });
-        }finally {
-          setLoading(_ => false);
-        }
-      })();
+        })();
+      }
       flag.current = true;
-    }, []);
+    }, [userdata?.token]);
   
     return (
       <Modal

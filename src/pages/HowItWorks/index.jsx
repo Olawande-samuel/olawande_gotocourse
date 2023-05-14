@@ -118,7 +118,6 @@ export function HIWAffiliate() {
 
 
 export function Hero({ title, img }) {
-    console.log({title});
 
     return (
         <div className={style.hero}>
@@ -169,7 +168,6 @@ export function Instructional({ videos }) {
 }
 
 export function InstructionalCard({ item }) {
-    console.log({ item });
     return (
         // <Suspense fallback={<Loader />}>
 

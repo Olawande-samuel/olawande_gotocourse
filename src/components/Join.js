@@ -19,7 +19,7 @@ const Join = () => {
               </button>
             </Link>
             <small>OR</small>
-            <Link to="/admin/login">
+            <Link to="/teacher/login">
               <button type="button" className="btn btn-outline-light">
                 Apply to teach
               </button>

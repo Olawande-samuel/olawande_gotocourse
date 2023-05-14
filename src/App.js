@@ -232,6 +232,13 @@ import RedirectPage from "./pages/Bootcamp/Redirect";
 
 import NewHome from "./pages/Landing/landing";
 import Abroad from "./components/abroad/pages";
+import { EarningCourses, EarningTeacherApplication } from "./pages/Dashboard/Teachers/Earnings";
+import { BootcampPaystackPayment } from "./pages/Bootcamp/PaystackPayment";
+import Africa from "./components/abroad/pages/Africa";
+import ConsoleAnswer from "./pages/Dashboard/Students/Classroom/Answer";
+import NewTeacherLanding from "./components/teacher";
+// import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
+
 
 const Login = lazy(() => import("./pages/User/Login"));
 const SignUp = lazy(() => import("./pages/User/SignUp"));
@@ -296,6 +303,7 @@ function MyApp({ mixpanel }) {
 	return (
 		<AuthContextProvider>
 			<SyllabusContextProvider>
+				{/* <ReactQueryDevtools initialIsOpen={false} /> */}
 				<Suspense fallback={<Loader />}>
 					<Routes>
 						<Route path="/" element={<Out />}>
@@ -326,10 +334,14 @@ function MyApp({ mixpanel }) {
 
 							{/* <Route index element={<Cart />} /> */}
 							{/* <Route path="learn-on-gotocourse" element={<Out />}>
-                  <Route index element={<Landing />} />
-                  </Route> */}
+								<Route index element={<Landing />} />
+								</Route> */}
+							<Route path="africa" element={<Out />}>
+								<Route index element={<Africa />} />
+								<Route path="train-to-work" element={<Abroad />} />
+								<Route path="women-in-tech" element={<Abroad />} />
 
-							<Route path="train" element={<Abroad />} />
+							</Route>
 
 
 							<Route
@@ -352,6 +364,7 @@ function MyApp({ mixpanel }) {
 							<Route path="change-password" element={<ResetPassword />} />
 							{/* <Route path="become-a-teacher" element={<BecomeATeacher />} /> */}
 
+							<Route path="gotocourse-teacher" element={<NewTeacherLanding />} />
 							<Route path="become-a-teacher" element={<TeachersLanding />} />
 							<Route path="student/classroom" element={<StudentClassroom />} />
 							<Route path="coming-soon" element={<ComingSoon />} />
@@ -387,6 +400,9 @@ function MyApp({ mixpanel }) {
 										<Route index element={<NewBootcampDetailsComponent />} />
 										{/* <Route path="payment" element={<ComingSoon />} /> */}
 										<Route path="payment" element={<BootcampPayment />} />
+										<Route path="pay" element={<BootcampPaystackPayment />} />
+
+										{/* <Route path="payment" element={<BootcampPaystackPayment />} /> */}
 										<Route
 											path="payment/success"
 											element={<PaymentStatus success={true} />}
@@ -398,6 +414,7 @@ function MyApp({ mixpanel }) {
 									</Route>
 								</Route>
 							</Route>
+
 
 							<Route
 								path="bootcamp-training"
@@ -449,10 +466,7 @@ function MyApp({ mixpanel }) {
 							{/* STUDENTS */}
 							{/* <Route path="student" element={<ComingSoon student={true} />}> */}
 							<Route path="student" element={<Out />}>
-								<Route
-									path=""
-									element={<StudentDashboard mixpanel={mixpanel} />}
-								/>
+								<Route path="" element={<StudentDashboard mixpanel={mixpanel} />} />
 								<Route path="profile" element={<StudentProfile />} />
 								<Route path="classes" element={<StudentClasses />} />
 								<Route path="bootcamps" element={<StudentBootcamps />} />
@@ -460,20 +474,15 @@ function MyApp({ mixpanel }) {
 								<Route path="profile/edit" element={<StudentEdit />} />
 								<Route path="courses" element={<StudentCourses />} />
 								<Route path="wishlist" element={<Wishlist />} />
-								<Route
-									path="wishlist-checkout"
-									element={<WishlistCheckOut />}
-								/>
+								<Route path="wishlist-checkout" element={<WishlistCheckOut />} />
 								<Route path="history" element={<StudentHistory />} />
 								<Route path="payment" element={<StudentFees />} />
+
 								<Route path="chat" element={<StudentChat />} />
 								{/* <Route path="help" element={<StudentHelp />} /> */}
 								<Route path="help" element={<HIWStudent />} />
 								<Route path="referral" element={<StudentReferral />} />
-								<Route
-									path="notifications"
-									element={<StudentNotifications />}
-								/>
+								<Route path="notifications" element={<StudentNotifications />} />
 
 								<Route path="live-class" element={<Out />}>
 									<Route index element={<StudentLive />} />
@@ -507,6 +516,7 @@ function MyApp({ mixpanel }) {
 										</Route>
 									</Route>
 									<Route path="assessments" element={<ConsoleAssessments />} />
+									<Route path="answers" element={<ConsoleAnswer />} />
 									<Route path="messages" element={<ConsoleMessages />} />
 								</Route>
 								<Route
@@ -573,7 +583,10 @@ function MyApp({ mixpanel }) {
 									path="classes/details/:id"
 									element={<TeacherBootcampDetails />}
 								/>
-								<Route path="earnings" element={<Earnings />} />
+								<Route path="earnings" element={<Out />}>
+									<Route index element={<Earnings />} />
+									<Route path="fetch" element={<EarningTeacherApplication />} />
+								</Route>
 								<Route path="profile/edit" element={<TeacherEdit />} />
 								<Route path="courses" element={<TeacherCourses />} />
 								<Route path="courses/create" element={<CreateCourse />} />
@@ -722,7 +735,12 @@ function MyApp({ mixpanel }) {
 								<Route path="settings" element={<Settings />} />
 								<Route path="ad-leads" element={<AdLeads />} />
 								<Route path="marketing-leads" element={<Market />} />
-								<Route path="earnings" element={<AdminEarning />} />
+								<Route path="earnings" element={<Out />}>
+									<Route index element={<AdminEarning />} />
+									<Route path="courses" element={<EarningCourses />} />
+
+
+								</Route>
 								<Route path="affiliate" element={<AdminAffiliate />} />
 								<Route path="blog" element={<Out />}>
 									<Route index element={<BlogDashboard />} />
@@ -789,11 +807,11 @@ function MyApp({ mixpanel }) {
 								</Route>
 							</Route>
 							<Route path="admin" element={<Out />}>
-								<Route path="login" element={<AdminLogin />} />
+								{/* <Route path="login" element={<AdminLogin />} /> */}
 								{/* <Route
-                    path="signup"
-                    element={<AdminSignup />}
-                  /> */}
+                    					path="signup"
+                    					element={<AdminSignup />}
+                  				/> */}
 							</Route>
 						</Route>
 

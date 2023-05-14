@@ -8,8 +8,9 @@ import '../classConsole/Content.css'
 import { AiOutlineSearch } from 'react-icons/ai';
 import { useState } from 'react';
 import Loader from '../../../../components/Loader';
+import { getFullDate, KEY } from '../../../../constants';
 
-const KEY = 'gotocourse-userdata';
+
 
 
 const Grid = styled.div`
@@ -62,6 +63,11 @@ export const AssessmentCard = styled.div`
             font-weight: 700;
             padding: .5rem 0;
 
+        }
+        p{
+            font-size:14px;
+            color: red;
+   
         }
 
       
@@ -122,13 +128,15 @@ export default function ConsoleClasses() {
     let userdata = getItem(KEY);
     const { generalState: { isMobile }, studentFunctions: { fetchCourses, fetchWishlist, fetchBootcamps } } = useAuth();
     const { data, isSuccess, isLoading } = useQuery(["fetch my classes"], () => fetchBootcamps(userdata?.token))
-    // console.log({ data });
+    
     let navigate = useNavigate()
+
+    let today = new Date()
 
     const [search, setSearch] = useState("")
     return (
         <div className=''>
-            {isLoading && <Loader/>}
+            {isLoading && <Loader />}
             <main className='assessments'>
                 <div className="assessments__inputcontainer">
                     <input type="text"
@@ -142,7 +150,7 @@ export default function ConsoleClasses() {
                 {
                     data?.data?.filter(item => item.status === "paid")?.length > 0 ?
                         <Grid>
-                            {data?.data?.filter(item => item.status === "paid" &&
+                            {data?.data?.filter(item => (item.status === "paid") &&
                                 item?.bootcampName
                                     .toLowerCase()
                                     .includes(search?.toLowerCase())
@@ -160,8 +168,16 @@ export default function ConsoleClasses() {
                                     </div>
                                     <div className="content">
                                         <h6>{x.bootcampName}</h6>
+                                        {x?.nextPayment &&
+                                            (x?.paymentStatus === "incomplete") &&
+                                            <p>
+                                                Next payment:{getFullDate(x?.nextPayment)}
+                                            </p>}
+                                            <button>Open Class</button>
 
-                                        <button>Open Class</button>
+                                        {/* {
+                                            x?.paymentStatus === "completed" ? <button>Open Class</button> :
+                                                x?.paymentStatus === "incomplete" && (new Date(x?.nextPayment) >= today) && <button>Open Class</button>} */}
                                     </div>
                                 </AssessmentCard>
                             ))}
@@ -185,18 +201,18 @@ export default function ConsoleClasses() {
 }
 
 
-export  function ConsoleMessages() {
+export function ConsoleMessages() {
     const { getItem } = useLocalStorage();
     let userdata = getItem(KEY);
     const { generalState: { isMobile }, studentFunctions: { fetchCourses, fetchWishlist, fetchBootcamps } } = useAuth();
     const { data, isSuccess, isLoading } = useQuery(["fetch my classes"], () => fetchBootcamps(userdata?.token))
-    // console.log({ data });
+    
     let navigate = useNavigate()
 
     const [search, setSearch] = useState("")
     return (
         <div className=''>
-            {isLoading && <Loader/>}
+            {isLoading && <Loader />}
             <main className='assessments'>
                 <div className="assessments__inputcontainer">
                     <input type="text"

@@ -427,7 +427,7 @@ function FileCard({ title, fileName, contentId, type, _id, fileId, all }) {
 			)} */}
 
 
-			{type === TYPES?.noPreview && (
+			{/* {type === TYPES?.noPreview && (
 				<div className="filetop d-none">
 					<object
 						type={type}
@@ -437,10 +437,10 @@ function FileCard({ title, fileName, contentId, type, _id, fileId, all }) {
 						aria-label={fileName}
 					></object>
 				</div>
-			)}
+			)} */}
 
 			<div className="filebottom">
-				<div className="position-absolute end-0" style={{ cursor: "pointer" }}>
+				{/* <div className="position-absolute end-0" style={{ cursor: "pointer" }}>
 					<MenuOptionsPopup
 						handleClick={handleClick}
 						anchorEl={anchorEl}
@@ -454,7 +454,7 @@ function FileCard({ title, fileName, contentId, type, _id, fileId, all }) {
 						x={all}
 						handleIsDownloadable={handleIsDownloadable}
 					/>
-				</div>
+				</div> */}
 				<h3>{title}</h3>
 				<div className="filebutton">
 					<i>
@@ -486,8 +486,6 @@ function FileCard({ title, fileName, contentId, type, _id, fileId, all }) {
 }
 
 export function ViewModal({ open, setOpen, file, creator, type, title }) {
-	console.log({ file });
-	console.log({ type });
 	const style = {
 		position: "absolute",
 		bottom: 0,
@@ -610,6 +608,7 @@ function Pdf({ document }) {
 export function DocumentViewer({ file, name }) {
 	const docs = [
 		{
+			// uri: "https://res.cloudinary.com/gotocourse-us/raw/upload/v1664205986/files/Risk_Register_2022.xlsx",
 			uri: file,
 			fileName: name
 		}, // Remote file

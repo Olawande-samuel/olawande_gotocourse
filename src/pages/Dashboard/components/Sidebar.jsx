@@ -213,7 +213,7 @@ const Sidebar = () => {
                 {
                     icon: BiCategory,
                     path: "myclasses",
-                    title: "My Classes",
+                    title: "My Courses",
                 },
                 {
                     icon: BiVideo,
@@ -538,7 +538,7 @@ const Sidebar = () => {
                             {
                                 icon: SiGoogleclassroom,
                                 path: "class-console",
-                                title: "My Classes",
+                                title: "My Courses",
                             },
                             // {
                             //     icon: BiVideo,

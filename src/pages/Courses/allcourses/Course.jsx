@@ -67,7 +67,7 @@ const Grid = styled.div`
     grid-auto-rows: 460px;
     overflow: hidden;
     gap: 1.5rem;
-    justify-content:space-around;
+    justify-content:center;
     margin: 1rem 0 ;
     padding: 2rem 0;
     
@@ -429,16 +429,13 @@ const UpComeComponent = ({ bootcampTrainingInfo, itemsPerPage }) => {
   // (This could be items from props; or items loaded in a local state
   // from an API endpoint with useEffect and useState)
   const endOffset = itemOffset + itemsPerPage;
-  console.log(`Loading items from ${itemOffset} to ${endOffset}`);
   const currentItems = bootcampTrainingInfo?.slice(itemOffset, endOffset);
   const pageCount = Math.ceil(bootcampTrainingInfo?.length / itemsPerPage);
 
   // Invoke when user click to request another page.
   const handlePageClick = (event) => {
     const newOffset = (event.selected * itemsPerPage) % bootcampTrainingInfo?.length;
-    console.log(
-      `User requested page number ${event.selected}, which is offset ${newOffset}`
-    );
+  
     setItemOffset(newOffset);
   };
   return (
@@ -506,16 +503,13 @@ const ShortCourseComponent = ({ bootcampTrainingInfo, itemsPerPage }) => {
   // (This could be items from props; or items loaded in a local state
   // from an API endpoint with useEffect and useState)
   const endOffset = itemOffset + itemsPerPage;
-  console.log(`Loading items from ${itemOffset} to ${endOffset}`);
   const currentItems = bootcampTrainingInfo?.slice(itemOffset, endOffset);
   const pageCount = Math.ceil(bootcampTrainingInfo?.length / itemsPerPage);
 
   // Invoke when user click to request another page.
   const handlePageClick = (event) => {
     const newOffset = (event.selected * itemsPerPage) % bootcampTrainingInfo?.length;
-    console.log(
-      `User requested page number ${event.selected}, which is offset ${newOffset}`
-    );
+   
     setItemOffset(newOffset);
   };
 
@@ -586,16 +580,12 @@ const HeadstartComponent = ({ bootcampTrainingInfo, itemsPerPage }) => {
   // (This could be items from props; or items loaded in a local state
   // from an API endpoint with useEffect and useState)
   const endOffset = itemOffset + itemsPerPage;
-  console.log(`Loading items from ${itemOffset} to ${endOffset}`);
   const currentItems = bootcampTrainingInfo?.slice(itemOffset, endOffset);
   const pageCount = Math.ceil(bootcampTrainingInfo?.length / itemsPerPage);
 
   // Invoke when user click to request another page.
   const handlePageClick = (event) => {
     const newOffset = (event.selected * itemsPerPage) % bootcampTrainingInfo?.length;
-    console.log(
-      `User requested page number ${event.selected}, which is offset ${newOffset}`
-    );
     setItemOffset(newOffset);
   };
 
@@ -664,16 +654,12 @@ const PathComponent = ({ bootcampTrainingInfo, itemsPerPage }) => {
   // (This could be items from props; or items loaded in a local state
   // from an API endpoint with useEffect and useState)
   const endOffset = itemOffset + itemsPerPage;
-  console.log(`Loading items from ${itemOffset} to ${endOffset}`);
   const currentItems = bootcampTrainingInfo?.slice(itemOffset, endOffset);
   const pageCount = Math.ceil(bootcampTrainingInfo?.length / itemsPerPage);
 
   // Invoke when user click to request another page.
   const handlePageClick = (event) => {
     const newOffset = (event.selected * itemsPerPage) % bootcampTrainingInfo?.length;
-    console.log(
-      `User requested page number ${event.selected}, which is offset ${newOffset}`
-    );
     setItemOffset(newOffset);
   };
 
@@ -747,16 +733,13 @@ const UpskillComponent = ({ bootcampTrainingInfo, itemsPerPage }) => {
   // (This could be items from props; or items loaded in a local state
   // from an API endpoint with useEffect and useState)
   const endOffset = itemOffset + itemsPerPage;
-  console.log(`Loading items from ${itemOffset} to ${endOffset}`);
   const currentItems = bootcampTrainingInfo?.slice(itemOffset, endOffset);
   const pageCount = Math.ceil(bootcampTrainingInfo?.length / itemsPerPage);
 
   // Invoke when user click to request another page.
   const handlePageClick = (event) => {
     const newOffset = (event.selected * itemsPerPage) % bootcampTrainingInfo?.length;
-    console.log(
-      `User requested page number ${event.selected}, which is offset ${newOffset}`
-    );
+  
     setItemOffset(newOffset);
   };
   return (
@@ -824,16 +807,12 @@ const TechComponent = ({ bootcampTrainingInfo, itemsPerPage }) => {
   // (This could be items from props; or items loaded in a local state
   // from an API endpoint with useEffect and useState)
   const endOffset = itemOffset + itemsPerPage;
-  console.log(`Loading items from ${itemOffset} to ${endOffset}`);
   const currentItems = bootcampTrainingInfo?.slice(itemOffset, endOffset);
   const pageCount = Math.ceil(bootcampTrainingInfo?.length / itemsPerPage);
 
   // Invoke when user click to request another page.
   const handlePageClick = (event) => {
     const newOffset = (event.selected * itemsPerPage) % bootcampTrainingInfo?.length;
-    console.log(
-      `User requested page number ${event.selected}, which is offset ${newOffset}`
-    );
     setItemOffset(newOffset);
   };
 
@@ -898,16 +877,12 @@ const ExecutiveComponent = ({ bootcampTrainingInfo, itemsPerPage }) => {
   // (This could be items from props; or items loaded in a local state
   // from an API endpoint with useEffect and useState)
   const endOffset = itemOffset + itemsPerPage;
-  console.log(`Loading items from ${itemOffset} to ${endOffset}`);
   const currentItems = bootcampTrainingInfo?.slice(itemOffset, endOffset);
   const pageCount = Math.ceil(bootcampTrainingInfo?.length / itemsPerPage);
 
   // Invoke when user click to request another page.
   const handlePageClick = (event) => {
     const newOffset = (event.selected * itemsPerPage) % bootcampTrainingInfo?.length;
-    console.log(
-      `User requested page number ${event.selected}, which is offset ${newOffset}`
-    );
     setItemOffset(newOffset);
   };
 
@@ -978,16 +953,12 @@ const DemandComponent = ({ bootcampTrainingInfo, itemsPerPage }) => {
   // (This could be items from props; or items loaded in a local state
   // from an API endpoint with useEffect and useState)
   const endOffset = itemOffset + itemsPerPage;
-  console.log(`Loading items from ${itemOffset} to ${endOffset}`);
   const currentItems = bootcampTrainingInfo?.slice(itemOffset, endOffset);
   const pageCount = Math.ceil(bootcampTrainingInfo?.length / itemsPerPage);
 
   // Invoke when user click to request another page.
   const handlePageClick = (event) => {
     const newOffset = (event.selected * itemsPerPage) % bootcampTrainingInfo?.length;
-    console.log(
-      `User requested page number ${event.selected}, which is offset ${newOffset}`
-    );
     setItemOffset(newOffset);
   };
 
@@ -1065,34 +1036,51 @@ const CourseComponent = () => {
     otherFunctions: { fetchCategories, fetchCourses, fetchBootcamps },
   } = useAuth();
 
-  // const categories = useQuery(["categories"], () => fetchCategories(), {
-  //   onSuccess: res => {
-  //     console.log("categories", res.data)
-  //   },
-  //   onError: err => console.error(err)
-
-  // });
-  // const courses = useQuery(["courses"], () => fetchCourses(), {
-  //   onSuccess: res => {
-  //     console.log("courses", res.data)
-  //   },
-  //   onError: err => console.error(err)
-
-  // });
+ 
 
   const { id } = useParams()
 
-  const change = id.split("_").join(" ")
 
 
 
 
   const bootcamps = useQuery(["bootcamps"], () => fetchBootcamps(), {
     onSuccess: res => {
-      // console.log({res})
-      // console.log(res.data.filter(item => item.subCategory === id && item.isActive))
+     
+     if(res.data && id === "IN_DEMAND"){
+        let ids = [
+          "63f68ab678429071a0195c6d", 
+          "63fcd51d4aacf5d78772e89f", 
+          "63717aa2f0eaad8dcf3930a7", 
+          "6371cda6f0eaad8dcf3966e7", 
+          // "63f74cdc78429071a01a00bf",
+          "636e9a3ef0eaad8dcf3699fc",
+          "63fcdb564aacf5d787730a0b",
+          // "63717978f0eaad8dcf392eeb"
+        ]
+        const productMng = res.data?.length > 0 ? res.data?.filter(item => item.isActive && item.bootcampId === "63f68ab678429071a0195c6d" && item.subCategory === "IN_DEMAND") : [];
+        const cyber = res.data?.length > 0 ? res.data?.filter(item => item.isActive && item.bootcampId === "63fcd51d4aacf5d78772e89f" && item.subCategory === "IN_DEMAND") : [];
+        const audit = res.data?.length > 0 ? res.data?.filter(item => item.isActive && item.bootcampId === "63717aa2f0eaad8dcf3930a7" && item.subCategory === "IN_DEMAND") : [];
+        const business = res.data?.length > 0 ? res.data?.filter(item => item.isActive && item.bootcampId === "6371cda6f0eaad8dcf3966e7" && item.subCategory === "IN_DEMAND") : [];
+        // const design = res.data?.length > 0 ? res.data?.filter(item => item.isActive && item.bootcampId === "63f74cdc78429071a01a00bf" && item.subCategory === "IN_DEMAND") : [];
+        const data = res.data?.length > 0 ? res.data?.filter(item => item.isActive && item.bootcampId === "636e9a3ef0eaad8dcf3699fc" && item.subCategory === "IN_DEMAND") : [];
+        const risk = res.data?.length > 0 ? res.data?.filter(item => item.isActive && item.bootcampId === "63fcdb564aacf5d787730a0b" && item.subCategory === "IN_DEMAND") : [];
+        const it = res.data?.length > 0 ? res.data?.filter(item => item.isActive && item.bootcampId === "63717978f0eaad8dcf392eeb" && item.subCategory === "IN_DEMAND") : [];
+        const restitem = res.data?.length > 0 ? res.data?.filter(item => item.isActive && item.subCategory === "IN_DEMAND" && !ids.includes(item.bootcampId)).sort((a, b) => new Date(a.startDate) - new Date(b.startDate)) : [];
 
-      if (res.data && id !== "upcoming") {
+        const all = [...cyber, ...productMng, ...it, ...data, ...business, ...audit, ...risk, ...restitem];
+        setBootcampTrainingInfo(all)
+        return;
+
+      }
+      else if (res.data && id === "upcoming") {
+        // const first = res.data?.length > 0 ? res.data?.filter(item => item.startDate === "2023-01-19T00:00:00.000Z" && item.isActive) : [];
+        const second = res.data?.length > 0 ? res.data?.filter(item => item.startDate?.includes("2023-03") && item.isActive).sort((a, b) => new Date(a.startDate) - new Date(b.startDate)) : [];
+        const all = [...second];
+        setBootcampTrainingInfo(all)
+        return;
+
+      } else if (res.data && id !== "upcoming" && id !== "IN_DEMAND") {
         const first = res.data?.length > 0 ? res.data?.filter(item => item.startDate === "2023-01-19T00:00:00.000Z" && item.isActive && item.subCategory === id) : [];
         const second = res.data?.length > 0 ? res.data?.filter(item => item.startDate === "2023-01-05T00:00:00.000Z" && item.isActive && item.subCategory === id) : [];
         const third = res.data?.length > 0 ? res.data?.filter(item => item.startDate !== "2023-01-05T00:00:00.000Z" && item.startDate !== "2023-01-19T00:00:00.000Z" && item.isActive && item.subCategory === id).sort((a, b) => new Date(a.startDate) - new Date(b.startDate)) : [];
@@ -1101,14 +1089,8 @@ const CourseComponent = () => {
         // const second = res.data?.length > 0 ? res.data?.filter(item => !item.startDate.includes("2023-01") && item.isActive && item.subCategory === id) : [];
         const all = [...first, ...second, ...third]; 
         setBootcampTrainingInfo(all)
-      } else if (res.data && id === "upcoming") {
-        const first = res.data?.length > 0 ? res.data?.filter(item => item.startDate === "2023-01-19T00:00:00.000Z" && item.isActive) : [];
-        const second = res.data?.length > 0 ? res.data?.filter(item => item.startDate.includes("2023-01") && !item.startDate.includes("2023-01-19T00:00:00.000Z") && item.isActive).sort((a, b) => new Date(a.startDate) - new Date(b.startDate)) : [];
-        const all = [...first, ...second];
-        setBootcampTrainingInfo(all)
-        return
-
-      } else {
+        return;
+      }else  {
         setBootcampTrainingInfo([])
 
       }

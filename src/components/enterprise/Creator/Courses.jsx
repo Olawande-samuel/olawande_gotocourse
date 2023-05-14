@@ -100,7 +100,6 @@ const Card = styled.div`
         }
     }
 
-}
 `
 const data =[ {
     img:img1,

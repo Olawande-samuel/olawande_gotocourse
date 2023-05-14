@@ -32,7 +32,6 @@ const UploadForm = ({ isOpen, setIsOpen, setPreviewImage, uploadType }) => {
         setLoading(true)
         const formdata = new FormData();
         formdata.append('file', file, file.name);
-        console.log(file.name)
 
 
         var ajax = new XMLHttpRequest();
@@ -58,9 +57,7 @@ const UploadForm = ({ isOpen, setIsOpen, setPreviewImage, uploadType }) => {
 
 
     function progressHandler(event) {
-        console.log({ event })
         var percent = (event.loaded / event.total) * 100;
-        console.log(percent)
         setProgress(Math.round(percent) + "% uploaded... please wait")
         // _("progressBar").value = Math.round(percent);
         // _("status").innerHTML = Math.round(percent) + "% uploaded... please wait";
@@ -69,7 +66,6 @@ const UploadForm = ({ isOpen, setIsOpen, setPreviewImage, uploadType }) => {
     function completeHandler(event) {
         setLoading(false)
 
-        console.log(JSON.parse(event.target.response))
 
         let { data, message } = JSON.parse(event.target.response)
         toast.success(message)
@@ -91,7 +87,6 @@ const UploadForm = ({ isOpen, setIsOpen, setPreviewImage, uploadType }) => {
 
     const mutation = useMutation(([token, data]) => addFile(token, data), {
         onSuccess: (res) => {
-            console.log(res)
             setData(null)
             setFile(null)
             setImageUrl(null)

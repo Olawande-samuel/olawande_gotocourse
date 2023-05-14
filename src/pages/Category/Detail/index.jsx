@@ -1,28 +1,25 @@
 import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 
-import {
-  useLocation,
-  useNavigate,
-  useParams,
-  Navigate,
-} from "react-router-dom";
-import { ToastContainer, toast } from "react-toastify";
-import { Link } from "react-router-dom";
-import { MdNavigateNext } from "react-icons/md";
+import { Breadcrumbs, Skeleton } from "@mui/material";
 import { BiArrowToRight } from "react-icons/bi";
 import { FaDownload } from "react-icons/fa";
-import { Breadcrumbs, Skeleton } from "@mui/material";
-import { Navigation, Autoplay, Pagination, Scrollbar, A11y } from "swiper";
+import { MdNavigateNext } from "react-icons/md";
+import {
+  Link, useLocation,
+  useNavigate,
+  useParams
+} from "react-router-dom";
+import { ToastContainer } from "react-toastify";
+import { A11y, Autoplay, Navigation, Pagination, Scrollbar } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/react";
 
-import Layout from "../../../components/Layout";
-import { useEffectOnMount } from "../../../hooks";
-import { useAuth } from "../../../contexts/Auth";
-import { AdvancedError } from "../../../classes";
-import { capitalize, COURSE_CATEGORY_KEY, getDate, IMAGEURL } from "../../../constants";
-import DOMPurify from "dompurify";
 import { useQuery } from "@tanstack/react-query";
+import DOMPurify from "dompurify";
+import { AdvancedError } from "../../../classes";
+import Layout from "../../../components/Layout";
+import { capitalize, IMAGEURL } from "../../../constants";
+import { useAuth } from "../../../contexts/Auth";
 
 const DetailContainer = styled.div`
   width: 100%;
@@ -30,7 +27,7 @@ const DetailContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  jusitfy-content: center;
+  justify-content: center;
 `;
 
 const CategoryTop = styled.div`
@@ -333,7 +330,6 @@ const Detail = ({ preview }) => {
 
   const queryClass = useQuery(["fetchclasses"], fetchBootcamps, {
     onSuccess: (res)=>{
-      console.log(res)
       setCategoryCourses(res.data?.filter(item => item.category === courseCategory))
     },
     onError: (error)=>{

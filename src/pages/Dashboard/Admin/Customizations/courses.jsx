@@ -36,7 +36,6 @@ const CustomizeCourses = ({ onSubmit, oldCoursesToShow, school_id }) => {
     };
 
     React.useEffect(() => {
-        console.log({ onClient: onClient.current });
         if (!onClient.current) {
             onClient.current = true;
             return;
@@ -45,7 +44,6 @@ const CustomizeCourses = ({ onSubmit, oldCoursesToShow, school_id }) => {
         adminFunctions
             .getCoursesInSchool(userdata?.token, school_id)
             .then((axiosRes) => {
-                console.log(axiosRes);
                 if (axiosRes.success) {
                     setCoursesInSchool(axiosRes.data || []);
                     setLoading(false);

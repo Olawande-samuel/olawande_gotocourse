@@ -16,20 +16,16 @@ const UploadWidget = ({ fileUrl, setFileUrl, setUploadData, type, theme}) => {
 
     const addToFile = useMutation(([token, data])=> addNewFile(token, data), {
         onSuccess: (res)=> {
-            console.log(res)
             if(res.statusCode === 1){
                 setUploadData(res.data)
-                console.log("setting done")
             }
         },
         onError: err => console.error(err)
     })
 
-    console.log({setUploadData})
     useEffect(() => {
         cloudinaryRef.current = window?.cloudinary;
 
-        console.log(cloudinaryRef?.current);
         widgetRef.current = cloudinaryRef?.current?.createUploadWidget({
             cloudName: process.env.REACT_APP_CLOUD_NAME,
             uploadPreset: "ml_default",
@@ -38,11 +34,8 @@ const UploadWidget = ({ fileUrl, setFileUrl, setUploadData, type, theme}) => {
 
         }, function (error, result) {
             if (result.event === "success") {
-                console.log({result});
-                console.log(result?.info);
                 let ext = result?.info?.secure_url.split("/");
                 let extension = ext[ext.length -1]
-                console.log({extension});
                 setFileUrl(extension)
                 let format = result.info.format ? result.info.format : result.info.url.split(".").slice(-1)[0];
                 let ogName = result.info.original_filename ? result.info.original_filename : result.info.url.split("/").slice(-1)[0];
@@ -75,7 +68,6 @@ const UploadWidget = ({ fileUrl, setFileUrl, setUploadData, type, theme}) => {
             pauseOnHover: true
         })
     }
-    console.log({theme})
 
     return (
         <>

@@ -12,7 +12,7 @@ import { toast, ToastContainer } from "react-toastify";
 import { useAuth } from "../../contexts/Auth";
 import { KEY } from "../../constants";
 
-import style from "../Teacher/teacher.module.css";
+import style from "./Pay.module.css";
 import { useLocalStorage } from "../../hooks";
 import { AdvancedError } from "../../classes";
 import Success from "../../images/paymentSuccess.png";
@@ -44,17 +44,13 @@ export const BootcampPayment = () => {
   });
 
   const params = useParams();
-  console.log({ params })
 
   const bootcamps = useQuery(["bootcamps"], () => fetchBootcamps(), {
     onSuccess: res => {
-      console.log({ res })
-      console.log(res.data.find(item => item.bootcampId === params.id))
       if (res.data.length > 0) {
         let info = res.data.find(item => item.bootcampId === params.id)
         setBootcamp(info)
         let infoPrice = info.packages.length > 0 ? info.packages[0].price : info.price
-        console.log({ infoPrice })
         setPrice(infoPrice)
 
         return
@@ -120,7 +116,6 @@ export const BootcampPayment = () => {
             throw new AdvancedError(message, statusCode);
           const { data } = response;
   
-          console.log({ data });
   
           setStripeId(data.clientSecret);
           setShowStripeModal(true);
@@ -149,9 +144,10 @@ export const BootcampPayment = () => {
           if (!success || statusCode !== 1)
             throw new AdvancedError(message, statusCode);
           const { data } = response;
-          console.log({ data });
           toast.success("You have successfully enrolled for this course.")
-          navigate("/student")
+          setTimeout(()=>{
+            navigate("/student")
+          }, 2500)
 
         } catch (error) {
           toast.error(error.message, {
@@ -193,7 +189,7 @@ export const BootcampPayment = () => {
         >
           <div >
             {showStripeModal ? (
-              <div className="col-md-7 col-lg-5 ">
+              <div className="col-md-7 col-lg-5 mx-auto ">
                 <ErrorBoundary>
                   <PaymentModal token={stripeId} setShowStripeModal={setShowStripeModal} />
                 </ErrorBoundary>
@@ -257,27 +253,28 @@ export const BootcampPayment = () => {
                     {paymentData.fullPayment === false ? (
                       <>
                         <div className="">
-                          <small
+                          {/* <small
                             className="text-info"
                             style={{ fontSize: "12px" }}
                           >
                             *Fees must be paid in not more than two Installments.
                             Each installment carries a $100 extra charge
-                          </small>
+                          </small> */}
                           <div className="form-group">
                             <input
                               type="radio"
                               name="initialPayment"
                               id="2"
                               onChange={handleInstallmentChoice}
-                              value={(price + (price * (5 / 100))) / 2 + 100}
+                              // value={(price + (price * (5 / 100))) / 2 + 100}
+                              value={(price + (price * (5 / 100))) / 2}
                             />
                             <label
                               htmlFor="2"
                               className="form-label generic_label ms-2 "
                             >
                               Pay in two installments of{" "}
-                              {(price + (price * (5 / 100))) / 2 + 100} each
+                              {(price + (price * (5 / 100))) / 2 } each
                             </label>
                           </div>
                           {/* <div className="text-center">
@@ -405,10 +402,8 @@ export const CheckoutForm = ({ token, setShowStripeModal,cart }) => {
         },
       });
 
-      console.log({ result })
       result && setLoading(false);
 
-      console.log({ result })
 
       if (result.error) {
         toast.error(result.error.message, {
@@ -510,7 +505,6 @@ export const PaymentStatus = ({ success }) => {
 
 
 
-  console.log(id)
   const userdata = getItem(KEY);
 
 
