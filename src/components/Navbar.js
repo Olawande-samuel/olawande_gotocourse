@@ -129,8 +129,10 @@ const Navbar = ({ background }) => {
 			)}
 			<div
 				className="container navbar-container align-items-center">
-				<Link
-					to="/"
+				<a
+				 href="https://gotocourse.com" target="_blank" rel="noreferrer"
+			
+					// to="/"
 					onClick={() => window.scrollTo(0, 0)}
 					className="logo navbar-brand "
 					style={{
@@ -172,7 +174,7 @@ const Navbar = ({ background }) => {
 
 					)}
 					{/* <small className="d-block" style={{fontSize:"14px", color: landing || mainpage ? "var(--theme-blue)" : "#fff"}}>Learn without limits</small> */}
-				</Link>
+				</a>
 				<button type="button" className="navbar-toggler " onClick={toggleNav}>
 					<span className="navbar-toggler-icon"></span>
 				</button>

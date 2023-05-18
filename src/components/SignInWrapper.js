@@ -24,7 +24,7 @@ const SignInWrapper = ({ image, children }) => {
 				<div className="signWrapper_logo_container">
 					<h1>Welcome to</h1>
 					<div className="signWrapper_logo">
-						<Link to="/">
+						<Link to="/learn-on-gotocourse">
 							<div className="signWrapper_logo_text text-center text-white">
 								<h1>
 									GO<span>2</span>COURSE

@@ -203,7 +203,7 @@ const Navbar = () => {
 			<NavContainer>
 				<div className="navcontainer container">
 					<div className="navbarlogo">
-						<Link to={`/`}>
+						<Link to={`/learn-on-gotocourse`}>
 						{/* <Logosm color="var(--theme-blue)" /> */}
 						{/* <img src={logo} alt="" width={150} /> */}
 						{/* <TrainLogo color="var(--theme-blue)"/> */}

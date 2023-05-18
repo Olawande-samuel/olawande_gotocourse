@@ -128,7 +128,7 @@ const AfricaFooter = () => {
         <div className="footer_container d-flex justify-content-between">
           <div className="footer_left">
             <div className="footer_top pt-2">
-              <Link to="/" onClick={() => window.scrollTo(0, 0)}>
+              <Link to="/learn-on-gotocourse" onClick={() => window.scrollTo(0, 0)}>
                 <i className="d-none d-lg-block">
                   <Logo color={"#fff"} style={{width: "100px"}}/>
                   {/* <img src={africalogo} alt="" style={{width: "150px"}}/> */}
