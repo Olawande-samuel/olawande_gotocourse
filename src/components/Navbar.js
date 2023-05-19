@@ -1,30 +1,25 @@
-import React, { useState, useRef, useEffect } from "react";
-import Logo from "../images/Logo.png";
-import { MdOutlineKeyboardArrowDown } from "react-icons/md";
-import { FaRegUser } from "react-icons/fa";
 import { motion } from "framer-motion";
-import { Link, useNavigate, useLocation } from "react-router-dom";
+import React, { useEffect, useRef, useState } from "react";
+import { FaRegUser } from "react-icons/fa";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
-import { Logosm } from "../images/components/svgs";
 
-import Button from "@mui/material/Button";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 
-import { categories as navList } from "../data";
-import { useAuth } from "../contexts/Auth";
-import { useLocalStorage } from "../hooks";
-import { ScrollToTop } from "../pages/Courses";
-import LogoutButton from "./LogoutButton";
-import { AiOutlineCloseCircle } from "react-icons/ai";
 import { useQuery } from "@tanstack/react-query";
+import { AiOutlineCloseCircle } from "react-icons/ai";
 import { KEY } from "../constants";
-import logo from '../images/landing/LearnG2C.png'
-import Teacerlogo from '../images/landing/Teacerlogo.png'
+import { useAuth } from "../contexts/Auth";
+import { categories as navList } from "../data";
+import { useLocalStorage } from "../hooks";
+import logo from '../images/landing/LearnG2C.png';
+import Teacerlogo from '../images/landing/Teacerlogo.png';
+import { ScrollToTop } from "../pages/Courses";
 
 
 const Navbar = ({ background }) => {
-	
+
 	const { setGeneralState } = useAuth();
 	const [show, setShow] = useState(false);
 	const [drop, setDrop] = useState(false);
@@ -129,10 +124,10 @@ const Navbar = ({ background }) => {
 				</div>
 			)}
 			<div
-				className="container navbar-container align-items-center">
+				className="container navbar-container align-items-center py-3">
 				<a
-				 href="https://gotocourse.com" target="_blank" rel="noreferrer"
-			
+					href="https://gotocourse.com" target="_blank" rel="noreferrer"
+
 					// to="/"
 					onClick={() => window.scrollTo(0, 0)}
 					className="logo navbar-brand "
@@ -146,14 +141,22 @@ const Navbar = ({ background }) => {
 						teacher ?
 							<img src={Teacerlogo} alt=""
 								width={140}
-								style={{ maxWidth: "100%" }}
+								height={40}
+								style={{ 
+									maxWidth: "100%",
+									maxHeight: "100%"
+
+								 }}
 							/>
 
 							:
 
 							<img src={logo} alt=""
 								width={140}
-								style={{ maxWidth: "100%" }}
+								height={40}
+								style={{ maxWidth: "100%", 									
+								maxHeight: "100%"
+							}}
 							/>
 
 
