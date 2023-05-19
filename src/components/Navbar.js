@@ -24,6 +24,7 @@ import Teacerlogo from '../images/landing/Teacerlogo.png'
 
 
 const Navbar = ({ background }) => {
+	
 	const { setGeneralState } = useAuth();
 	const [show, setShow] = useState(false);
 	const [drop, setDrop] = useState(false);
