@@ -77,7 +77,7 @@ const Navbar = ({ background }) => {
 	const categoryRoute = background === "category";
 	const landing = location.pathname.split("/")[1] !== "lounge";
 	const mainpage = location.pathname.split("/")[1] === "learn-on-gotocourse";
-	const teacher = location.pathname.split("/")[1] === "qualifications" || location.pathname.split("/")[1] === "gotocourse-teacher";
+	const teacher = location.pathname.split("/")[1] === "qualifications" || location.pathname.split("/")[1] === "become-a-teacher" || location.pathname.split("/")[1] === "gotocourse-teacher";
 	function showDrop() { }
 
 	const [showBanner, setShowBanner] = useState(true);
@@ -129,8 +129,10 @@ const Navbar = ({ background }) => {
 			)}
 			<div
 				className="container navbar-container align-items-center">
-				<Link
-					to="/"
+				<a
+				 href="https://gotocourse.com" target="_blank" rel="noreferrer"
+			
+					// to="/"
 					onClick={() => window.scrollTo(0, 0)}
 					className="logo navbar-brand "
 					style={{
@@ -172,7 +174,7 @@ const Navbar = ({ background }) => {
 
 					)}
 					{/* <small className="d-block" style={{fontSize:"14px", color: landing || mainpage ? "var(--theme-blue)" : "#fff"}}>Learn without limits</small> */}
-				</Link>
+				</a>
 				<button type="button" className="navbar-toggler " onClick={toggleNav}>
 					<span className="navbar-toggler-icon"></span>
 				</button>
