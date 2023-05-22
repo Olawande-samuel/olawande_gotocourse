@@ -307,7 +307,8 @@ function MyApp({ mixpanel }) {
 				<Suspense fallback={<Loader />}>
 					<Routes>
 						<Route path="/" element={<Out />}>
-							<Route index element={<NewHome mixpanel={mixpanel} />} />
+							{/* <Route index element={<NewHome mixpanel={mixpanel} />} /> */}
+							<Route index element={<Navigate replace to="/learn-on-gotocourse" />} />
 							{/* <Route index element={<Navigate replace to="/login"/>} /> */}
 							<Route
 								path="create-with-gotocourse"

@@ -40,6 +40,7 @@ import { colors, KEY } from "../../../constants";
 import { useAuth } from "../../../contexts/Auth";
 import LogoutButton from "../../../components/LogoutButton";
 import { LogoSidebar, Logosm } from "../../../images/components/svgs";
+import logo from "../../../images/newLogo.png";
 import { SiGooglechat, SiGoogleclassroom } from "react-icons/si";
 import { BsNewspaper } from "react-icons/bs";
 import { HiOutlinePresentationChartLine } from "react-icons/hi";
@@ -708,7 +709,10 @@ const Sidebar = () => {
                 <div className="text-center">
                     {!isCreator ? (
                         <Link to="/">
-                            <LogoSidebar />
+                            {/* <LogoSidebar / */}
+                            <div className="d-flex justify-content-center px-1">
+                                <img src={logo} alt="logo" style={{maxWidth: "100%"}} />
+                            </div>     
                         </Link>
                     ) : (
                         <Link to="/school" className="h3 fw-bold text-white">

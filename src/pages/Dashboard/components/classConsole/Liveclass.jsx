@@ -342,7 +342,7 @@ export function ScheduleClass({ open, setOpen , editDataArray}) {
       setFormstate({...formstate, startDate: utcTime,})
     }
   }
-
+  
   function handleEndDate(e){
     setEndDate(e.target.value)
     if(e.target.value){
