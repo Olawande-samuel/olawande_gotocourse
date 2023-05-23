@@ -708,12 +708,12 @@ const Sidebar = () => {
                 </i>
                 <div className="text-center">
                     {!isCreator ? (
-                        <Link to="/">
+                        <a href="https://gotocourse.com">
                             {/* <LogoSidebar / */}
                             <div className="d-flex justify-content-center px-1">
                                 <img src={logo} alt="logo" style={{maxWidth: "100%"}} />
                             </div>     
-                        </Link>
+                        </a>
                     ) : (
                         <Link to="/school" className="h3 fw-bold text-white">
                             DASHBOARD
