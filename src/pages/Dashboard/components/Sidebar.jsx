@@ -708,7 +708,7 @@ const Sidebar = () => {
                 </i>
                 <div className="text-center">
                     {!isCreator ? (
-                        <a href="https://gotocourse.com">
+                        <a href="https://gotocourse.com" target="_blank" rel='noreferrer'>
                             {/* <LogoSidebar / */}
                             <div className="d-flex justify-content-center px-1">
                                 <img src={logo} alt="logo" style={{maxWidth: "100%"}} />
