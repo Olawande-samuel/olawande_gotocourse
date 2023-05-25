@@ -23,6 +23,8 @@ import { VscNote, VscScreenNormal } from "react-icons/vsc";
 
 import { IconButton, Tooltip } from "@mui/material";
 import { Logosm } from "../../../../images/components/svgs";
+import logo from "../../../../images/newLogo.png";
+
 import "./console.css";
 import style from "./style.module.css";
 
@@ -416,8 +418,11 @@ function Sidebar({ Toggle, side, toggleModule }) {
 					className={`${classConsole.sidebar ? style.open : style.close} ${style.class_sidebar
 						}`}
 				>
-					<a href="https://gotocourse.com" target="_blank" >
-						<Logosm />
+					<a href="https://gotocourse.com" target="_blank" rel="noreferrer" >
+						{/* <Logosm /> */}
+						<div className="d-flex justify-content-center px-1">
+                            <img src={logo} alt="logo" style={{maxWidth: "100%"}} />
+                        </div>
 					</a>
 
 
