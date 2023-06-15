@@ -22,7 +22,6 @@ import { RiVideoAddFill } from "react-icons/ri";
 import { VscNote, VscScreenNormal } from "react-icons/vsc";
 
 import { IconButton, Tooltip } from "@mui/material";
-import { Logosm } from "../../../../images/components/svgs";
 import logo from "../../../../images/newLogo.png";
 
 import "./console.css";
@@ -165,8 +164,6 @@ export const Console = ({ children }) => {
 		generalState,
 		setGeneralState,
 	} = useAuth();
-
-	const [side, setSide] = useState(false);
 	const [show, setShow] = useState(false);
 	const [moduleOpen, setModuleOpen] = useState(false);
 
@@ -301,8 +298,6 @@ export function goBack(pathname) {
 	}
 }
 
-const SidebarDiv = styled.div``;
-
 function Sidebar({ Toggle, side, toggleModule }) {
 	const {
 		generalState: { classConsole },
@@ -319,7 +314,7 @@ function Sidebar({ Toggle, side, toggleModule }) {
 	const userdata = getItem(KEY);
 	const courseId = localStorage.getItem(CLASSID);
 	const studentpath = pathname.split("/")[1] === "student";
-	const queryClient = useQueryClient();
+	
 	function closeSidebar() {
 		setGeneralState({
 			...generalState,
@@ -534,7 +529,6 @@ function Sidebar({ Toggle, side, toggleModule }) {
 	);
 }
 
-const AccordDiv = styled.div``;
 
 export function Accord({
 	name,
@@ -550,7 +544,7 @@ export function Accord({
 	openEditContentModal,
 	toggleModule,
 }) {
-	const [searchParams, setSearchParams] = useSearchParams();
+	const [searchParams] = useSearchParams();
 	const navigate = useNavigate();
 	const { getItem } = useLocalStorage();
 	const userdata = getItem(KEY);
@@ -591,18 +585,7 @@ export function Accord({
 				break;
 		}
 	}
-	function routeType(type) {
-		switch (type) {
-			case "QUIZ":
-				return "quiz";
-			case "NOTE":
-				return "note";
-			case "FILE_VIDEO":
-				return "file";
-			default:
-				break;
-		}
-	}
+	
 
 	const contentUpdate = useMutation(
 		([token, data, id]) => updateContent(token, data, id),
@@ -648,7 +631,7 @@ export function Accord({
 
 	// CONTENT DND
 	function onDragEnd(result) {
-		const { destination, source, draggableId } = result;
+		const { destination, source } = result;
 
 		if (!destination) {
 			return;
@@ -839,8 +822,7 @@ function AccordMenu({
 	const userdata = getItem(KEY);
 	const navigate = useNavigate();
 	const queryClient = useQueryClient();
-	const [searchParams, setSearchParams] = useSearchParams();
-
+	
 	const {
 		teacherConsoleFunctions: { deleteDomain, deleteContent },
 		consoleFunctions: { updateDomain, updateContent },
@@ -1470,11 +1452,11 @@ export function PopModalContent({
 
 export function MainContainer() {
 	const {
-		consoleFunctions: { fetchContents, fetchQuiz },
+		consoleFunctions: { fetchContents },
 	} = useAuth();
-	const { pathname, search } = useLocation();
+	const { search } = useLocation();
 
-	const [searchParams, setSearchParams] = useSearchParams();
+	const [searchParams] = useSearchParams();
 
 	const { getItem } = useLocalStorage();
 	const userdata = getItem(KEY);
@@ -1500,33 +1482,6 @@ export function MainContainer() {
 			}
 		}
 	}, [getDomainContent?.data?.data, contentid]);
-
-	let searchData = search.split("=").reverse()[0];
-	const [formData, setFormData] = useState({
-		classId: "",
-		contentId: "",
-		title: "",
-		endDate: "",
-		endTime: "",
-		note: "",
-		timeLimit: "",
-		maxAttempts: 1,
-		questions: [
-			{
-				type: "",
-				title: "",
-				showAnswer: false,
-				answer: "",
-				grade: "",
-				options: [
-					{
-						isAnswer: false,
-						title: "",
-					},
-				],
-			},
-		],
-	});
 
 	switch (data?.type) {
 		case "FILE_VIDEO":

@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { Badge } from "@mui/material";
-import { MdHistory } from "react-icons/md";
 import {
     AiOutlineClose,
     AiOutlineSetting,
@@ -10,7 +9,6 @@ import {
 import {
     IoIosHome,
     IoIosPerson,
-    IoIosChatbubbles,
     IoIosCash,
     IoIosHelpBuoy,
 } from "react-icons/io";
@@ -19,15 +17,13 @@ import { FaCalendarAlt } from "react-icons/fa";
 import {
     BiCategory,
     BiBell,
-    BiBarChartSquare,
     BiHelpCircle,
     BiVideo,
-    BiCustomize,
 } from "react-icons/bi";
 import { MdOutlineAddReaction, MdOutlineSell } from "react-icons/md";
 import { FaTwitch } from "react-icons/fa";
 import { useLocation, Link, NavLink, useNavigate } from "react-router-dom";
-import { FiGift, FiSend, FiBookOpen } from "react-icons/fi";
+import { FiGift, FiSend } from "react-icons/fi";
 import { FaRegMoneyBillAlt, FaMoneyBillWave } from "react-icons/fa";
 import { motion } from "framer-motion";
 
@@ -35,19 +31,15 @@ import { AdvancedError } from "../../../classes";
 import { useLocalStorage } from "../../../hooks";
 
 import clsx from "./styles.module.css";
-import Logo from "../../../components/Logo";
-import { colors, KEY } from "../../../constants";
+import { KEY } from "../../../constants";
 import { useAuth } from "../../../contexts/Auth";
 import LogoutButton from "../../../components/LogoutButton";
-import { LogoSidebar, Logosm } from "../../../images/components/svgs";
 import logo from "../../../images/newLogo.png";
-import { SiGooglechat, SiGoogleclassroom } from "react-icons/si";
+import { SiGoogleclassroom } from "react-icons/si";
 import { BsNewspaper } from "react-icons/bs";
 import { HiOutlinePresentationChartLine } from "react-icons/hi";
 import { RiAdvertisementFill } from "react-icons/ri";
 import { GiSandsOfTime } from "react-icons/gi";
-
-import {Dropdown} from "react-bootstrap"
 
 //mini-components
 function SidebarItem({ icon: Icon, title, path, showBadge, ...props }) {
