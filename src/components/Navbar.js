@@ -13,8 +13,7 @@ import { KEY } from "../constants";
 import { useAuth } from "../contexts/Auth";
 import { categories as navList } from "../data";
 import { useLocalStorage } from "../hooks";
-import logo from '../images/landing/LearnG2C.png';
-import Teacerlogo from '../images/landing/Teacerlogo.png';
+import logo from '../images/landing/logo.svg';
 import { ScrollToTop } from "../pages/Courses";
 
 
@@ -86,17 +85,9 @@ const Navbar = ({ background }) => {
 				}`}
 			style={{
 				// background: celebRoute ? "#191046" : confirmEmail ? "#E5E5E5" : landing ? "var(--blue-ish)" :  mainpage ? "#fff": "var(--theme-blue)",
-				background: celebRoute
-					? "#191046"
-					: confirmEmail
-						? "#E5E5E5"
-						: landing
-							? "var(--blue-ish)"
-							: "var(--theme-blue)",
-				color:
-					confirmEmail || landing || categoryRoute
-						? "var(--theme-blue)"
-						: "#fffff",
+				backgroundColor: "rgba(255, 255, 255, 0.6)",
+				backdropFilter: "blur(4px)",
+				opacity: 1
 			}}
 		>
 			<ScrollToTop />
@@ -123,10 +114,12 @@ const Navbar = ({ background }) => {
 					</i>
 				</div>
 			)}
+
+
 			<div
 				className="container navbar-container align-items-center py-3">
 				<a
-					href="https://gotocourse.com" target="_blank" rel="noreferrer"
+					href="https://gotocourse.com"
 
 					// to="/"
 					onClick={() => window.scrollTo(0, 0)}
@@ -135,50 +128,25 @@ const Navbar = ({ background }) => {
 						flex: ".25"
 					}}
 				>
-					{confirmEmail || landing || categoryRoute || mainpage ? (
-						// <Logosm color="var(--theme-blue)" />
 
-						teacher ?
-							<img src={Teacerlogo} alt=""
-								width={140}
-								height={40}
-								style={{ 
-									maxWidth: "100%",
-									maxHeight: "100%"
+					<img
+						src={logo}
+						alt=""
+						width={140}
+						style={{
+							maxWidth: "100%",
+							// maxHeight: "100%"
 
-								 }}
-							/>
+						}}
 
-							:
+					// height={40}
 
-							<img src={logo} alt=""
-								width={140}
-								height={40}
-								style={{ maxWidth: "100%", 									
-								maxHeight: "100%"
-							}}
-							/>
-
-
-					) : (
-						// <Logosm />
-						teacher ?
-
-							<img src={Teacerlogo} alt=""
-								width={140}
-								style={{ maxWidth: "100%" }}
-							/>
-
-							:
-
-							<img src={logo} alt=""
-								width={140}
-								style={{ maxWidth: "100%" }}
-							/>
-
-					)}
+					/>
 					{/* <small className="d-block" style={{fontSize:"14px", color: landing || mainpage ? "var(--theme-blue)" : "#fff"}}>Learn without limits</small> */}
 				</a>
+
+			
+
 				<button type="button" className="navbar-toggler " onClick={toggleNav}>
 					<span className="navbar-toggler-icon"></span>
 				</button>
@@ -189,47 +157,30 @@ const Navbar = ({ background }) => {
 				>
 					<ul className="navbar-nav me-5">
 
+					<div className="nav-item d-flex align-items-center nav_link d-xs-none">
+					<li className="me-3 nav_link">
+						<a href={`https://www.gotocourse.com/about`}>About Us</a>
+					</li>
 
-						{
-							!teacher &&
-							<li className="nav-item holder">
-								<Link
-									to="/africa"
-									className="link nav-link courses me-4"
-									style={{
-										color:
-											landing || mainpage
-												? "var(--theme-blue)"
-												: "rgba(255, 255, 255)",
-									}}
-								>
-									Go2Course Africa
-								</Link>
-							</li>
-						}
+					<li className="me-3 nav_link">
+						<div className="dropdown">
+							<span>Products</span>
+							<div className="dropdowncontent">
+								<a href={`https://www.gotocourse.com/product/learning-suite`}  >Learning suite</a>
+								<a href={`https://www.gotocourse.com/product/business-suite`}  >Business suite</a>
 
 
+							</div>
+						</div>
+					</li>
 
-						{(location.pathname.split("/")[1] === "" || celebRoute) && (
-							<>
-								<li className="nav-item holder">
-									<Link
-										className="link nav-link courses me-4"
-										to="/categories"
-										style={{
-											color:
-												landing || mainpage
-													? "var(--theme-blue)"
-													: "rgba(255, 255, 255)",
-										}}
-									>
-										Categories
-									</Link>
-									{drop ? <NavList dropRef={dropRef} /> : null}
-								</li>
+					<li className="me-3 nav_link">
+						<a href={`https://www.gotocourse.com/pricing`}  >Pricing</a>
+					</li>
 
-							</>
-						)}
+				</div>
+
+
 
 						{confirmEmail && (
 							<>
