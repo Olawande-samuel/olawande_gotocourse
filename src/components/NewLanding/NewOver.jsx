@@ -179,7 +179,7 @@ const OverflowContainer = styled.section`
 
             h6{
                 font-weight: 700;
-                font-size: clamp(1.5rem, 1.3rem + 1.8vw, 2rem);
+                font-size: 16px;
                 line-height: 25px;
                 color: var(--theme-blue);
             
@@ -304,8 +304,8 @@ export const NewReady = () => {
             <Container>
                 <div className="container">
                     <div className="inputbox">
-                        <h2>Ready to launch your
-                            <span className="d-block">dream career?</span>
+                        <h2>Ready to learn skills needed to maximize 
+                        your digital learning platform?
                         </h2>
 
                         <p>Secure a spot today</p>
@@ -361,15 +361,14 @@ export const Overflow = () => {
 
                 <div className="overflowbold">
                     <p>
-                        Join live classes on our proprietary <br /> learning platform, followed by career <br /> coaching and interview prep
-                    </p>
+                    Join short courses on our proprietary <br/>
+learning platform, followed by hand-<br/>
+holding and advisory sessions                    </p>
 
                     <h6>OUR GOAL</h6>
 
                     <span>
-                        To be the No 1 global platform where millions of learners connect <br />
-                        with top tech educators and bootcamps in order to help upskill, <br />
-                        boost productivity and reduce the cost of learning.
+                    To be a leader in helping creators and educators on their journey of learning and development, using technology to provide access to quality education and improve learning outcomes.
 
                     </span>
                 </div>
@@ -385,7 +384,7 @@ export const Overflow = () => {
 const statData = [
     {
         title: "20k+",
-        content: "Registered Students",
+        content: "Registered Users",
     },
     {
         title: "98%",
@@ -394,7 +393,7 @@ const statData = [
     {
         // sup: "More than",
         title: "89%",
-        content: "Tranined students already have jobs",
+        content: "Alumni have active online academy",
     },
 
 ];

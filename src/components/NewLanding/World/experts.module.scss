@@ -1,0 +1,179 @@
+.experts {
+    padding: 3rem 0 0 0;
+
+
+    .expertscontent {
+        display: flex;
+        // border: 2px solid red;
+
+        .expertsleft {
+            flex: .5;
+            // border: 2px solid yellow;
+
+
+            .image {
+                width: 100%;
+                // border: 2px solid blue;
+
+                img {
+                    max-width: 100%;
+                }
+            }
+
+        }
+
+        .expertsright {
+            flex: .5;
+            padding: 2rem;
+            // border: 2px solid green;
+
+            .header{
+                padding-bottom: 1rem;
+                h2 {
+                    font-style: normal;
+                    font-weight: 700;
+                    font-size: clamp(1.25rem, 1.0768rem + 0.9897vw, 2.66035625rem);
+                    line-height: 46px;
+                    margin-bottom: 0;
+                }
+
+
+            }
+
+
+            .expertsside {
+
+                .buttons {
+                    button {
+                        margin: 2rem 0;
+                        padding: 1rem 3rem;
+                        color: #fff;
+                        background: var(--theme-blue);
+                    }
+
+                }
+
+
+                .description {
+                    display: flex;
+                    gap: 2rem;
+
+                    p {
+                        font-style: normal;
+                        font-weight: 400;
+                        font-size: 14px;
+                        line-height: 30px;
+
+                        span{
+                            font-weight: 700;
+                        }
+
+                    }
+
+
+                }
+            }
+
+
+
+
+        }
+
+
+
+
+    }
+
+
+
+}
+
+
+
+
+@media (min-width: 2000px) {
+
+    .experts {
+
+        .expertscontent {
+
+            .expertsleft {
+
+                .image {
+                    img {
+                        object-fit: cover;
+                    }
+                }
+            }
+
+           
+        }
+
+
+    }
+}
+
+@media (max-width: 1024px) {
+
+    .experts {
+
+        .expertscontent {
+
+            .expertsleft {
+
+                .image {
+                    img {
+                        object-fit: contain;
+                        object-position: unset;
+                    }
+                }
+            }
+
+           
+        }
+
+
+    }
+}
+
+@media (max-width: 768px) {
+
+    .experts {
+        padding: unset;
+
+        .expertscontent {
+            flex-direction: column;
+
+            .expertsleft {
+                text-align: center;
+
+                .image {
+                    height: 300px;
+                    img{
+                        object-position: unset;
+                        max-height: 100%;
+
+                    }
+                }
+            }
+
+            .expertsright {
+                h2 {
+                    text-align: center;
+                    font-size: 24px;
+                    line-height: 46px;
+                }
+
+                .expertsside {
+
+                    .buttons {
+                        text-align: center;
+                    }
+                }
+            }
+
+        }
+
+
+    }
+}

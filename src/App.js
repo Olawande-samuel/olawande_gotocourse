@@ -307,45 +307,45 @@ function MyApp({ mixpanel }) {
 				<Suspense fallback={<Loader />}>
 					<Routes>
 						<Route path="/" element={<Out />}>
-							<Route index element={<NewHome mixpanel={mixpanel} />} />
-							<Route
+							{/* <Route index element={<NewHome mixpanel={mixpanel} />} /> */}
+							{/* <Route
 								path="create-with-gotocourse"
 								element={<AnotherLanding />}
 							/>
 							<Route path="create" element={<CreatePage />} />
 							<Route path="manage" element={<ManagePage />} />
-							<Route path="pricing" element={<Pricing />} />
+							<Route path="pricing" element={<Pricing />} /> */}
 
-							<Route path="school/login" element={<EnterPriseLogin />} />
+							{/* <Route path="school/login" element={<EnterPriseLogin />} />
 							<Route path="school/signup" element={<EnterpriseSignUp />} />
 							<Route
 								path="enterprise-forgot"
 								element={<EnterPriseForgotPassword />}
-							/>
-							<Route
+							/> */}
+							{/* <Route
 								path="enterprise-verify"
 								element={<EnterpriseVerification />}
-							/>
-							<Route
+							/> */}
+							{/* <Route
 								path="enterprise-onboarding"
 								element={<EnterpriseOnboarding />}
-							/>
-							<Route path="creator-landing" element={<Creator />} />
+							/> */}
+							{/* <Route path="creator-landing" element={<Creator />} /> */}
 
 							{/* <Route index element={<Cart />} /> */}
 							{/* <Route path="learn-on-gotocourse" element={<Out />}>
 								<Route index element={<Landing />} />
 								</Route> */}
-							<Route path="africa" element={<Out />}>
+							{/* <Route path="africa" element={<Out />}>
 								<Route index element={<Africa />} />
 								<Route path="train-to-work" element={<Abroad />} />
 								<Route path="women-in-tech" element={<Abroad />} />
 
-							</Route>
+							</Route> */}
 
 
 							<Route
-								path="learn-on-gotocourse"
+								index
 								element={<Landing mixpanel={mixpanel} />}
 							/>
 							<Route path="login" element={<Login />} />
