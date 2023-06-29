@@ -1,0 +1,188 @@
+.herocontainer {
+    height: auto;
+
+    .herocontent {
+        // padding: 6rem 0 3rem 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+
+        .heroleft {
+            flex: .5;
+            text-align: center;
+
+            img {
+                max-width: 100%;
+
+            }
+
+        }
+
+        .heroright {
+            flex: .5;
+
+            h1 {
+                white-space: pre-line;
+                font-style: normal;
+                font-weight: 900;
+                font-size: 39px;
+                // color: var(--theme-blue);
+
+            }
+
+            ul {
+
+                padding: 1rem 0;
+                margin: 1rem;
+                list-style-type: disc;
+
+                li {
+                    font-size: 14px;
+                    font-style: normal;
+                    font-weight: 400;
+                    letter-spacing: -0.015em;
+                }
+            }
+
+
+            .buttons {
+                margin-top: 2rem;
+                display: flex;
+                align-items: center;
+                gap: 1rem;
+
+                .firstbtn {
+                    color: #fff;
+                    background: var(--theme-blue);
+                    border-radius: 5px;
+                    padding-block: .8rem;
+                }
+
+                .secondbtn {
+                    border: none;
+                    background: #fff;
+                    color: var(--theme-blue);
+                }
+
+                button {
+                    padding: .5rem 2rem;
+                    font-size: 14px;
+
+                }
+
+            }
+
+            .text {
+                margin-top: 2rem;
+                font-size: 14px;
+                font-style: normal;
+                font-weight: 400;
+                letter-spacing: -0.015em;
+            }
+
+        }
+
+
+
+
+    }
+
+    .newCreateHero_content{
+        p {
+            color: var(--theme-blue);
+            font-size: 18px;
+        }
+    }
+
+
+    .newCreateHero_about_pill {
+
+        margin-bottom: 2rem;
+
+        span {
+            background: #FFEBE9;
+            color: #F75C4E;
+            padding: 13px 21px;
+            border-radius: 20px;
+        }
+
+      
+
+    }
+
+    @media (max-width: 1024px) {
+        .herocontent{
+            .heroright{
+                h1{
+                    font-size: 30px;
+                }
+            }
+
+            .heroleft{
+                img{
+                    object-fit: contain;
+                }
+            }
+        }
+        
+    }
+
+    @media (max-width: 830px) {
+        .herocontent {
+            flex-direction: column-reverse;
+            padding: 6rem 0 1rem 0;
+            gap: unset;
+
+            .newCreateHero_content  {
+
+                .logo{
+
+                    img{
+                        max-width: 100% ;
+                        object-fit: contain;
+
+                    }
+
+                }
+            }
+
+            .heroleft {
+                height: 250px;
+                padding: unset;
+                text-align: center;
+
+                img {
+                    height: auto;
+                }
+
+            }
+
+
+            .heroright {
+                text-align: center;
+                padding: 1rem 0;
+
+                h1 {
+
+                    font-size: 30px;
+
+
+                }
+
+                .buttons {
+                    flex-direction: column;
+
+                }
+
+                .text {
+                    margin-top: .5rem;
+                }
+
+            }
+
+
+
+        }
+    }
+}

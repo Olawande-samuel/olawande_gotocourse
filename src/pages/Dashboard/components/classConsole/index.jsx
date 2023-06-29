@@ -1,11 +1,10 @@
 import { useAuth } from "../../../../contexts/Auth";
 
-import { useState, useRef, useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
-	AiFillClockCircle,
-	AiOutlinePaperClip,
-	AiOutlinePlus,
 	AiOutlineMenu,
+	AiOutlinePaperClip,
+	AiOutlinePlus
 } from "react-icons/ai";
 import {
 	BiCaretDown,
@@ -14,58 +13,56 @@ import {
 	BiLockAlt,
 } from "react-icons/bi";
 import {
-	BsPaperclip,
 	BsCameraReels,
 	BsCloudUpload,
 	BsPlayBtn,
-	BsThreeDotsVertical,
+	BsThreeDotsVertical
 } from "react-icons/bs";
 import { RiVideoAddFill } from "react-icons/ri";
 import { VscNote, VscScreenNormal } from "react-icons/vsc";
 
-import { Logosm } from "../../../../images/components/svgs";
-import style from "./style.module.css";
-import "./console.css";
 import { IconButton, Tooltip } from "@mui/material";
+import { Logosm } from "../../../../images/components/svgs";
+import "./console.css";
+import style from "./style.module.css";
 
-import { FaCalendarAlt, FaPlus, FaUsers } from "react-icons/fa";
+import {
+	FormControl,
+	FormControlLabel,
+	FormHelperText,
+	InputLabel,
+	Select,
+	Switch,
+	TextField,
+} from "@mui/material";
+import Modal from "react-bootstrap/Modal";
+import { FaPlus, FaUsers } from "react-icons/fa";
 import {
 	MdAttachFile,
 	MdLibraryAdd,
-	MdLocationOn,
 	MdMessage,
-	MdOutlineNote,
+	MdOutlineNote
 } from "react-icons/md";
-import Modal from "react-bootstrap/Modal";
-import {
-	TextField,
-	InputLabel,
-	FormHelperText,
-	FormControl,
-	Select,
-	FormControlLabel,
-	Switch,
-} from "@mui/material";
 
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
 	Link,
-	useNavigate,
 	useLocation,
+	useNavigate,
 	useParams,
 	useSearchParams,
 } from "react-router-dom";
-import clsx from "../styles.module.css";
-import { AdvancedError } from "../../../../classes";
 import { toast } from "react-toastify";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { AdvancedError } from "../../../../classes";
 import { CLASSID, KEY } from "../../../../constants";
 import { useLocalStorage } from "../../../../hooks";
+import clsx from "../styles.module.css";
 
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import File from "./File";
-import Quiz from "./Quiz";
 import Note from "./Note";
+import Quiz from "./Quiz";
 
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import styled from "styled-components";
@@ -211,8 +208,8 @@ export const Console = ({ children }) => {
 		pathname.split("/")[2] === "myclasses"
 			? "My Classes"
 			: pathname.split("/")[2] === "liveclass"
-			? "Live Class"
-			: pathname.split("/")[2];
+				? "Live Class"
+				: pathname.split("/")[2];
 
 	return (
 		<div className={style.console}>
@@ -267,23 +264,23 @@ export const Console = ({ children }) => {
 			<div className={`${style.icon_bar} ${studentAssessMent && style.none}`}>
 				{studentpath
 					? studentIcon.map(({ title, id, icon: Icon, link }) => (
-							<Tooltip title={title} key={id}>
-								<IconButton>
-									<Link to={link} className="d-inline-flex">
-										<Icon size="1.5rem" color="#0C2191" />
-									</Link>
-								</IconButton>
-							</Tooltip>
-					  ))
+						<Tooltip title={title} key={id}>
+							<IconButton>
+								<Link to={link} className="d-inline-flex">
+									<Icon size="1.5rem" color="#0C2191" />
+								</Link>
+							</IconButton>
+						</Tooltip>
+					))
 					: iconData.map(({ title, id, icon: Icon, link }) => (
-							<Tooltip title={title} key={id}>
-								<IconButton>
-									<Link to={link} className="d-inline-flex">
-										<Icon size="1.5rem" color="#0C2191" />
-									</Link>
-								</IconButton>
-							</Tooltip>
-					  ))}
+						<Tooltip title={title} key={id}>
+							<IconButton>
+								<Link to={link} className="d-inline-flex">
+									<Icon size="1.5rem" color="#0C2191" />
+								</Link>
+							</IconButton>
+						</Tooltip>
+					))}
 			</div>
 		</div>
 	);
@@ -416,13 +413,13 @@ function Sidebar({ Toggle, side, toggleModule }) {
 		<DragDropContext onDragEnd={onDragEnd}>
 			<>
 				<article
-					className={`${classConsole.sidebar ? style.open : style.close} ${
-						style.class_sidebar
-					}`}
+					className={`${classConsole.sidebar ? style.open : style.close} ${style.class_sidebar
+						}`}
 				>
-					<Link to="/">
+					<a href="https://gotocourse.com" target="_blank" >
 						<Logosm />
-					</Link>
+					</a>
+
 
 					{!studentpath ? (
 						<>
@@ -524,9 +521,8 @@ function Sidebar({ Toggle, side, toggleModule }) {
 				</article>
 				<div
 					onClick={closeSidebar}
-					className={`d-lg-none ${clsx.overlay} ${
-						classConsole.sidebar ? clsx.overlayopen : clsx.overlayclose
-					}`}
+					className={`d-lg-none ${clsx.overlay} ${classConsole.sidebar ? clsx.overlayopen : clsx.overlayclose
+						}`}
 				></div>
 			</>
 		</DragDropContext>
@@ -693,7 +689,7 @@ export function Accord({
 									<BiCaretRight onClick={() => showDetails(!details)} />
 								)}
 							</i>
-							<span style={{cursor: 'pointer'}} onClick={() => showDetails(!details)}>{name}</span>
+							<span style={{ cursor: 'pointer' }} onClick={() => showDetails(!details)}>{name}</span>
 							<AddDomainContent
 								id={_id}
 							/>
@@ -780,9 +776,8 @@ export function Accord({
 																item.classId
 															)
 														}
-														className={`d-flex justify-content-between ${
-															item._id === contentid ? "activeClass" : ""
-														}`}
+														className={`d-flex justify-content-between ${item._id === contentid ? "activeClass" : ""
+															}`}
 														style={{ cursor: "pointer" }}
 														{...provided.draggableProps}
 														{...provided.dragHandleProps}

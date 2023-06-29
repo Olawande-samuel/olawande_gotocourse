@@ -707,9 +707,9 @@ const Sidebar = () => {
                 </i>
                 <div className="text-center">
                     {!isCreator ? (
-                        <Link to="/">
+                        <a href="https://gotocourse.com" target="_blank" >
                             <LogoSidebar />
-                        </Link>
+                        </a>
                     ) : (
                         <Link to="/school" className="h3 fw-bold text-white">
                             DASHBOARD

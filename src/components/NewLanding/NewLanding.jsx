@@ -85,13 +85,18 @@ import NewCourse from "./NewCousrse";
 import Testimonials from "../Testimonials";
 import Endless from "./Endless";
 import HowLearn from "./Learn";
-import Review from "./Review";
+// import Review from "./Review";
 import { NewReady } from "./NewOver";
 import { ToastContainer } from "react-toastify";
 import { IconButton } from "@mui/material";
 import { MdClose } from "react-icons/md";
-
-
+import NewHero from './Hero/Hero'
+import Experts from "./World/Experts";
+import Courses  from './Courses/Courses'
+import Custom from "./Custom/Custom";
+import Webinars from "./Features/Webinars";
+import Review from "./Review/Review";
+import grouppicture from '../../images/landing/learn_group.webp'
 const NewLanding = () => {
 
   const { show, boot } = useIntercom();
@@ -121,25 +126,32 @@ const NewLanding = () => {
           pauseOnFocusLoss
           draggable
           pauseOnHover />
-        <Hero />
-        <NewCompanies />
+        {/* <Hero /> */}
+        <NewHero {...hero} />
+        {/* <NewCompanies /> */}
         <NewReady />
+        <Experts/>
+        <Courses/>
+       
         {/* <WomenTech open={open} setOpen={setOpen} /> */}
         {/* <Ready/> */}
         {/* <Overflow/> */}
-        <GreatOpportunities />
+        {/* <GreatOpportunities />
         <Category />
         <Up />
         <NewCourse />
         <UpskillCourse />
         <Headstart />
-        <Pathfinder />
+        <Pathfinder /> */}
         {/* <ShortCourses /> */}
         <Endless />
-        <HowLearn />
-        <Review />
+        <Custom {...chat}/>
+        <Webinars/>
+        <Review/>
+       {/* <HowLearn /> */}
+        {/* <Review />  */}
         {/* <Testimonials type="newLanding" /> */}
-        <VideoSection />
+        {/* <VideoSection /> */}
         {/* <Companies /> */}
         {/* <Stats /> */}
         {/* <WhatweDo /> */}
@@ -176,6 +188,33 @@ const NewLanding = () => {
   );
 };
 export default NewLanding;
+
+const hero = {
+  title: `Everything you need
+ to grow your
+learning platform`,
+  span: `Acquire skills from expert needed to effectively
+ manage and grow your digital learning space.`,
+  img: critical,
+  imgText: "an elated man carrying a laptop",
+  color: "var(--theme-blue)",
+  firstbtn: "Register for free",
+  width: 600,
+  height: 500
+}
+
+const chat = {
+  img: grouppicture,
+  imgtext: "course materials",
+  title: `Enroll to a
+   course today.`,
+  text: `Get started by registering to be part of any
+   of our courses today.
+  `,
+  imgWidth: 500,
+  imgheight: 400,
+  button: "Start learning",
+}
 
 function WomenTech({ open, setOpen }) {
   const modalStyle = {
@@ -223,8 +262,8 @@ function WomenTech({ open, setOpen }) {
 
 
         <Box sx={style}>
-          <div style={{  textAlign:"right",cursor:"pointer",  width: "100%" , padding:".2rem 0"}} onClick={() => setOpen(false)}>
-            <MdClose style={{ color: " #F75C4E",fontSize:"30px"}} />
+          <div style={{ textAlign: "right", cursor: "pointer", width: "100%", padding: ".2rem 0" }} onClick={() => setOpen(false)}>
+            <MdClose style={{ color: " #F75C4E", fontSize: "30px" }} />
           </div>
           <div style={{ width: "100%", height: "350px", }}>
             <img src={womentech} alt="" style={{ maxWidth: "100%", maxHeight: "100%", width: "100%" }} />

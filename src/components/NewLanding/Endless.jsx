@@ -153,9 +153,8 @@ const Endless = () => {
                 <div className="headercontent">
                     <h4>ENDLESS POSSIBILITIES</h4>
                     <p>
-                        Join 20,000+ users who access learning anytime, anywhere, on any device <br />
-                        Let our  real world experts give you a  good start, learn live and get mentored by  <br />
-                        instructors with wide range of experience.
+                        Learn how to grow your online education business with resources specifically tailored <br />
+                        to help you create , manage and grow your virtual education platform.
 
                     </p>
                 </div>
@@ -164,9 +163,11 @@ const Endless = () => {
                     <div className="left">
                         <h6>Learn from industry Experts</h6>
                         <p>
-                            Learn high in-demand skills from <br />
-                            industry experts through Live classes,<br />
-                            pre-recorded videos, and mentorship
+                            Learn business skills from industry<br />
+                            experts through Live classes,<br />
+                            workshops, pre-recorded videos, and<br />
+                            mentorship
+
                         </p>
 
                     </div>
@@ -178,24 +179,22 @@ const Endless = () => {
                 </ContentBody>
 
                 <ReverseBody>
-                <div className="left">
+                    <div className="left">
                         <img src={woman} alt="" />
 
                     </div>
                     <div className="right">
                         <h6>Live instructor-led learning</h6>
                         <p>
-                            Our live instructor-led courses are designed to<br />
-                            help you stay engaged and focused <br />
-                            throughout the course, so you can get the most<br />
-                            out of your learning experience. With<br />
-                            Gotocourse's live instructor-led learning, you'll<br />
-                            have all the benefits of a traditional classroom<br />
-                            with the convenience of online learning.
+                            Our live instructor-led courses are designed to help<br />
+                            you stay engaged and focused throughout the course,<br />
+                            so you can get the most out of your learning experience.
+
+
                         </p>
 
                     </div>
-                   
+
 
                 </ReverseBody>
 
@@ -203,9 +202,10 @@ const Endless = () => {
                     <div className="left">
                         <h6>One-on-one mentoring</h6>
                         <p>
-                            Challenge yourself with a one-on-one mentorship <br />
-                            session with industry experts and<br />
-                            professionals and grow your career
+                            We provide a one-on-one mentorship session <br />
+                            on tools and skills to turn your knowledge into<br />
+                            income and running a successful virtual academy.
+
                         </p>
                     </div>
                     <div className="right">
@@ -232,7 +232,7 @@ const Endless = () => {
                             ideas, collaborate on projects and build lasting<br />
                             relationships with other learners.                     </p>
                     </div>
-                 
+
 
                 </ReverseBody>
 

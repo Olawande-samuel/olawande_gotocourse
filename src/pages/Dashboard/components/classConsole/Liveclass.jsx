@@ -213,7 +213,7 @@ export function CurrentLive({ setOpen, roomName, status, startDate, startTime, e
 
     if(today >= startingDate){
       // window.open(`http://localhost:3000/live/${classId}?token=${id}&user=${token}`, '_blank')
-        window.open(`https://www.meetifix.com/live/${classId}?token=${id}&user=${token}`, '_blank')
+        window.open(`https://www.meetifix.com/live/${classId}?token=${id}&user=${token}&type=class`, '_blank')
     }else {
       window.alert(`Class starts on ${startDate}`)
     }
